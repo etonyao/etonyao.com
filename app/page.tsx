@@ -5,7 +5,17 @@ import { useEffect, useState, useRef } from 'react';
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isMouseInHero, setIsMouseInHero] = useState(false);
+  const [typedText, setTypedText] = useState('');
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
+
+  const roles = [
+    'Product Manager',
+    'Marketing Strategist',
+    'USC Student',
+    'Video Game Enthusiast'
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -31,6 +41,32 @@ export default function Home() {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  // Typing effect
+  useEffect(() => {
+    const currentRole = roles[roleIndex];
+    const typingSpeed = isDeleting ? 50 : 100;
+    const pauseTime = isDeleting ? 500 : 2000;
+
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (typedText.length < currentRole.length) {
+          setTypedText(currentRole.slice(0, typedText.length + 1));
+        } else {
+          setTimeout(() => setIsDeleting(true), pauseTime);
+        }
+      } else {
+        if (typedText.length > 0) {
+          setTypedText(currentRole.slice(0, typedText.length - 1));
+        } else {
+          setIsDeleting(false);
+          setRoleIndex((prev) => (prev + 1) % roles.length);
+        }
+      }
+    }, typingSpeed);
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, roleIndex, roles]);
 
   const handleProjectHover = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
@@ -62,16 +98,30 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10">
         {/* Navigation */}
-        <nav className="fixed top-0 w-full bg-slate-950/50 backdrop-blur-md border-b border-white/10 z-40">
+        <nav className="fixed top-0 w-full bg-slate-950/70 backdrop-blur-xl border-b border-white/10 z-40 shadow-lg shadow-blue-500/5">
           <div className="max-w-6xl mx-auto px-6 py-4">
             <div className="flex justify-between items-center">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Eton Yao
-              </h1>
-              <div className="flex gap-6">
-                <a href="#about" className="text-slate-300 hover:text-blue-400 transition-colors">About</a>
-                <a href="#projects" className="text-slate-300 hover:text-blue-400 transition-colors">Projects</a>
-                <a href="#contact" className="text-slate-300 hover:text-blue-400 transition-colors">Contact</a>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/50">
+                  EY
+                </div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                  Eton Yao
+                </h1>
+              </div>
+              <div className="flex gap-8">
+                <a href="#about" className="text-slate-300 hover:text-blue-400 transition-all duration-300 relative group">
+                  About
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#projects" className="text-slate-300 hover:text-blue-400 transition-all duration-300 relative group">
+                  Projects
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#contact" className="text-slate-300 hover:text-blue-400 transition-all duration-300 relative group">
+                  Contact
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
               </div>
             </div>
           </div>
@@ -100,18 +150,40 @@ export default function Home() {
           )}
           <div className="max-w-6xl mx-auto relative z-30">
             <div className="max-w-3xl">
+              {/* Badges */}
+              <div className="flex gap-3 mb-6 animate-fade-in">
+                <span className="px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-full text-sm font-medium backdrop-blur-sm">
+                  USC '27
+                </span>
+                <span className="px-4 py-2 bg-purple-500/20 border border-purple-500/30 text-purple-300 rounded-full text-sm font-medium backdrop-blur-sm">
+                  Open to Opportunities
+                </span>
+              </div>
+
               <div className="mb-6 overflow-hidden">
-                <h2 className="text-6xl md:text-8xl font-bold text-white mb-2 animate-fade-in">
+                <h2 className="text-6xl md:text-8xl font-bold text-white mb-2 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                   Hi, I'm
                 </h2>
-                <h2 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                <h2 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   Eton Yao
                 </h2>
               </div>
-              <p className="text-xl md:text-2xl text-slate-300 mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                I'm a student passionate about building innovative web applications and learning new technologies.
-              </p>
-              <div className="flex gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+
+              {/* Typing animation */}
+              <div className="mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                <p className="text-xl md:text-2xl text-slate-400 mb-2">
+                  <span className="text-slate-500">I'm a </span>
+                  <span className="text-blue-400 font-semibold">
+                    {typedText}
+                    <span className="animate-pulse">|</span>
+                  </span>
+                </p>
+                <p className="text-lg md:text-xl text-slate-300">
+                  Business Administration @ USC | Product Management & Marketing Intern
+                </p>
+              </div>
+
+              <div className="flex gap-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <a
                   href="#contact"
                   className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-medium relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/50"
@@ -139,21 +211,36 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-12">
               <div>
                 <p className="text-lg text-slate-300 mb-4 leading-relaxed">
-                  I'm a student passionate about web development and software engineering, constantly learning and building projects with modern technologies.
+                  I'm a Business Administration student at USC (expected graduation May 2027), pursuing a Master of International Trade Law and Economics (MITLE). My passion lies at the intersection of product management, marketing, and technology.
                 </p>
                 <p className="text-lg text-slate-300 mb-4 leading-relaxed">
-                  I enjoy creating innovative solutions and exploring new frameworks, with a focus on delivering quality user experiences.
+                  Currently a Marketing Intern at <span className="text-blue-400 font-semibold">Clouted (a16z speedrun 003)</span>, where I drive social media campaigns reaching over 5M+ monthly views. Previously, I worked as a Product Management Intern at <span className="text-cyan-400 font-semibold">Ringley Group</span> in London, defining roadmaps for sustainability dashboards tracking 10,000+ data points.
+                </p>
+                <p className="text-lg text-slate-300 leading-relaxed">
+                  I love building products that make a difference, from leading marketing for USC's Advanced Games Project to designing community programs that engage 5,000+ students across LA.
                 </p>
               </div>
               <div>
-                <h4 className="text-2xl font-semibold text-white mb-6">Skills</h4>
+                <h4 className="text-2xl font-semibold text-white mb-6">Skills & Tools</h4>
                 <div className="flex flex-wrap gap-3">
-                  {['Product Management', 'Python', 'Data Analysis', 'Machine Learning', 'React', 'Next.js', 'TypeScript', 'Project Management', 'UX Strategy', 'AI Integration'].map((skill) => (
+                  {['Product Management', 'Figma', 'Python', 'AI', 'Data Analysis', 'Airtable', 'Linear', 'Microsoft Office', 'Marketing', 'Agile/Scrum'].map((skill) => (
                     <span
                       key={skill}
                       className="px-4 py-2 bg-slate-800/50 backdrop-blur-sm text-blue-300 rounded-lg border border-blue-400/30 hover:border-blue-400 hover:bg-slate-700/50 transition-all duration-300 cursor-default hover:scale-105"
                     >
                       {skill}
+                    </span>
+                  ))}
+                </div>
+
+                <h4 className="text-2xl font-semibold text-white mb-6 mt-8">Interests</h4>
+                <div className="flex flex-wrap gap-3">
+                  {['Video Games', 'Sustainability', 'Vibe Coding', 'Cooking', 'Travel', 'Kung Fu', 'Pickleball', 'Karaoke', 'Museums'].map((interest) => (
+                    <span
+                      key={interest}
+                      className="px-4 py-2 bg-purple-500/10 backdrop-blur-sm text-purple-300 rounded-lg border border-purple-400/30 hover:border-purple-400 hover:bg-purple-500/20 transition-all duration-300 cursor-default hover:scale-105"
+                    >
+                      {interest}
                     </span>
                   ))}
                 </div>
