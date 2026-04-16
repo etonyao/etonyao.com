@@ -1,191 +1,332 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 export default function Home() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [cursorVariant, setCursorVariant] = useState('default');
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const handleProjectHover = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = (y - centerY) / 10;
+    const rotateY = (centerX - x) / 10;
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+  };
+
+  const handleProjectLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Eton Yao</h1>
-            <div className="flex gap-6">
-              <a href="#about" className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">About</a>
-              <a href="#projects" className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Projects</a>
-              <a href="#contact" className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Contact</a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 relative overflow-hidden">
+      {/* Animated Background Gradient */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      {/* Custom Cursor */}
+      <div
+        className="fixed w-6 h-6 rounded-full border-2 border-blue-400 pointer-events-none z-50 transition-all duration-100 ease-out mix-blend-difference"
+        style={{
+          left: `${mousePosition.x}px`,
+          top: `${mousePosition.y}px`,
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Navigation */}
+        <nav className="fixed top-0 w-full bg-slate-950/50 backdrop-blur-md border-b border-white/10 z-40">
+          <div className="max-w-6xl mx-auto px-6 py-4">
+            <div className="flex justify-between items-center">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Eton Yao
+              </h1>
+              <div className="flex gap-6">
+                <a href="#about" className="text-slate-300 hover:text-blue-400 transition-colors">About</a>
+                <a href="#projects" className="text-slate-300 hover:text-blue-400 transition-colors">Projects</a>
+                <a href="#contact" className="text-slate-300 hover:text-blue-400 transition-colors">Contact</a>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-3xl">
-            <h2 className="text-5xl md:text-7xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">
-              Hi, I'm Eton Yao
-            </h2>
-            <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 mb-8">
-              I'm a student passionate about building innovative web applications and learning new technologies.
+        {/* Hero Section */}
+        <section className="pt-32 pb-20 px-6 min-h-screen flex items-center">
+          <div className="max-w-6xl mx-auto">
+            <div className="max-w-3xl">
+              <div className="mb-6 overflow-hidden">
+                <h2 className="text-6xl md:text-8xl font-bold text-white mb-2 animate-fade-in">
+                  Hi, I'm
+                </h2>
+                <h2 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                  Eton Yao
+                </h2>
+              </div>
+              <p className="text-xl md:text-2xl text-slate-300 mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                I'm a student passionate about building innovative web applications and learning new technologies.
+              </p>
+              <div className="flex gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                <a
+                  href="#contact"
+                  className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-medium relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/50"
+                >
+                  <span className="relative z-10">Get in Touch</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </a>
+                <a
+                  href="#projects"
+                  className="px-8 py-4 border-2 border-blue-400/50 text-blue-400 rounded-lg font-medium hover:bg-blue-400/10 hover:border-blue-400 transition-all duration-300 hover:scale-105"
+                >
+                  View Projects
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="py-20 px-6 bg-slate-900/30 backdrop-blur-sm">
+          <div className="max-w-6xl mx-auto">
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-12 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              About Me
+            </h3>
+            <div className="grid md:grid-cols-2 gap-12">
+              <div>
+                <p className="text-lg text-slate-300 mb-4 leading-relaxed">
+                  I'm a student passionate about web development and software engineering, constantly learning and building projects with modern technologies.
+                </p>
+                <p className="text-lg text-slate-300 mb-4 leading-relaxed">
+                  I enjoy creating innovative solutions and exploring new frameworks, with a focus on delivering quality user experiences.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-2xl font-semibold text-white mb-6">Skills</h4>
+                <div className="flex flex-wrap gap-3">
+                  {['Product Management', 'Python', 'Data Analysis', 'Machine Learning', 'React', 'Next.js', 'TypeScript', 'Project Management', 'UX Strategy', 'AI Integration'].map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-4 py-2 bg-slate-800/50 backdrop-blur-sm text-blue-300 rounded-lg border border-blue-400/30 hover:border-blue-400 hover:bg-slate-700/50 transition-all duration-300 cursor-default hover:scale-105"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Projects Section */}
+        <section id="projects" className="py-20 px-6">
+          <div className="max-w-6xl mx-auto">
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Featured Projects
+            </h3>
+            <p className="text-slate-400 mb-12 text-lg">A collection of my recent work showcasing various skills and technologies</p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Project 1 */}
+              <div
+                onMouseMove={handleProjectHover}
+                onMouseLeave={handleProjectLeave}
+                className="group bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <div className="relative z-10">
+                  <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                    Potion Problems - Game Marketing Campaign
+                  </h4>
+                  <p className="text-slate-400 mb-4 leading-relaxed">
+                    Led marketing strategy for USC Advanced Games Project, managing cross-functional collaboration across 8 teams including engineering and design to launch a successful game trailer.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full border border-blue-500/30">Project Management</span>
+                    <span className="text-xs px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Marketing Strategy</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Project 2 */}
+              <div
+                onMouseMove={handleProjectHover}
+                onMouseLeave={handleProjectLeave}
+                className="group bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <div className="relative z-10">
+                  <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                    Sustainability Dashboard - Ringley Group
+                  </h4>
+                  <p className="text-slate-400 mb-4 leading-relaxed">
+                    Product roadmap and strategy for a comprehensive sustainability dashboard tracking 10,000+ data points to guide net-zero initiatives and property acquisition decisions.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Product Management</span>
+                    <span className="text-xs px-3 py-1 bg-green-500/20 text-green-300 rounded-full border border-green-500/30">Data Analysis</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Project 3 */}
+              <div
+                onMouseMove={handleProjectHover}
+                onMouseLeave={handleProjectLeave}
+                className="group bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <div className="relative z-10">
+                  <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                    APASA Community Impact Program
+                  </h4>
+                  <p className="text-slate-400 mb-4 leading-relaxed">
+                    Designed and launched a service initiative requiring 40+ member organizations to conduct community projects across Los Angeles, achieving 60% sustained engagement rate.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full border border-pink-500/30">Program Management</span>
+                    <span className="text-xs px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full border border-orange-500/30">Community Engagement</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Project 4 */}
+              <div
+                onMouseMove={handleProjectHover}
+                onMouseLeave={handleProjectLeave}
+                className="group bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <div className="relative z-10">
+                  <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                    Anthropogenic Climate Change Analysis
+                  </h4>
+                  <p className="text-slate-400 mb-4 leading-relaxed">
+                    Data analysis project examining the relationship between CO2 emissions, urbanization, and global temperature increases using multiple datasets to demonstrate human impact on climate change.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full border border-yellow-500/30">Python</span>
+                    <span className="text-xs px-3 py-1 bg-green-500/20 text-green-300 rounded-full border border-green-500/30">Data Analysis</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Project 5 */}
+              <div
+                onMouseMove={handleProjectHover}
+                onMouseLeave={handleProjectLeave}
+                className="group bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <div className="relative z-10">
+                  <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                    Pokemon Stats ML Predictor
+                  </h4>
+                  <p className="text-slate-400 mb-4 leading-relaxed">
+                    Machine learning project using neural networks to analyze Pokemon statistics and predict legendary status, featuring confusion matrix visualization and interactive prediction capabilities.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Machine Learning</span>
+                    <span className="text-xs px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full border border-blue-500/30">Python</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Project 6 */}
+              <div
+                onMouseMove={handleProjectHover}
+                onMouseLeave={handleProjectLeave}
+                className="group bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <div className="relative z-10">
+                  <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                    Alongside AI - Peer Chat Feature PRD
+                  </h4>
+                  <p className="text-slate-400 mb-4 leading-relaxed">
+                    Product strategy for an AI-moderated anonymous peer-to-peer chat feature, enabling students to practice interpersonal skills while receiving mental health support from Kiwi AI assistant.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Product Management</span>
+                    <span className="text-xs px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full border border-indigo-500/30">AI Integration</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="py-20 px-6 bg-slate-900/30 backdrop-blur-sm">
+          <div className="max-w-6xl mx-auto text-center">
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Get In Touch
+            </h3>
+            <p className="text-xl text-slate-300 mb-12 max-w-2xl mx-auto">
+              I'm always open to new opportunities and interesting projects. Feel free to reach out!
             </p>
-            <div className="flex gap-4">
+            <div className="flex justify-center gap-6">
               <a
-                href="#contact"
-                className="px-6 py-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors font-medium"
+                href="mailto:etonyao@gmail.com"
+                className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-medium relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/50"
               >
-                Get in Touch
+                <span className="relative z-10">Email Me</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </a>
               <a
-                href="#projects"
-                className="px-6 py-3 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors font-medium"
+                href="https://www.linkedin.com/in/eton-yao/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-4 border-2 border-blue-400/50 text-blue-400 rounded-lg font-medium hover:bg-blue-400/10 hover:border-blue-400 transition-all duration-300 hover:scale-105"
               >
-                View Projects
+                LinkedIn
               </a>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 px-6 bg-zinc-50 dark:bg-zinc-900">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-8">About Me</h3>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-4">
-                I'm a student passionate about web development and software engineering, constantly learning and building projects with modern technologies.
-              </p>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-4">
-                I enjoy creating innovative solutions and exploring new frameworks, with a focus on delivering quality user experiences.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Skills</h4>
-              <div className="flex flex-wrap gap-2">
-                {['Product Management', 'Python', 'Data Analysis', 'Machine Learning', 'React', 'Next.js', 'TypeScript', 'Project Management', 'UX Strategy', 'AI Integration'].map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-4 py-2 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-lg border border-zinc-200 dark:border-zinc-700"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
+        {/* Footer */}
+        <footer className="py-8 px-6 border-t border-white/10">
+          <div className="max-w-6xl mx-auto text-center text-slate-400">
+            <p>&copy; {new Date().getFullYear()} Eton Yao. All rights reserved.</p>
           </div>
-        </div>
-      </section>
+        </footer>
+      </div>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-8">Featured Projects</h3>
-          <p className="text-zinc-600 dark:text-zinc-400 mb-12">A collection of my recent work showcasing various skills and technologies</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Project 1: Potion Problems */}
-            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
-              <h4 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Potion Problems - Game Marketing Campaign</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                Led marketing strategy for USC Advanced Games Project, managing cross-functional collaboration across 8 teams including engineering and design to launch a successful game trailer.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Project Management</span>
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Marketing Strategy</span>
-              </div>
-            </div>
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-            {/* Project 2: Sustainability Dashboard */}
-            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
-              <h4 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Sustainability Dashboard - Ringley Group</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                Product roadmap and strategy for a comprehensive sustainability dashboard tracking 10,000+ data points to guide net-zero initiatives and property acquisition decisions.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Product Management</span>
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Data Analysis</span>
-              </div>
-            </div>
-
-            {/* Project 3: APASA Community Impact */}
-            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
-              <h4 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">APASA Community Impact Program</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                Designed and launched a service initiative requiring 40+ member organizations to conduct community projects across Los Angeles, achieving 60% sustained engagement rate.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Program Management</span>
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Community Engagement</span>
-              </div>
-            </div>
-
-            {/* Project 4: Climate Change Analysis */}
-            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
-              <h4 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Anthropogenic Climate Change Analysis</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                Data analysis project examining the relationship between CO2 emissions, urbanization, and global temperature increases using multiple datasets to demonstrate human impact on climate change.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Python</span>
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Data Analysis</span>
-              </div>
-            </div>
-
-            {/* Project 5: Pokemon ML Predictor */}
-            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
-              <h4 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Pokemon Stats ML Predictor</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                Machine learning project using neural networks to analyze Pokemon statistics and predict legendary status, featuring confusion matrix visualization and interactive prediction capabilities.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Machine Learning</span>
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Python</span>
-              </div>
-            </div>
-
-            {/* Project 6: Alongside AI */}
-            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
-              <h4 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Alongside AI - Peer Chat Feature PRD</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                Product strategy for an AI-moderated anonymous peer-to-peer chat feature, enabling students to practice interpersonal skills while receiving mental health support from Kiwi AI assistant.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">Product Management</span>
-                <span className="text-xs px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">AI Integration</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 bg-zinc-50 dark:bg-zinc-900">
-        <div className="max-w-6xl mx-auto text-center">
-          <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">Get In Touch</h3>
-          <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-2xl mx-auto">
-            I'm always open to new opportunities and interesting projects. Feel free to reach out!
-          </p>
-          <div className="flex justify-center gap-6">
-            <a
-              href="mailto:etonyao@gmail.com"
-              className="px-8 py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors font-medium"
-            >
-              Email Me
-            </a>
-            <a
-              href="https://www.linkedin.com/in/eton-yao/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-lg hover:bg-white dark:hover:bg-zinc-800 transition-colors font-medium"
-            >
-              LinkedIn
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-zinc-200 dark:border-zinc-800">
-        <div className="max-w-6xl mx-auto text-center text-zinc-600 dark:text-zinc-400">
-          <p>&copy; {new Date().getFullYear()} Eton Yao. All rights reserved.</p>
-        </div>
-      </footer>
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
     </div>
   );
 }
