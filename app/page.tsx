@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [cursorVariant, setCursorVariant] = useState('default');
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -42,13 +41,19 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      {/* Custom Cursor */}
+      {/* Interactive Mouse Spotlight Effect */}
       <div
-        className="fixed w-6 h-6 rounded-full border-2 border-blue-400 pointer-events-none z-50 transition-all duration-100 ease-out mix-blend-difference"
+        className="fixed pointer-events-none z-30 transition-opacity duration-300"
         style={{
-          left: `${mousePosition.x}px`,
-          top: `${mousePosition.y}px`,
-          transform: 'translate(-50%, -50%)',
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
+          inset: 0,
+        }}
+      />
+      <div
+        className="fixed pointer-events-none z-30"
+        style={{
+          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 211, 238, 0.1), transparent 40%)`,
+          inset: 0,
         }}
       />
 
