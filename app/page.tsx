@@ -102,8 +102,36 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 py-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/50">
-                  EY
+                {/* Animated Logo */}
+                <div className="relative w-10 h-10 group cursor-pointer">
+                  {/* Rotating border */}
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 opacity-75 group-hover:opacity-100 blur-sm group-hover:blur-md transition-all duration-300 animate-spin-slow"></div>
+
+                  {/* Logo container */}
+                  <div className="relative w-10 h-10 rounded-lg bg-slate-950 flex items-center justify-center border-2 border-transparent group-hover:border-blue-400/50 transition-all duration-300">
+                    {/* Inner glow */}
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 group-hover:from-blue-500/30 group-hover:to-cyan-500/30 transition-all duration-300"></div>
+
+                    {/* Geometric shape - hexagon */}
+                    <svg className="w-6 h-6 relative z-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12 2L21 7V17L12 22L3 17V7L12 2Z"
+                        stroke="url(#logo-gradient)"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="group-hover:animate-pulse"
+                      />
+                      <circle cx="12" cy="12" r="3" fill="url(#logo-gradient)" className="group-hover:animate-ping" style={{ animationDuration: '2s' }} />
+                      <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#3b82f6" />
+                          <stop offset="50%" stopColor="#22d3ee" />
+                          <stop offset="100%" stopColor="#a855f7" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
                 </div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">
                   Eton Yao
@@ -435,9 +463,22 @@ export default function Home() {
           }
         }
 
+        @keyframes spin-slow {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
         .animate-fade-in {
           animation: fade-in 0.6s ease-out forwards;
           opacity: 0;
+        }
+
+        .animate-spin-slow {
+          animation: spin-slow 8s linear infinite;
         }
       `}</style>
     </div>
