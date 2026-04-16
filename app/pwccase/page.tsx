@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Sparkles, Calendar, Clock, TrendingUp, Zap, ChevronDown, Plus, Check } from 'lucide-react';
+import { X, Sparkles, Calendar, Clock, TrendingUp, Zap, ChevronDown, Plus, Check, Rocket, Brain, MessageSquare, Smartphone, BarChart, Shield } from 'lucide-react';
 
 interface TimeEntry {
   id: string;
@@ -155,6 +155,111 @@ export default function PWCCasePrototype() {
                 {showAIAssistant ? 'Hide' : 'Show'} AI Assistant (Demo)
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Feature Roadmap */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Rocket className="w-6 h-6 text-blue-600" />
+            <h2 className="text-xl font-bold text-gray-900">Phased Rollout Strategy</h2>
+          </div>
+          <p className="text-gray-600 mb-6 text-sm">
+            Features will be shipped incrementally to ensure stability and gather user feedback. Each phase targets specific pain points identified in the Complex User segment.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Phase 1 */}
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white text-xs font-bold">1</div>
+                <span className="text-xs font-semibold text-green-700 uppercase tracking-wide">Phase 1 - Live</span>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <Calendar className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Calendar Sync</p>
+                    <p className="text-xs text-gray-600">Auto-suggest WBS codes from Outlook events</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Brain className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Smart Detection</p>
+                    <p className="text-xs text-gray-600">Identify complex users at 15-min threshold</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Phase 2 */}
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">2</div>
+                <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Phase 2 - Q2 2025</span>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <TrendingUp className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Pattern Recognition</p>
+                    <p className="text-xs text-gray-600">Learn recurring WBS usage patterns</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Zap className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Bulk Entry Mode</p>
+                    <p className="text-xs text-gray-600">Enter multiple entries with keyboard shortcuts</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <BarChart className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Time Splitting</p>
+                    <p className="text-xs text-gray-600">Auto-split hours across multiple WBS codes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Phase 3 */}
+            <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">3</div>
+                <span className="text-xs font-semibold text-purple-700 uppercase tracking-wide">Phase 3 - Q3 2025</span>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <MessageSquare className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Voice Input</p>
+                    <p className="text-xs text-gray-600">Hands-free time entry via voice commands</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Smartphone className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Mobile App</p>
+                    <p className="text-xs text-gray-600">On-the-go entry with offline sync</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Shield className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Auto-Save Drafts</p>
+                    <p className="text-xs text-gray-600">Never lose work with continuous auto-save</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <p className="text-xs text-gray-600">
+              <strong className="text-gray-900">Success Metrics:</strong> Target 60% reduction in time entry duration for Complex Users (from 30+ min to &lt;12 min) and 25% increase in same-day submission rates by end of Phase 2.
+            </p>
           </div>
         </div>
 
