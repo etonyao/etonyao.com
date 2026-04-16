@@ -103,31 +103,55 @@ export default function Home() {
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
                 {/* Animated Logo */}
-                <div className="relative w-10 h-10 group cursor-pointer">
-                  {/* Rotating border */}
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 opacity-75 group-hover:opacity-100 blur-sm group-hover:blur-md transition-all duration-300 animate-spin-slow"></div>
+                <div className="relative w-12 h-12 group cursor-pointer">
+                  {/* Rotating rings */}
+                  <div className="absolute inset-0 animate-spin-slow">
+                    <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-blue-500 border-r-cyan-500"></div>
+                  </div>
+                  <div className="absolute inset-1 animate-spin-reverse">
+                    <div className="absolute inset-0 rounded-full border-2 border-transparent border-b-purple-500 border-l-blue-400"></div>
+                  </div>
 
                   {/* Logo container */}
-                  <div className="relative w-10 h-10 rounded-lg bg-slate-950 flex items-center justify-center border-2 border-transparent group-hover:border-blue-400/50 transition-all duration-300">
-                    {/* Inner glow */}
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20 group-hover:from-blue-500/30 group-hover:to-cyan-500/30 transition-all duration-300"></div>
+                  <div className="relative w-12 h-12 rounded-full bg-slate-950/80 backdrop-blur-sm flex items-center justify-center border border-blue-500/20 group-hover:border-blue-400/50 transition-all duration-300 group-hover:scale-110">
+                    {/* Glowing background */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-purple-500/10 group-hover:from-blue-500/20 group-hover:via-cyan-500/20 group-hover:to-purple-500/20 transition-all duration-300"></div>
 
-                    {/* Geometric shape - hexagon */}
-                    <svg className="w-6 h-6 relative z-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Abstract EY symbol */}
+                    <svg className="w-7 h-7 relative z-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      {/* E shape - three horizontal bars */}
                       <path
-                        d="M12 2L21 7V17L12 22L3 17V7L12 2Z"
-                        stroke="url(#logo-gradient)"
-                        strokeWidth="2"
+                        d="M12 10 L20 10 M12 20 L18 20 M12 30 L20 30"
+                        stroke="url(#logo-grad)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        className="group-hover:stroke-[3.5] transition-all duration-300"
+                      />
+                      {/* Y shape - diagonal lines meeting */}
+                      <path
+                        d="M22 10 L28 18 M34 10 L28 18 L28 30"
+                        stroke="url(#logo-grad)"
+                        strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="group-hover:stroke-[3.5] transition-all duration-300"
+                      />
+                      {/* Accent dot */}
+                      <circle
+                        cx="28"
+                        cy="20"
+                        r="2"
+                        fill="url(#logo-grad)"
                         className="group-hover:animate-pulse"
                       />
-                      <circle cx="12" cy="12" r="3" fill="url(#logo-gradient)" className="group-hover:animate-ping" style={{ animationDuration: '2s' }} />
                       <defs>
-                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#3b82f6" />
-                          <stop offset="50%" stopColor="#22d3ee" />
-                          <stop offset="100%" stopColor="#a855f7" />
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#3b82f6">
+                            <animate attributeName="stop-color" values="#3b82f6; #22d3ee; #a855f7; #3b82f6" dur="4s" repeatCount="indefinite" />
+                          </stop>
+                          <stop offset="100%" stopColor="#22d3ee">
+                            <animate attributeName="stop-color" values="#22d3ee; #a855f7; #3b82f6; #22d3ee" dur="4s" repeatCount="indefinite" />
+                          </stop>
                         </linearGradient>
                       </defs>
                     </svg>
@@ -479,6 +503,19 @@ export default function Home() {
 
         .animate-spin-slow {
           animation: spin-slow 8s linear infinite;
+        }
+
+        @keyframes spin-reverse {
+          from {
+            transform: rotate(360deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+
+        .animate-spin-reverse {
+          animation: spin-reverse 6s linear infinite;
         }
       `}</style>
     </div>

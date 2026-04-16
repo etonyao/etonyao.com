@@ -1,0 +1,41 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <circle cx="32" cy="32" r="32" fill="url(#bg-gradient)"/>
+
+  <!-- Rotating rings effect -->
+  <circle cx="32" cy="32" r="28" stroke="url(#ring-gradient)" stroke-width="2" opacity="0.3" fill="none"/>
+  <circle cx="32" cy="32" r="24" stroke="url(#ring-gradient)" stroke-width="2" opacity="0.5" fill="none"/>
+
+  <!-- E shape - three horizontal bars -->
+  <path
+    d="M18 18 L30 18 M18 32 L27 32 M18 46 L30 46"
+    stroke="white"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+
+  <!-- Y shape - diagonal lines meeting -->
+  <path
+    d="M34 18 L42 30 M50 18 L42 30 L42 46"
+    stroke="white"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Accent dot -->
+  <circle cx="42" cy="34" r="3" fill="white" opacity="0.8"/>
+
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+</svg>
