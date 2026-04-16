@@ -1,13 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMouseInHero, setIsMouseInHero] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        const isInside =
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom;
+
+        setIsMouseInHero(isInside);
+
+        if (isInside) {
+          setMousePosition({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+          });
+        }
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -41,22 +59,6 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      {/* Interactive Mouse Spotlight Effect */}
-      <div
-        className="fixed pointer-events-none z-30 transition-opacity duration-300"
-        style={{
-          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
-          inset: 0,
-        }}
-      />
-      <div
-        className="fixed pointer-events-none z-30"
-        style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 211, 238, 0.1), transparent 40%)`,
-          inset: 0,
-        }}
-      />
-
       {/* Content */}
       <div className="relative z-10">
         {/* Navigation */}
@@ -76,8 +78,27 @@ export default function Home() {
         </nav>
 
         {/* Hero Section */}
-        <section className="pt-32 pb-20 px-6 min-h-screen flex items-center">
-          <div className="max-w-6xl mx-auto">
+        <section ref={heroRef} className="pt-32 pb-20 px-6 min-h-screen flex items-center relative overflow-hidden">
+          {/* Interactive Mouse Spotlight Effect - Hero Only */}
+          {isMouseInHero && (
+            <>
+              <div
+                className="absolute pointer-events-none z-20 transition-opacity duration-300"
+                style={{
+                  background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
+                  inset: 0,
+                }}
+              />
+              <div
+                className="absolute pointer-events-none z-20"
+                style={{
+                  background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 211, 238, 0.1), transparent 40%)`,
+                  inset: 0,
+                }}
+              />
+            </>
+          )}
+          <div className="max-w-6xl mx-auto relative z-30">
             <div className="max-w-3xl">
               <div className="mb-6 overflow-hidden">
                 <h2 className="text-6xl md:text-8xl font-bold text-white mb-2 animate-fade-in">
