@@ -355,6 +355,86 @@ export const POKEMON_DATABASE: PokemonData[] = [
   { id: 786, name: 'Tapu Lele', types: ['Psychic', 'Fairy'], abilities: ['Psychic Surge', 'Telepathy'], availableIn: ['vgc-reg-i', 'pokemon-champions'] },
   { id: 787, name: 'Tapu Bulu', types: ['Grass', 'Fairy'], abilities: ['Grassy Surge', 'Telepathy'], availableIn: ['vgc-reg-i', 'pokemon-champions'] },
   { id: 788, name: 'Tapu Fini', types: ['Water', 'Fairy'], abilities: ['Misty Surge', 'Telepathy'], availableIn: ['vgc-reg-i', 'pokemon-champions'] },
+
+  // Additional Top VGC Pokemon
+  {
+    id: 903,
+    name: 'Sneasler',
+    types: ['Fighting', 'Poison'],
+    abilities: ['Pressure', 'Unburden'],
+    availableIn: ['vgc-reg-i', 'vgc-reg-h', 'pokemon-champions'],
+    commonSpreads: [
+      { name: 'Unburden Sweeper', hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252, description: 'Fast physical attacker' }
+    ]
+  },
+  { id: 1012, name: 'Poltchageist', types: ['Grass', 'Ghost'], abilities: ['Hospitality'], availableIn: ['vgc-reg-i', 'vgc-reg-h'] },
+  { id: 1013, name: 'Sinistcha', types: ['Grass', 'Ghost'], abilities: ['Hospitality', 'Heatproof'], availableIn: ['vgc-reg-i', 'vgc-reg-h'] },
+  { id: 902, name: 'Basculegion', types: ['Water', 'Ghost'], abilities: ['Rattled', 'Adaptability'], availableIn: ['vgc-reg-i', 'vgc-reg-h', 'pokemon-champions'] },
+  { id: 279, name: 'Pelipper', types: ['Water', 'Flying'], abilities: ['Keen Eye', 'Drizzle'], availableIn: ['vgc-reg-i', 'vgc-reg-h', 'pokemon-champions'] },
+
+  // Eeveelutions
+  { id: 134, name: 'Vaporeon', types: ['Water'], abilities: ['Water Absorb', 'Hydration'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 135, name: 'Jolteon', types: ['Electric'], abilities: ['Volt Absorb', 'Quick Feet'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 136, name: 'Flareon', types: ['Fire'], abilities: ['Flash Fire', 'Guts'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 196, name: 'Espeon', types: ['Psychic'], abilities: ['Synchronize', 'Magic Bounce'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 197, name: 'Umbreon', types: ['Dark'], abilities: ['Synchronize', 'Inner Focus'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 470, name: 'Leafeon', types: ['Grass'], abilities: ['Leaf Guard', 'Chlorophyll'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 471, name: 'Glaceon', types: ['Ice'], abilities: ['Snow Cloak', 'Ice Body'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 700, name: 'Sylveon', types: ['Fairy'], abilities: ['Cute Charm', 'Pixilate'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+
+  // Regional Forms and Legendaries
+  { id: 146, name: 'Moltres', types: ['Fire', 'Flying'], abilities: ['Pressure', 'Flame Body'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 38, name: 'Ninetales', types: ['Fire'], abilities: ['Flash Fire', 'Drought'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 462, name: 'Magnezone', types: ['Electric', 'Steel'], abilities: ['Magnet Pull', 'Sturdy'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 464, name: 'Rhyperior', types: ['Ground', 'Rock'], abilities: ['Lightning Rod', 'Solid Rock'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 466, name: 'Electivire', types: ['Electric'], abilities: ['Motor Drive', 'Vital Spirit'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 467, name: 'Magmortar', types: ['Fire'], abilities: ['Flame Body', 'Vital Spirit'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 475, name: 'Gallade', types: ['Psychic', 'Fighting'], abilities: ['Steadfast', 'Sharpness'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 534, name: 'Conkeldurr', types: ['Fighting'], abilities: ['Guts', 'Sheer Force'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+
+  // Gen 1-5 Competitive Pokemon
+  { id: 143, name: 'Snorlax', types: ['Normal'], abilities: ['Immunity', 'Thick Fat'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 131, name: 'Lapras', types: ['Water', 'Ice'], abilities: ['Water Absorb', 'Shell Armor'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 242, name: 'Blissey', types: ['Normal'], abilities: ['Natural Cure', 'Serene Grace'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 460, name: 'Abomasnow', types: ['Grass', 'Ice'], abilities: ['Snow Warning', 'Soundproof'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 596, name: 'Galvantula', types: ['Bug', 'Electric'], abilities: ['Compound Eyes', 'Unnerve'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 598, name: 'Ferrothorn', types: ['Grass', 'Steel'], abilities: ['Iron Barbs', 'Anticipation'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 609, name: 'Chandelure', types: ['Ghost', 'Fire'], abilities: ['Flash Fire', 'Flame Body'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 612, name: 'Haxorus', types: ['Dragon'], abilities: ['Rivalry', 'Mold Breaker'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 623, name: 'Golurk', types: ['Ground', 'Ghost'], abilities: ['Iron Fist', 'Klutz'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 625, name: 'Bisharp', types: ['Dark', 'Steel'], abilities: ['Defiant', 'Inner Focus'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+
+  // Gen 6-8 Competitive Pokemon
+  { id: 697, name: 'Tyrantrum', types: ['Rock', 'Dragon'], abilities: ['Strong Jaw', 'Rock Head'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 706, name: 'Goodra', types: ['Dragon'], abilities: ['Sap Sipper', 'Hydration'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 724, name: 'Decidueye', types: ['Grass', 'Ghost'], abilities: ['Overgrow', 'Long Reach'], availableIn: ['pokemon-champions'] },
+  { id: 730, name: 'Primarina', types: ['Water', 'Fairy'], abilities: ['Torrent', 'Liquid Voice'], availableIn: ['pokemon-champions'] },
+  { id: 746, name: 'Wishiwashi', types: ['Water'], abilities: ['Schooling'], availableIn: ['vgc-reg-h'] },
+  { id: 748, name: 'Toxapex', types: ['Poison', 'Water'], abilities: ['Merciless', 'Limber'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 763, name: 'Tsareena', types: ['Grass'], abilities: ['Leaf Guard', 'Queenly Majesty'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 776, name: 'Turtonator', types: ['Fire', 'Dragon'], abilities: ['Shell Armor'], availableIn: ['vgc-reg-h'] },
+  { id: 777, name: 'Togedemaru', types: ['Electric', 'Steel'], abilities: ['Iron Barbs', 'Lightning Rod'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 784, name: 'Kommo-o', types: ['Dragon', 'Fighting'], abilities: ['Bulletproof', 'Soundproof'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+
+  // Gen 8 Galar Pokemon
+  { id: 818, name: 'Inteleon', types: ['Water'], abilities: ['Torrent', 'Sniper'], availableIn: ['pokemon-champions'] },
+  { id: 823, name: 'Corviknight', types: ['Flying', 'Steel'], abilities: ['Pressure', 'Unnerve'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 826, name: 'Orbeetle', types: ['Bug', 'Psychic'], abilities: ['Swarm', 'Frisk'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 834, name: 'Drednaw', types: ['Water', 'Rock'], abilities: ['Strong Jaw', 'Shell Armor'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 836, name: 'Boltund', types: ['Electric'], abilities: ['Strong Jaw', 'Competitive'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 839, name: 'Coalossal', types: ['Rock', 'Fire'], abilities: ['Steam Engine', 'Flame Body'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 842, name: 'Appletun', types: ['Grass', 'Dragon'], abilities: ['Ripen', 'Gluttony'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 845, name: 'Cramorant', types: ['Flying', 'Water'], abilities: ['Gulp Missile'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 847, name: 'Barraskewda', types: ['Water'], abilities: ['Swift Swim', 'Propeller Tail'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 849, name: 'Toxtricity', types: ['Electric', 'Poison'], abilities: ['Punk Rock', 'Plus'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 851, name: 'Centiskorch', types: ['Fire', 'Bug'], abilities: ['Flash Fire', 'White Smoke'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 853, name: 'Grapploct', types: ['Fighting'], abilities: ['Limber', 'Technician'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 858, name: 'Hatterene', types: ['Psychic', 'Fairy'], abilities: ['Healer', 'Anticipation'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 862, name: 'Obstagoon', types: ['Dark', 'Normal'], abilities: ['Reckless', 'Guts'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 864, name: 'Cursola', types: ['Ghost'], abilities: ['Weak Armor', 'Perish Body'], availableIn: ['vgc-reg-h'] },
+  { id: 869, name: 'Alcremie', types: ['Fairy'], abilities: ['Sweet Veil', 'Aroma Veil'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
+  { id: 873, name: 'Frosmoth', types: ['Ice', 'Bug'], abilities: ['Shield Dust', 'Ice Scales'], availableIn: ['vgc-reg-h'] },
+  { id: 884, name: 'Duraludon', types: ['Steel', 'Dragon'], abilities: ['Light Metal', 'Heavy Metal'], availableIn: ['vgc-reg-h', 'pokemon-champions'] },
 ];
 
 export const NATURES = [
