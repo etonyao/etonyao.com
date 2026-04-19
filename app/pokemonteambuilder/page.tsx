@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Plus, Trash2, Download, Upload, Shield, X, Search, Edit, Save, FolderPlus, ChevronDown } from 'lucide-react';
-import { POKEMON_DATABASE, NATURES, ITEMS, type PokemonData } from './pokemonData';
+import { POKEMON_DATABASE, NATURES, ITEMS, type PokemonData, type EVSpread } from './pokemonData';
 import Image from 'next/image';
 
 interface Pokemon {
@@ -88,6 +88,21 @@ export default function TeamBuilder() {
     setEditingPokemon({...pokemon});
     setSelectedSlot(slot);
     setShowEditModal(true);
+  };
+
+  const applyEVSpread = (spread: EVSpread) => {
+    if (!editingPokemon) return;
+    setEditingPokemon({
+      ...editingPokemon,
+      evs: {
+        hp: spread.hp,
+        atk: spread.atk,
+        def: spread.def,
+        spa: spread.spa,
+        spd: spread.spd,
+        spe: spread.spe
+      }
+    });
   };
 
   const saveEditedPokemon = () => {
@@ -478,6 +493,43 @@ export default function TeamBuilder() {
                     Total: {totalEvs} / 510
                   </span>
                 </div>
+
+                {/* EV Presets */}
+                {(() => {
+                  const pokemonData = POKEMON_DATABASE.find(p => p.id === parseInt(editingPokemon.id));
+                  if (pokemonData?.commonSpreads && pokemonData.commonSpreads.length > 0) {
+                    return (
+                      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h4 className="text-sm font-semibold text-gray-900 mb-3">Common EV Spreads</h4>
+                        <div className="space-y-2">
+                          {pokemonData.commonSpreads.map((spread, index) => (
+                            <button
+                              key={index}
+                              onClick={() => applyEVSpread(spread)}
+                              className="w-full text-left p-3 bg-white border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-400 transition-colors"
+                            >
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-medium text-gray-900">{spread.name}</span>
+                                <span className="text-xs text-gray-500">{spread.hp + spread.atk + spread.def + spread.spa + spread.spd + spread.spe} EVs</span>
+                              </div>
+                              <p className="text-xs text-gray-600 mb-2">{spread.description}</p>
+                              <div className="flex gap-2 text-xs text-gray-500">
+                                {spread.hp > 0 && <span>{spread.hp} HP</span>}
+                                {spread.atk > 0 && <span>{spread.atk} Atk</span>}
+                                {spread.def > 0 && <span>{spread.def} Def</span>}
+                                {spread.spa > 0 && <span>{spread.spa} SpA</span>}
+                                {spread.spd > 0 && <span>{spread.spd} SpD</span>}
+                                {spread.spe > 0 && <span>{spread.spe} Spe</span>}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
+
                 <div className="space-y-4">
                   {(['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const).map((stat) => (
                     <div key={stat} className="space-y-2">
