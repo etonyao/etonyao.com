@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Trash2, Download, Upload, Shield, X, Search, Edit, Save, FolderPlus, ChevronDown } from 'lucide-react';
 import { POKEMON_DATABASE, NATURES, ITEMS, type PokemonData, type EVSpread } from './pokemonData';
 import Image from 'next/image';
@@ -38,6 +38,56 @@ const GAMES_AND_FORMATS = [
   { id: 'pokemon-champions', name: 'Pokemon Champions', game: 'Pokemon Champions', description: '263 Pokemon + Mega Evolutions', format: 'Doubles' },
   { id: 'smogon-ou', name: 'Smogon OU', game: 'Gen 9', description: 'OverUsed tier singles', format: 'Singles' },
 ];
+
+// Nature effects: [increased stat, decreased stat]
+const NATURE_EFFECTS: Record<string, { increases?: string; decreases?: string; description: string }> = {
+  'Hardy': { description: 'Neutral - No stat changes' },
+  'Lonely': { increases: 'Attack', decreases: 'Defense', description: '+Atk / -Def' },
+  'Brave': { increases: 'Attack', decreases: 'Speed', description: '+Atk / -Spe' },
+  'Adamant': { increases: 'Attack', decreases: 'Sp. Atk', description: '+Atk / -SpA' },
+  'Naughty': { increases: 'Attack', decreases: 'Sp. Def', description: '+Atk / -SpD' },
+  'Bold': { increases: 'Defense', decreases: 'Attack', description: '+Def / -Atk' },
+  'Docile': { description: 'Neutral - No stat changes' },
+  'Relaxed': { increases: 'Defense', decreases: 'Speed', description: '+Def / -Spe' },
+  'Impish': { increases: 'Defense', decreases: 'Sp. Atk', description: '+Def / -SpA' },
+  'Lax': { increases: 'Defense', decreases: 'Sp. Def', description: '+Def / -SpD' },
+  'Timid': { increases: 'Speed', decreases: 'Attack', description: '+Spe / -Atk' },
+  'Hasty': { increases: 'Speed', decreases: 'Defense', description: '+Spe / -Def' },
+  'Serious': { description: 'Neutral - No stat changes' },
+  'Jolly': { increases: 'Speed', decreases: 'Sp. Atk', description: '+Spe / -SpA' },
+  'Naive': { increases: 'Speed', decreases: 'Sp. Def', description: '+Spe / -SpD' },
+  'Modest': { increases: 'Sp. Atk', decreases: 'Attack', description: '+SpA / -Atk' },
+  'Mild': { increases: 'Sp. Atk', decreases: 'Defense', description: '+SpA / -Def' },
+  'Quiet': { increases: 'Sp. Atk', decreases: 'Speed', description: '+SpA / -Spe' },
+  'Bashful': { description: 'Neutral - No stat changes' },
+  'Rash': { increases: 'Sp. Atk', decreases: 'Sp. Def', description: '+SpA / -SpD' },
+  'Calm': { increases: 'Sp. Def', decreases: 'Attack', description: '+SpD / -Atk' },
+  'Gentle': { increases: 'Sp. Def', decreases: 'Defense', description: '+SpD / -Def' },
+  'Sassy': { increases: 'Sp. Def', decreases: 'Speed', description: '+SpD / -Spe' },
+  'Careful': { increases: 'Sp. Def', decreases: 'Sp. Atk', description: '+SpD / -SpA' },
+  'Quirky': { description: 'Neutral - No stat changes' }
+};
+
+// Item sprite mapping (using Pokemon item sprites)
+const ITEM_SPRITES: Record<string, string> = {
+  'Assault Vest': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/assault-vest.png',
+  'Choice Band': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-band.png',
+  'Choice Scarf': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png',
+  'Choice Specs': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-specs.png',
+  'Focus Sash': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png',
+  'Life Orb': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/life-orb.png',
+  'Leftovers': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/leftovers.png',
+  'Sitrus Berry': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sitrus-berry.png',
+  'Safety Goggles': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safety-goggles.png',
+  'Rocky Helmet': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rocky-helmet.png',
+  'Heavy-Duty Boots': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heavy-duty-boots.png',
+  'Weakness Policy': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/weakness-policy.png',
+  'Covert Cloak': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/covert-cloak.png',
+  'Mirror Herb': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mirror-herb.png',
+  'Clear Amulet': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/clear-amulet.png',
+  'Booster Energy': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/booster-energy.png',
+  'Loaded Dice': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/loaded-dice.png',
+};
 
 export default function TeamBuilder() {
   const [teams, setTeams] = useState<Team[]>([
@@ -167,7 +217,15 @@ export default function TeamBuilder() {
 
   const filteredPokemon = POKEMON_DATABASE.filter(pokemon => {
     const matchesSearch = pokemon.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+    const isAvailable = pokemon.availableIn.includes(currentTeam.game);
+
+    // If there's a search query, show all matching Pokemon
+    // If no search query, only show Pokemon available in the current game
+    if (searchQuery.trim()) {
+      return matchesSearch;
+    } else {
+      return isAvailable;
+    }
   }).sort((a, b) => {
     const aAvailable = a.availableIn.includes(currentTeam.game);
     const bAvailable = b.availableIn.includes(currentTeam.game);
@@ -175,6 +233,29 @@ export default function TeamBuilder() {
     if (!aAvailable && bAvailable) return 1;
     return a.name.localeCompare(b.name);
   });
+
+  // ESC key handler for modals
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (showPokemonModal) {
+          setShowPokemonModal(false);
+          setSelectedSlot(null);
+          setSearchQuery('');
+        } else if (showEditModal) {
+          setShowEditModal(false);
+          setEditingPokemon(null);
+          setSelectedSlot(null);
+        } else if (showTeamModal) {
+          setShowTeamModal(false);
+          setNewTeamName('');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [showPokemonModal, showEditModal, showTeamModal]);
 
   const totalEvs = editingPokemon ? Object.values(editingPokemon.evs).reduce((sum, val) => sum + val, 0) : 0;
 
@@ -371,6 +452,17 @@ export default function TeamBuilder() {
             </div>
 
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-220px)]">
+              {filteredPokemon.length === 0 && !searchQuery.trim() && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 mb-2">No Pokemon available in this format.</p>
+                  <p className="text-sm text-gray-400">Try searching for a specific Pokemon to see all options.</p>
+                </div>
+              )}
+              {filteredPokemon.length === 0 && searchQuery.trim() && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">No Pokemon found matching "{searchQuery}"</p>
+                </div>
+              )}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {filteredPokemon.map((pokemon) => {
                   const isAvailable = pokemon.availableIn.includes(currentTeam.game);
@@ -418,6 +510,11 @@ export default function TeamBuilder() {
                   );
                 })}
               </div>
+              {filteredPokemon.length > 0 && !searchQuery.trim() && (
+                <p className="text-center text-xs text-gray-500 mt-6">
+                  Showing only Pokemon available in {currentGame?.name}. Search to see all Pokemon.
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -466,10 +563,33 @@ export default function TeamBuilder() {
                     onChange={(e) => setEditingPokemon({...editingPokemon, nature: e.target.value})}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   >
-                    {NATURES.map(nature => (
-                      <option key={nature} value={nature}>{nature}</option>
-                    ))}
+                    {NATURES.map(nature => {
+                      const effect = NATURE_EFFECTS[nature];
+                      return (
+                        <option key={nature} value={nature}>
+                          {nature} {effect.description ? `- ${effect.description}` : ''}
+                        </option>
+                      );
+                    })}
                   </select>
+                  {editingPokemon.nature && NATURE_EFFECTS[editingPokemon.nature] && (
+                    <p className="mt-2 text-xs text-gray-600">
+                      {NATURE_EFFECTS[editingPokemon.nature].increases && (
+                        <span className="text-green-600">
+                          +10% {NATURE_EFFECTS[editingPokemon.nature].increases}
+                        </span>
+                      )}
+                      {NATURE_EFFECTS[editingPokemon.nature].increases && NATURE_EFFECTS[editingPokemon.nature].decreases && <span> / </span>}
+                      {NATURE_EFFECTS[editingPokemon.nature].decreases && (
+                        <span className="text-red-600">
+                          -10% {NATURE_EFFECTS[editingPokemon.nature].decreases}
+                        </span>
+                      )}
+                      {!NATURE_EFFECTS[editingPokemon.nature].increases && !NATURE_EFFECTS[editingPokemon.nature].decreases && (
+                        <span className="text-gray-500">No stat changes</span>
+                      )}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Item</label>
@@ -482,6 +602,18 @@ export default function TeamBuilder() {
                       <option key={item} value={item}>{item}</option>
                     ))}
                   </select>
+                  {editingPokemon.item && editingPokemon.item !== 'None' && ITEM_SPRITES[editingPokemon.item] && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <Image
+                        src={ITEM_SPRITES[editingPokemon.item]}
+                        alt={editingPokemon.item}
+                        width={24}
+                        height={24}
+                        className="pixelated"
+                      />
+                      <span className="text-xs text-gray-600">{editingPokemon.item}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
