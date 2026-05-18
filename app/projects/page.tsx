@@ -55,6 +55,30 @@ const projects = [
     description: 'Interactive prototype for an AI-powered time tracking tool targeting complex users. Features calendar-based auto-suggestions, pattern detection, and a phased rollout roadmap designed to reduce manual entry time by 60%.',
     link: '/pwccase',
   },
+  {
+    title: 'Netflix — Film of the Week PRD',
+    category: 'Product Management',
+    tags: ['Product Management', 'Streaming', 'Content Discovery'],
+    description: 'PRD for a curated weekly film spotlight on Netflix targeting decision fatigue. Features a homepage banner, TikTok-style short-form preview, and UGC campaign. Includes A/B test plan and roadmap to expand into Show/Short of the Week.',
+  },
+  {
+    title: 'Netflix — Mood Meter PRD + Lean Canvas',
+    category: 'Product Management',
+    tags: ['Product Management', 'AI Integration', 'Streaming'],
+    description: 'Full group PRD and Lean Canvas for a mood-first content discovery feature on Netflix. Users pick from 8 mood tiles, tune watch length and familiarity, and receive a personalized results page in under 90 seconds. Includes ICE scoring, 10 user stories, phased A/B experiment plan, and SMART success metrics (65% playback conversion, +12% watch time uplift targets).',
+  },
+  {
+    title: 'The Sims — GTM & Brand Strategy',
+    category: 'Product Marketing',
+    tags: ['Go-to-Market', 'Brand Strategy', 'Gaming'],
+    description: 'Full go-to-market strategy for The Sims franchise covering transmedia storytelling, the #MySimLife UGC TikTok challenge, a Sims x Love Island brand partnership, and the PLUMBOB Rave PR event — a branded rave where attendees become "Sims IRL" with mood-reactive Plumbob headpieces.',
+  },
+  {
+    title: 'Fable — Marketing Launch Campaign',
+    category: 'Product Marketing',
+    tags: ['Go-to-Market', 'Gaming', 'Experiential Marketing'],
+    description: 'Full marketing launch plan for the Fable reboot. Includes positioning statement, three customer personas (Strategist, Immersionist, Escapist), a Renaissance Faire pop-up PR event ("Write Your Fable"), an AR TikTok filter ("Choose Your Fate"), interactive bus stop OOH ("Mirror of Albion"), and brand partnerships with Guinness and Cadbury.',
+  },
 ];
 
 const categoryColor: Record<string, string> = {

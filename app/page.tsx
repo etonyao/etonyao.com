@@ -382,6 +382,10 @@ export default function Home() {
                   'Alongside AI — Kiwi Connect Press Release',
                   'Pokémon Team Builder',
                   'AI Time Entry System — Concept Prototype',
+                  'Netflix — Film of the Week PRD',
+                  'Netflix — Mood Meter PRD + Lean Canvas',
+                  'The Sims — GTM & Brand Strategy',
+                  'Fable — Marketing Launch Campaign',
                   'Potion Problems — Game Marketing Campaign',
                   'Sustainability Dashboard — Ringley Group',
                   'APASA Community Impact Program',
@@ -391,6 +395,10 @@ export default function Home() {
                   'Alongside AI — Kiwi Connect Press Release',
                   'Pokémon Team Builder',
                   'AI Time Entry System — Concept Prototype',
+                  'Netflix — Film of the Week PRD',
+                  'Netflix — Mood Meter PRD + Lean Canvas',
+                  'The Sims — GTM & Brand Strategy',
+                  'Fable — Marketing Launch Campaign',
                 ].map((project, i) => (
                   <span key={i} className="text-xs text-gray-300 font-medium tracking-widest uppercase shrink-0">
                     {project} <span className="text-gray-200 mx-2">·</span>
