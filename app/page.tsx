@@ -306,133 +306,65 @@ export default function Home() {
             <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Featured Projects
             </h3>
-            <p className="text-gray-600 mb-12 text-lg">A collection of my recent work showcasing various skills and technologies</p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Project 1 */}
-              <div
-                onMouseMove={handleProjectHover}
-                onMouseLeave={handleProjectLeave}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 cursor-pointer shadow-sm"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div className="relative z-10">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    Potion Problems - Game Marketing Campaign
-                  </h4>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    Led marketing strategy for USC Advanced Games Project, managing cross-functional collaboration across 8 teams including engineering and design to launch a successful game trailer.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-200">Project Management</span>
-                    <span className="text-xs px-3 py-1 bg-purple-50 text-purple-700 rounded-full border border-purple-200">Marketing Strategy</span>
-                  </div>
-                </div>
-              </div>
+            <p className="text-gray-600 mb-12 text-lg">Explore my work across product management and product marketing</p>
 
-              {/* Project 2 */}
-              <div
-                onMouseMove={handleProjectHover}
-                onMouseLeave={handleProjectLeave}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 cursor-pointer shadow-sm"
-                style={{ transformStyle: 'preserve-3d' }}
+            {/* Two-panel split */}
+            <div className="grid md:grid-cols-2 gap-6 min-h-[420px]">
+              {/* Product Management panel */}
+              <a
+                href="/product"
+                className="group relative flex flex-col justify-between rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-10 overflow-hidden hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
               >
-                <div className="relative z-10">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    Sustainability Dashboard - Ringley Group
-                  </h4>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    Product roadmap and strategy for a comprehensive sustainability dashboard tracking 10,000+ data points to guide net-zero initiatives and property acquisition decisions.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-cyan-50 text-cyan-700 rounded-full border border-cyan-200">Product Management</span>
-                    <span className="text-xs px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-200">Data Analysis</span>
-                  </div>
-                </div>
-              </div>
+                {/* Background accent */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-500/10 transition-all duration-500" />
 
-              {/* Project 3 */}
-              <div
-                onMouseMove={handleProjectHover}
-                onMouseLeave={handleProjectLeave}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 cursor-pointer shadow-sm"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
                 <div className="relative z-10">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    APASA Community Impact Program
+                  <span className="inline-block mb-4 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-blue-200">
+                    Product Management
+                  </span>
+                  <h4 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    PM Projects
                   </h4>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    Designed and launched a service initiative requiring 40+ member organizations to conduct community projects across Los Angeles, achieving 60% sustained engagement rate.
+                  <p className="text-gray-500 text-base leading-relaxed">
+                    PRDs, roadmaps, feature strategy, and end-to-end product work.
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-pink-50 text-pink-700 rounded-full border border-pink-200">Program Management</span>
-                    <span className="text-xs px-3 py-1 bg-orange-50 text-orange-700 rounded-full border border-orange-200">Community Engagement</span>
-                  </div>
                 </div>
-              </div>
 
-              {/* Project 4 */}
-              <div
-                onMouseMove={handleProjectHover}
-                onMouseLeave={handleProjectLeave}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 cursor-pointer shadow-sm"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div className="relative z-10">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    Anthropogenic Climate Change Analysis
-                  </h4>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    Data analysis project examining the relationship between CO2 emissions, urbanization, and global temperature increases using multiple datasets to demonstrate human impact on climate change.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full border border-yellow-200">Python</span>
-                    <span className="text-xs px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-200">Data Analysis</span>
-                  </div>
+                <div className="relative z-10 mt-8 flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
+                  View Projects
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </div>
-              </div>
+              </a>
 
-              {/* Project 5 */}
-              <div
-                onMouseMove={handleProjectHover}
-                onMouseLeave={handleProjectLeave}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 cursor-pointer shadow-sm"
-                style={{ transformStyle: 'preserve-3d' }}
+              {/* Product Marketing panel */}
+              <a
+                href="/marketing"
+                className="group relative flex flex-col justify-between rounded-2xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white p-10 overflow-hidden hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
               >
-                <div className="relative z-10">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    Pokemon Stats ML Predictor
-                  </h4>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    Machine learning project using neural networks to analyze Pokemon statistics and predict legendary status, featuring confusion matrix visualization and interactive prediction capabilities.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-purple-50 text-purple-700 rounded-full border border-purple-200">Machine Learning</span>
-                    <span className="text-xs px-3 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-200">Python</span>
-                  </div>
-                </div>
-              </div>
+                {/* Background accent */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-purple-500/10 transition-all duration-500" />
 
-              {/* Project 6 */}
-              <div
-                onMouseMove={handleProjectHover}
-                onMouseLeave={handleProjectLeave}
-                className="group bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 cursor-pointer shadow-sm"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
                 <div className="relative z-10">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    Alongside AI - Peer Chat Feature PRD
+                  <span className="inline-block mb-4 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-purple-200">
+                    Product Marketing
+                  </span>
+                  <h4 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
+                    Marketing Projects
                   </h4>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    Product strategy for an AI-moderated anonymous peer-to-peer chat feature, enabling students to practice interpersonal skills while receiving mental health support from Kiwi AI assistant.
+                  <p className="text-gray-500 text-base leading-relaxed">
+                    Go-to-market strategy, campaigns, and brand storytelling.
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-cyan-50 text-cyan-700 rounded-full border border-cyan-200">Product Management</span>
-                    <span className="text-xs px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">AI Integration</span>
-                  </div>
                 </div>
-              </div>
+
+                <div className="relative z-10 mt-8 flex items-center gap-2 text-purple-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
+                  View Projects
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </a>
             </div>
           </div>
         </section>
