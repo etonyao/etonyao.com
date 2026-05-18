@@ -79,6 +79,12 @@ const projects = [
     tags: ['Go-to-Market', 'Gaming', 'Experiential Marketing'],
     description: 'Full marketing launch plan for the Fable reboot. Includes positioning statement, three customer personas (Strategist, Immersionist, Escapist), a Renaissance Faire pop-up PR event ("Write Your Fable"), an AR TikTok filter ("Choose Your Fate"), interactive bus stop OOH ("Mirror of Albion"), and brand partnerships with Guinness and Cadbury.',
   },
+  {
+    title: 'Pokémon Pokopia — Full GTM Strategy',
+    category: 'Product Marketing',
+    tags: ['Go-to-Market', 'Gaming', 'Brand Strategy'],
+    description: 'Comprehensive go-to-market plan for Pokopia, a creature-collecting habitat-restoration RPG targeting casual and cozy gamers ages 7–30. Covers full-funnel paid media strategy across 3 phases ($35–45M budget), Pokémon Presents reveal mechanics, creator tier structure, franchise synergy across TCG/anime/mobile, experiential AR pop-ups in LA/NYC/Tokyo, and brand partnerships with LEGO and Gong Cha. Targets 5–6M Year 1 units and 8–10M MAU by Month 6.',
+  },
 ];
 
 const categoryColor: Record<string, string> = {

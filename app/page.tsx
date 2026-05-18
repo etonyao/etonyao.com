@@ -386,6 +386,7 @@ export default function Home() {
                   'Netflix — Mood Meter PRD + Lean Canvas',
                   'The Sims — GTM & Brand Strategy',
                   'Fable — Marketing Launch Campaign',
+                  'Pokémon Pokopia — Full GTM Strategy',
                   'Potion Problems — Game Marketing Campaign',
                   'Sustainability Dashboard — Ringley Group',
                   'APASA Community Impact Program',
