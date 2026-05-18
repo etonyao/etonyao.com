@@ -13,6 +13,7 @@ type Project = {
   link?: string;
   linkLabel?: string;
   document?: string;
+  video?: string;
 };
 
 const projects: Record<string, Project> = {
@@ -317,6 +318,7 @@ const projects: Record<string, Project> = {
     overview: 'As Marketing Lead for the USC Advanced Games Project, I drove the full marketing strategy for Potion Problems — a student-developed game — managing cross-functional collaboration across 8 teams to deliver a successful game trailer and launch campaign.',
     link: 'https://store.steampowered.com/app/3306050/Potion_Problems/',
     linkLabel: 'View on Steam',
+    video: 'https://www.youtube.com/embed/TmR3AQp_Ekk',
     sections: [
       {
         heading: 'My Role',
@@ -652,6 +654,22 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                     {outcome}
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Video Embed */}
+          {project.video && (
+            <div>
+              <h2 className={`text-xs font-bold uppercase tracking-widest mb-4 ${accentClasses.heading}`}>Trailer</h2>
+              <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-200 aspect-video">
+                <iframe
+                  src={project.video}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={`${project.title} trailer`}
+                />
               </div>
             </div>
           )}
