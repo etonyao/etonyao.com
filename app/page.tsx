@@ -366,6 +366,32 @@ export default function Home() {
                 </div>
               </a>
             </div>
+
+            {/* Subtle scrolling project ticker */}
+            <div className="mt-12 overflow-hidden relative">
+              <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+              <div className="flex gap-8 animate-ticker whitespace-nowrap">
+                {[
+                  'Potion Problems — Game Marketing Campaign',
+                  'Sustainability Dashboard — Ringley Group',
+                  'APASA Community Impact Program',
+                  'Anthropogenic Climate Change Analysis',
+                  'Pokemon Stats ML Predictor',
+                  'Alongside AI — Peer Chat Feature PRD',
+                  'Potion Problems — Game Marketing Campaign',
+                  'Sustainability Dashboard — Ringley Group',
+                  'APASA Community Impact Program',
+                  'Anthropogenic Climate Change Analysis',
+                  'Pokemon Stats ML Predictor',
+                  'Alongside AI — Peer Chat Feature PRD',
+                ].map((project, i) => (
+                  <span key={i} className="text-xs text-gray-300 font-medium tracking-widest uppercase shrink-0">
+                    {project} <span className="text-gray-200 mx-2">·</span>
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -446,6 +472,15 @@ export default function Home() {
 
         .animate-spin-reverse {
           animation: spin-reverse 6s linear infinite;
+        }
+
+        @keyframes ticker {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        .animate-ticker {
+          animation: ticker 30s linear infinite;
         }
       `}</style>
     </div>
