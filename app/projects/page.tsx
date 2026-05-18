@@ -30,10 +30,16 @@ const projects = [
     description: 'Neural network project to analyze Pokemon statistics and predict legendary status, featuring confusion matrix visualization and interactive prediction.',
   },
   {
-    title: 'Alongside AI — Peer Chat Feature PRD',
+    title: 'Alongside AI — Kiwi Connect PRD',
     category: 'Product Management',
-    tags: ['Product Management', 'AI Integration'],
-    description: 'Product strategy for an AI-moderated anonymous peer-to-peer chat feature enabling students to practice interpersonal skills with mental health support.',
+    tags: ['Product Management', 'AI Integration', 'EdTech'],
+    description: 'Full PRD for Kiwi Connect — an anonymous AI-moderated peer chat feature for Alongside. Includes problem framing, success metrics (50% adoption target), 12-month rollout timeline, A/B testing plan, and future expansion roadmap.',
+  },
+  {
+    title: 'Alongside AI — Kiwi Connect Press Release',
+    category: 'Product Marketing',
+    tags: ['Product Marketing', 'Go-to-Market', 'Copywriting'],
+    description: 'Launch press release for Kiwi Connect announcing the feature to schools, counselors, and the public. Covers product positioning, availability, pricing, and FAQs.',
   },
   {
     title: 'Pokémon Team Builder',
