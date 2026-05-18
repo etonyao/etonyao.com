@@ -12,6 +12,7 @@ type Project = {
   outcomes?: string[];
   link?: string;
   linkLabel?: string;
+  document?: string;
 };
 
 const projects: Record<string, Project> = {
@@ -155,6 +156,7 @@ const projects: Record<string, Project> = {
       'Creates a defensible moat no other AI platform offers',
       'Future expansions: peer mentor badges, group topic rooms, counselor integrations',
     ],
+    document: '/documents/alongside-prd-press-release.pdf',
   },
 
   'pokemon-team-builder': {
@@ -264,6 +266,7 @@ const projects: Record<string, Project> = {
       'Increases visibility for high-quality catalog titles',
       'Creates a weekly social media moment to drive off-platform awareness',
     ],
+    document: '/documents/netflix-film-of-week.pdf',
   },
 
   'netflix-mood-meter': {
@@ -303,6 +306,7 @@ const projects: Record<string, Project> = {
       'Target: +12% average watch time vs. control group',
       'Target: 40% of first-time users return within 14 days',
     ],
+    document: '/documents/netflix-mood-meter.pdf',
   },
 
   'potion-problems': {
@@ -402,6 +406,7 @@ const projects: Record<string, Project> = {
       'Positions Alongside as the only AI platform combining peer empathy with AI safety',
       'School rollout framing: select U.S. schools early 2026, nationwide by year-end',
     ],
+    document: '/documents/alongside-prd-press-release.pdf',
   },
 
   'the-sims-gtm': {
@@ -445,6 +450,7 @@ const projects: Record<string, Project> = {
       'Creator-first campaign designed to generate millions in earned media',
       'Positions The Sims as a lifestyle brand, not just a game',
     ],
+    document: '/documents/sims-gtm.pdf',
   },
 
   'fable-marketing': {
@@ -489,6 +495,7 @@ const projects: Record<string, Project> = {
       'Four activations spanning digital, experiential, OOH, and brand partnerships',
       'Positioned Fable as a cultural event, not just a game launch',
     ],
+    document: '/documents/fable-marketing.pdf',
   },
 
   'pokemon-pokopia-gtm': {
@@ -540,6 +547,7 @@ const projects: Record<string, Project> = {
       '80%+ aided awareness among Pokémon fans 8–30 within 90 days of announce',
       '500M+ organic social impressions via #Pokopia',
     ],
+    document: '/documents/pokemon-pokopia-gtm.pdf',
   },
 };
 
@@ -643,6 +651,32 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Document Embed */}
+          {project.document && (
+            <div>
+              <h2 className={`text-xs font-bold uppercase tracking-widest mb-4 ${accentClasses.heading}`}>Full Document</h2>
+              <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                <iframe
+                  src={project.document}
+                  className="w-full"
+                  style={{ height: '80vh' }}
+                  title={`${project.title} document`}
+                />
+              </div>
+              <a
+                href={project.document}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 mt-3 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download PDF
+              </a>
             </div>
           )}
         </div>
