@@ -315,6 +315,8 @@ const projects: Record<string, Project> = {
     tags: ['Project Management', 'Marketing Strategy', 'Gaming'],
     tagline: 'Leading the marketing launch for USC\'s Advanced Games Project.',
     overview: 'As Marketing Lead for the USC Advanced Games Project, I drove the full marketing strategy for Potion Problems — a student-developed game — managing cross-functional collaboration across 8 teams to deliver a successful game trailer and launch campaign.',
+    link: 'https://store.steampowered.com/app/3306050/Potion_Problems/',
+    linkLabel: 'View on Steam',
     sections: [
       {
         heading: 'My Role',
