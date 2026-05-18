@@ -1,27 +1,15 @@
 const projects = [
   {
+    title: 'Pokémon Pokopia — Full GTM Strategy',
+    tags: ['Go-to-Market', 'Gaming', 'Brand Strategy'],
+    description: 'Comprehensive go-to-market plan for Pokopia, a creature-collecting habitat-restoration RPG targeting casual and cozy gamers ages 7–30. Covers full-funnel paid media strategy across 3 phases ($35–45M budget), Pokémon Presents reveal mechanics, creator tier structure, franchise synergy across TCG/anime/mobile, experiential AR pop-ups in LA/NYC/Tokyo, and brand partnerships with LEGO and Gong Cha. Targets 5–6M Year 1 units and 8–10M MAU by Month 6.',
+    link: '/projects/pokemon-pokopia-gtm',
+  },
+  {
     title: 'Potion Problems — Game Marketing Campaign',
     tags: ['Project Management', 'Marketing Strategy'],
     description: 'Led marketing strategy for USC Advanced Games Project, managing cross-functional collaboration across 8 teams to launch a successful game trailer.',
     link: '/projects/potion-problems',
-  },
-  {
-    title: 'APASA Community Impact Program',
-    tags: ['Program Management', 'Community Engagement'],
-    description: 'Designed and launched a service initiative requiring 40+ member organizations to conduct community projects across Los Angeles, achieving 60% sustained engagement.',
-    link: '/projects/apasa',
-  },
-  {
-    title: 'Alongside AI — Kiwi Connect Press Release',
-    tags: ['Marketing', 'Go-to-Market', 'Copywriting'],
-    description: 'Launch press release for Kiwi Connect announcing the feature to schools, counselors, and the public. Covers product positioning, availability, pricing, and FAQs.',
-    link: '/projects/kiwi-connect-press-release',
-  },
-  {
-    title: 'The Sims — GTM & Brand Strategy',
-    tags: ['Go-to-Market', 'Brand Strategy', 'Gaming'],
-    description: 'Full go-to-market strategy for The Sims franchise covering transmedia storytelling, the #MySimLife UGC TikTok challenge, a Sims x Love Island brand partnership, and the PLUMBOB Rave PR event — a branded rave where attendees become "Sims IRL" with mood-reactive Plumbob headpieces.',
-    link: '/projects/the-sims-gtm',
   },
   {
     title: 'Fable — Marketing Launch Campaign',
@@ -30,10 +18,22 @@ const projects = [
     link: '/projects/fable-marketing',
   },
   {
-    title: 'Pokémon Pokopia — Full GTM Strategy',
-    tags: ['Go-to-Market', 'Gaming', 'Brand Strategy'],
-    description: 'Comprehensive go-to-market plan for Pokopia, a creature-collecting habitat-restoration RPG targeting casual and cozy gamers ages 7–30. Covers full-funnel paid media strategy across 3 phases ($35–45M budget), Pokémon Presents reveal mechanics, creator tier structure, franchise synergy across TCG/anime/mobile, experiential AR pop-ups in LA/NYC/Tokyo, and brand partnerships with LEGO and Gong Cha. Targets 5–6M Year 1 units and 8–10M MAU by Month 6.',
-    link: '/projects/pokemon-pokopia-gtm',
+    title: 'The Sims — GTM & Brand Strategy',
+    tags: ['Go-to-Market', 'Brand Strategy', 'Gaming'],
+    description: 'Full go-to-market strategy for The Sims franchise covering transmedia storytelling, the #MySimLife UGC TikTok challenge, a Sims x Love Island brand partnership, and the PLUMBOB Rave PR event — a branded rave where attendees become "Sims IRL" with mood-reactive Plumbob headpieces.',
+    link: '/projects/the-sims-gtm',
+  },
+  {
+    title: 'Alongside AI — Kiwi Connect Press Release',
+    tags: ['Marketing', 'Go-to-Market', 'Copywriting'],
+    description: 'Launch press release for Kiwi Connect announcing the feature to schools, counselors, and the public. Covers product positioning, availability, pricing, and FAQs.',
+    link: '/projects/kiwi-connect-press-release',
+  },
+  {
+    title: 'APASA Community Impact Program',
+    tags: ['Program Management', 'Community Engagement'],
+    description: 'Designed and launched a service initiative requiring 40+ member organizations to conduct community projects across Los Angeles, achieving 60% sustained engagement.',
+    link: '/projects/apasa',
   },
 ];
 

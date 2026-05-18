@@ -1,33 +1,15 @@
 const projects = [
   {
-    title: 'Sustainability Dashboard — Ringley Group',
-    tags: ['Product Management', 'Data Analysis'],
-    description: 'Product roadmap and strategy for a sustainability dashboard tracking 10,000+ data points to guide net-zero initiatives and property acquisition decisions.',
-    link: '/projects/sustainability-dashboard',
-  },
-  {
-    title: 'Anthropogenic Climate Change Analysis',
-    tags: ['Python', 'Data Analysis'],
-    description: 'Data analysis examining CO2 emissions, urbanization, and global temperature increases using multiple datasets to demonstrate human impact on climate change.',
-    link: '/projects/climate-change-analysis',
-  },
-  {
-    title: 'Pokemon Stats ML Predictor',
-    tags: ['Machine Learning', 'Python'],
-    description: 'Neural network project to analyze Pokemon statistics and predict legendary status, featuring confusion matrix visualization and interactive prediction.',
-    link: '/projects/pokemon-ml-predictor',
+    title: 'Netflix — Mood Meter PRD + Lean Canvas',
+    tags: ['Product Management', 'AI Integration', 'Streaming'],
+    description: 'Full group PRD and Lean Canvas for a mood-first content discovery feature on Netflix. Users pick from 8 mood tiles, tune watch length and familiarity, and receive a personalized results page in under 90 seconds. Includes ICE scoring, 10 user stories, phased A/B experiment plan, and SMART success metrics (65% playback conversion, +12% watch time uplift targets).',
+    link: '/projects/netflix-mood-meter',
   },
   {
     title: 'Alongside AI — Kiwi Connect PRD',
     tags: ['Product Management', 'AI Integration', 'EdTech'],
     description: 'Full PRD for Kiwi Connect — an anonymous AI-moderated peer chat feature for Alongside. Includes problem framing, success metrics (50% adoption target), 12-month rollout timeline, A/B testing plan, and future expansion roadmap.',
     link: '/projects/alongside-prd',
-  },
-  {
-    title: 'Pokémon Team Builder',
-    tags: ['React', 'Next.js', 'UI/UX'],
-    description: 'Full-stack team builder web app supporting multiple competitive formats (VGC, Smogon), with EV spreads, item/nature selection, and preset meta spreads.',
-    link: '/projects/pokemon-team-builder',
   },
   {
     title: 'AI Time Entry System — Concept Prototype',
@@ -42,10 +24,28 @@ const projects = [
     link: '/projects/netflix-film-of-the-week',
   },
   {
-    title: 'Netflix — Mood Meter PRD + Lean Canvas',
-    tags: ['Product Management', 'AI Integration', 'Streaming'],
-    description: 'Full group PRD and Lean Canvas for a mood-first content discovery feature on Netflix. Users pick from 8 mood tiles, tune watch length and familiarity, and receive a personalized results page in under 90 seconds. Includes ICE scoring, 10 user stories, phased A/B experiment plan, and SMART success metrics (65% playback conversion, +12% watch time uplift targets).',
-    link: '/projects/netflix-mood-meter',
+    title: 'Pokémon Team Builder',
+    tags: ['React', 'Next.js', 'UI/UX'],
+    description: 'Full-stack team builder web app supporting multiple competitive formats (VGC, Smogon), with EV spreads, item/nature selection, and preset meta spreads.',
+    link: '/projects/pokemon-team-builder',
+  },
+  {
+    title: 'Sustainability Dashboard — Ringley Group',
+    tags: ['Product Management', 'Data Analysis'],
+    description: 'Product roadmap and strategy for a sustainability dashboard tracking 10,000+ data points to guide net-zero initiatives and property acquisition decisions.',
+    link: '/projects/sustainability-dashboard',
+  },
+  {
+    title: 'Pokemon Stats ML Predictor',
+    tags: ['Machine Learning', 'Python'],
+    description: 'Neural network project to analyze Pokemon statistics and predict legendary status, featuring confusion matrix visualization and interactive prediction.',
+    link: '/projects/pokemon-ml-predictor',
+  },
+  {
+    title: 'Anthropogenic Climate Change Analysis',
+    tags: ['Python', 'Data Analysis'],
+    description: 'Data analysis examining CO2 emissions, urbanization, and global temperature increases using multiple datasets to demonstrate human impact on climate change.',
+    link: '/projects/climate-change-analysis',
   },
 ];
 
