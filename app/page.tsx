@@ -368,10 +368,10 @@ export default function Home() {
             </div>
 
             {/* Subtle scrolling project ticker */}
-            <div className="mt-12 overflow-hidden relative">
+            <a href="/projects" className="block mt-12 overflow-hidden relative cursor-pointer group">
               <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
               <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-              <div className="flex gap-8 animate-ticker whitespace-nowrap">
+              <div className="flex gap-8 animate-ticker whitespace-nowrap group-hover:[animation-play-state:paused]">
                 {[
                   'Potion Problems — Game Marketing Campaign',
                   'Sustainability Dashboard — Ringley Group',
@@ -391,7 +391,7 @@ export default function Home() {
                   </span>
                 ))}
               </div>
-            </div>
+            </a>
           </div>
         </section>
 
