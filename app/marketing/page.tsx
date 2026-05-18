@@ -14,7 +14,7 @@ export default function MarketingProjects() {
             Back
           </a>
           <span className="text-gray-300">|</span>
-          <span className="text-gray-900 font-semibold">Product Marketing Projects</span>
+          <span className="text-gray-900 font-semibold">Marketing Projects</span>
         </div>
       </nav>
 
@@ -22,7 +22,7 @@ export default function MarketingProjects() {
       <section className="pt-32 pb-12 px-6 bg-gradient-to-br from-purple-50 to-white">
         <div className="max-w-6xl mx-auto">
           <span className="inline-block mb-4 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-purple-200">
-            Product Marketing
+            Marketing
           </span>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">Marketing Projects</h1>
           <p className="text-xl text-gray-500 max-w-2xl">

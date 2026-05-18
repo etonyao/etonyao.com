@@ -348,8 +348,8 @@ export default function Home() {
 
                 <div className="relative z-10">
                   <span className="inline-block mb-4 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-purple-200">
-                    Product Marketing
-                  </span>
+                    Marketing
+</span>
                   <h4 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
                     Marketing Projects
                   </h4>

@@ -1,7 +1,7 @@
 const projects = [
   {
     title: 'Potion Problems — Game Marketing Campaign',
-    category: 'Product Marketing',
+    category: 'Marketing',
     tags: ['Project Management', 'Marketing Strategy'],
     description: 'Led marketing strategy for USC Advanced Games Project, managing cross-functional collaboration across 8 teams to launch a successful game trailer.',
   },
@@ -13,7 +13,7 @@ const projects = [
   },
   {
     title: 'APASA Community Impact Program',
-    category: 'Product Marketing',
+    category: 'Marketing',
     tags: ['Program Management', 'Community Engagement'],
     description: 'Designed and launched a service initiative requiring 40+ member organizations to conduct community projects across Los Angeles, achieving 60% sustained engagement.',
   },
@@ -37,8 +37,8 @@ const projects = [
   },
   {
     title: 'Alongside AI — Kiwi Connect Press Release',
-    category: 'Product Marketing',
-    tags: ['Product Marketing', 'Go-to-Market', 'Copywriting'],
+    category: 'Marketing',
+    tags: ['Marketing', 'Go-to-Market', 'Copywriting'],
     description: 'Launch press release for Kiwi Connect announcing the feature to schools, counselors, and the public. Covers product positioning, availability, pricing, and FAQs.',
   },
   {
@@ -69,19 +69,19 @@ const projects = [
   },
   {
     title: 'The Sims — GTM & Brand Strategy',
-    category: 'Product Marketing',
+    category: 'Marketing',
     tags: ['Go-to-Market', 'Brand Strategy', 'Gaming'],
     description: 'Full go-to-market strategy for The Sims franchise covering transmedia storytelling, the #MySimLife UGC TikTok challenge, a Sims x Love Island brand partnership, and the PLUMBOB Rave PR event — a branded rave where attendees become "Sims IRL" with mood-reactive Plumbob headpieces.',
   },
   {
     title: 'Fable — Marketing Launch Campaign',
-    category: 'Product Marketing',
+    category: 'Marketing',
     tags: ['Go-to-Market', 'Gaming', 'Experiential Marketing'],
     description: 'Full marketing launch plan for the Fable reboot. Includes positioning statement, three customer personas (Strategist, Immersionist, Escapist), a Renaissance Faire pop-up PR event ("Write Your Fable"), an AR TikTok filter ("Choose Your Fate"), interactive bus stop OOH ("Mirror of Albion"), and brand partnerships with Guinness and Cadbury.',
   },
   {
     title: 'Pokémon Pokopia — Full GTM Strategy',
-    category: 'Product Marketing',
+    category: 'Marketing',
     tags: ['Go-to-Market', 'Gaming', 'Brand Strategy'],
     description: 'Comprehensive go-to-market plan for Pokopia, a creature-collecting habitat-restoration RPG targeting casual and cozy gamers ages 7–30. Covers full-funnel paid media strategy across 3 phases ($35–45M budget), Pokémon Presents reveal mechanics, creator tier structure, franchise synergy across TCG/anime/mobile, experiential AR pop-ups in LA/NYC/Tokyo, and brand partnerships with LEGO and Gong Cha. Targets 5–6M Year 1 units and 8–10M MAU by Month 6.',
   },
@@ -89,7 +89,7 @@ const projects = [
 
 const categoryColor: Record<string, string> = {
   'Product Management': 'bg-blue-50 text-blue-600 border-blue-200',
-  'Product Marketing': 'bg-purple-50 text-purple-600 border-purple-200',
+  'Marketing': 'bg-purple-50 text-purple-600 border-purple-200',
 };
 
 export default function ProjectsBacklog() {
