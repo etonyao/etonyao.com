@@ -3,43 +3,49 @@ const projects = [
     title: 'Sustainability Dashboard — Ringley Group',
     tags: ['Product Management', 'Data Analysis'],
     description: 'Product roadmap and strategy for a sustainability dashboard tracking 10,000+ data points to guide net-zero initiatives and property acquisition decisions.',
+    link: '/projects/sustainability-dashboard',
   },
   {
     title: 'Anthropogenic Climate Change Analysis',
     tags: ['Python', 'Data Analysis'],
     description: 'Data analysis examining CO2 emissions, urbanization, and global temperature increases using multiple datasets to demonstrate human impact on climate change.',
+    link: '/projects/climate-change-analysis',
   },
   {
     title: 'Pokemon Stats ML Predictor',
     tags: ['Machine Learning', 'Python'],
     description: 'Neural network project to analyze Pokemon statistics and predict legendary status, featuring confusion matrix visualization and interactive prediction.',
+    link: '/projects/pokemon-ml-predictor',
   },
   {
     title: 'Alongside AI — Kiwi Connect PRD',
     tags: ['Product Management', 'AI Integration', 'EdTech'],
     description: 'Full PRD for Kiwi Connect — an anonymous AI-moderated peer chat feature for Alongside. Includes problem framing, success metrics (50% adoption target), 12-month rollout timeline, A/B testing plan, and future expansion roadmap.',
+    link: '/projects/alongside-prd',
   },
   {
     title: 'Pokémon Team Builder',
     tags: ['React', 'Next.js', 'UI/UX'],
     description: 'Full-stack team builder web app supporting multiple competitive formats (VGC, Smogon), with EV spreads, item/nature selection, and preset meta spreads.',
-    link: '/pokemonteambuilder',
+    link: '/projects/pokemon-team-builder',
   },
   {
     title: 'AI Time Entry System — Concept Prototype',
     tags: ['Product Management', 'AI Integration', 'Prototyping'],
     description: 'Interactive prototype for an AI-powered time tracking tool targeting complex users. Features calendar-based auto-suggestions, pattern detection, and a phased rollout roadmap designed to reduce manual entry time by 60%.',
-    link: '/pwccase',
+    link: '/projects/ai-time-entry',
   },
   {
     title: 'Netflix — Film of the Week PRD',
     tags: ['Product Management', 'Streaming', 'Content Discovery'],
     description: 'PRD for a curated weekly film spotlight on Netflix targeting decision fatigue. Features a homepage banner, TikTok-style short-form preview, and UGC campaign. Includes A/B test plan and roadmap to expand into Show/Short of the Week.',
+    link: '/projects/netflix-film-of-the-week',
   },
   {
     title: 'Netflix — Mood Meter PRD + Lean Canvas',
     tags: ['Product Management', 'AI Integration', 'Streaming'],
     description: 'Full group PRD and Lean Canvas for a mood-first content discovery feature on Netflix. Users pick from 8 mood tiles, tune watch length and familiarity, and receive a personalized results page in under 90 seconds. Includes ICE scoring, 10 user stories, phased A/B experiment plan, and SMART success metrics (65% playback conversion, +12% watch time uplift targets).',
+    link: '/projects/netflix-mood-meter',
   },
 ];
 
@@ -76,14 +82,13 @@ export default function ProductProjects() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, i) => (
-              <div
+              <a
                 key={i}
-                className="group rounded-2xl border border-gray-200 bg-white p-6 flex flex-col gap-3 hover:border-blue-400 hover:shadow-lg transition-all duration-300"
+                href={project.link}
+                className="group rounded-2xl border border-gray-200 bg-white p-6 flex flex-col gap-3 hover:border-blue-400 hover:shadow-lg transition-all duration-300 no-underline"
               >
                 <h2 className="text-base font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-snug">
-                  {'link' in project && project.link ? (
-                    <a href={project.link} className="hover:underline underline-offset-2">{project.title}</a>
-                  ) : project.title}
+                  {project.title}
                 </h2>
                 <p className="text-sm text-gray-500 leading-relaxed flex-1">{project.description}</p>
                 <div className="flex flex-wrap gap-1.5 pt-1">
@@ -93,7 +98,7 @@ export default function ProductProjects() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
