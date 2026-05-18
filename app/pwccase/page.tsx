@@ -141,7 +141,7 @@ export default function PWCCasePrototype() {
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-bold text-gray-900 mb-2">PWC Case Study: Option A - Enhance Astro with AI</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">Case Study: Option A - Enhance Astro with AI</h2>
               <p className="text-gray-700 mb-3">
                 <strong>Target Segment:</strong> Complex Users (18%) - 6+ WBS codes, 30+ minutes daily
               </p>

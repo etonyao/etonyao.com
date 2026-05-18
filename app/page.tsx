@@ -379,12 +379,16 @@ export default function Home() {
                   'Anthropogenic Climate Change Analysis',
                   'Pokemon Stats ML Predictor',
                   'Alongside AI — Peer Chat Feature PRD',
+                  'Pokémon Team Builder',
+                  'AI Time Entry System — Concept Prototype',
                   'Potion Problems — Game Marketing Campaign',
                   'Sustainability Dashboard — Ringley Group',
                   'APASA Community Impact Program',
                   'Anthropogenic Climate Change Analysis',
                   'Pokemon Stats ML Predictor',
                   'Alongside AI — Peer Chat Feature PRD',
+                  'Pokémon Team Builder',
+                  'AI Time Entry System — Concept Prototype',
                 ].map((project, i) => (
                   <span key={i} className="text-xs text-gray-300 font-medium tracking-widest uppercase shrink-0">
                     {project} <span className="text-gray-200 mx-2">·</span>

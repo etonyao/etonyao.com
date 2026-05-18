@@ -35,6 +35,20 @@ const projects = [
     tags: ['Product Management', 'AI Integration'],
     description: 'Product strategy for an AI-moderated anonymous peer-to-peer chat feature enabling students to practice interpersonal skills with mental health support.',
   },
+  {
+    title: 'Pokémon Team Builder',
+    category: 'Product Management',
+    tags: ['React', 'Next.js', 'UI/UX'],
+    description: 'Full-stack team builder web app supporting multiple competitive formats (VGC, Smogon), with EV spreads, item/nature selection, and preset meta spreads.',
+    link: '/pokemonteambuilder',
+  },
+  {
+    title: 'AI Time Entry System — Concept Prototype',
+    category: 'Product Management',
+    tags: ['Product Management', 'AI Integration', 'Prototyping'],
+    description: 'Interactive prototype for an AI-powered time tracking tool targeting complex users. Features calendar-based auto-suggestions, pattern detection, and a phased rollout roadmap designed to reduce manual entry time by 60%.',
+    link: '/pwccase',
+  },
 ];
 
 const categoryColor: Record<string, string> = {
@@ -76,9 +90,15 @@ export default function ProjectsBacklog() {
               <span className="text-xs text-gray-300 font-mono mt-1 w-5 shrink-0">{String(i + 1).padStart(2, '0')}</span>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <h2 className="text-base font-semibold text-gray-800 group-hover:text-gray-900 transition-colors">
-                    {project.title}
-                  </h2>
+                  {'link' in project && project.link ? (
+                    <a href={project.link} className="text-base font-semibold text-gray-800 hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
+                      {project.title}
+                    </a>
+                  ) : (
+                    <h2 className="text-base font-semibold text-gray-800 group-hover:text-gray-900 transition-colors">
+                      {project.title}
+                    </h2>
+                  )}
                   <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${categoryColor[project.category]}`}>
                     {project.category}
                   </span>
