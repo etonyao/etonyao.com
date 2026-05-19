@@ -199,7 +199,7 @@ const projects: Record<string, Project> = {
     link: '/pokemonteambuilder',
     linkLabel: 'Try the Team Builder',
     image: '/documents/pokemon-team-builder.avif',
-    imagePosition: 'center top',
+    imagePosition: 'center 5%',
   },
 
   'ai-time-entry': {
