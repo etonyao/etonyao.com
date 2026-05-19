@@ -16,6 +16,7 @@ type Project = {
   video?: string;
   image?: string;
   imagePosition?: string;
+  imageFit?: 'cover' | 'contain';
 };
 
 const projects: Record<string, Project> = {
@@ -331,7 +332,7 @@ const projects: Record<string, Project> = {
     linkLabel: 'View on Steam',
     video: 'https://www.youtube.com/embed/TmR3AQp_Ekk',
     image: '/documents/potion-problems.jpg',
-    imagePosition: 'center top',
+    imagePosition: 'center 20%',
     sections: [
       {
         heading: 'My Role',
@@ -391,6 +392,8 @@ const projects: Record<string, Project> = {
       '60% sustained engagement rate across program cycles',
     ],
     image: '/documents/apasa-logo.webp',
+    imagePosition: 'center center',
+    imageFit: 'contain',
   },
 
   'kiwi-connect-press-release': {
@@ -471,7 +474,7 @@ const projects: Record<string, Project> = {
     ],
     document: '/documents/sims-gtm.pdf',
     image: '/documents/sims.png',
-    imagePosition: 'center top',
+    imagePosition: 'center 40%',
   },
 
   'fable-marketing': {
@@ -518,7 +521,7 @@ const projects: Record<string, Project> = {
     ],
     document: '/documents/fable-marketing.pdf',
     image: '/documents/fable.jpg',
-    imagePosition: 'center top',
+    imagePosition: 'center 70%',
   },
 
   'pokemon-pokopia-gtm': {
@@ -617,11 +620,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Hero Image */}
       {project.image && (
-        <div className="w-full h-64 md:h-[480px] mt-[57px] overflow-hidden">
+        <div className={`w-full h-64 md:h-[480px] mt-[57px] overflow-hidden flex items-center justify-center ${project.imageFit === 'contain' ? 'bg-gray-100' : ''}`}>
           <img
             src={project.image}
             alt={project.title}
-            className="w-full h-full object-cover"
+            className={`w-full h-full ${project.imageFit === 'contain' ? 'object-contain p-12' : 'object-cover'}`}
             style={{ objectPosition: project.imagePosition ?? 'center' }}
           />
         </div>
