@@ -14,6 +14,7 @@ type Project = {
   linkLabel?: string;
   document?: string;
   video?: string;
+  image?: string;
 };
 
 const projects: Record<string, Project> = {
@@ -48,6 +49,7 @@ const projects: Record<string, Project> = {
       'Roadmap delivered across 3 phased sprints',
       'Directly informed net-zero property acquisition decisions',
     ],
+    image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200&q=80&fit=crop&auto=format',
   },
 
   'climate-change-analysis': {
@@ -81,6 +83,7 @@ const projects: Record<string, Project> = {
       'Multi-dataset analysis combining NASA, NOAA, and World Bank sources',
       'Fully reproducible Python/Jupyter notebook deliverable',
     ],
+    image: 'https://images.unsplash.com/photo-1615092296061-e2ccfeb2f3d6?w=1200&q=80&fit=crop&auto=format',
   },
 
   'pokemon-ml-predictor': {
@@ -114,6 +117,7 @@ const projects: Record<string, Project> = {
       'Confusion matrix visualization of model performance',
       'Interactive prediction interface for real-time classification',
     ],
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=80&fit=crop&auto=format',
   },
 
   'alongside-prd': {
@@ -158,6 +162,7 @@ const projects: Record<string, Project> = {
       'Future expansions: peer mentor badges, group topic rooms, counselor integrations',
     ],
     document: '/documents/alongside-prd-press-release.pdf',
+    image: 'https://images.unsplash.com/photo-1524601500432-1e1a4c71d692?w=1200&q=80&fit=crop&auto=format',
   },
 
   'pokemon-team-builder': {
@@ -190,6 +195,7 @@ const projects: Record<string, Project> = {
     ],
     link: '/pokemonteambuilder',
     linkLabel: 'Try the Team Builder',
+    image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=1200&q=80&fit=crop&auto=format',
   },
 
   'ai-time-entry': {
@@ -230,6 +236,7 @@ const projects: Record<string, Project> = {
     ],
     link: '/pwccase',
     linkLabel: 'View Live Prototype',
+    image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&q=80&fit=crop&auto=format',
   },
 
   'netflix-film-of-the-week': {
@@ -268,6 +275,7 @@ const projects: Record<string, Project> = {
       'Creates a weekly social media moment to drive off-platform awareness',
     ],
     document: '/documents/netflix-film-of-week.pdf',
+    image: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=1200&q=80&fit=crop&auto=format',
   },
 
   'netflix-mood-meter': {
@@ -308,6 +316,7 @@ const projects: Record<string, Project> = {
       'Target: 40% of first-time users return within 14 days',
     ],
     document: '/documents/netflix-mood-meter.pdf',
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&q=80&fit=crop&auto=format',
   },
 
   'potion-problems': {
@@ -319,6 +328,7 @@ const projects: Record<string, Project> = {
     link: 'https://store.steampowered.com/app/3306050/Potion_Problems/',
     linkLabel: 'View on Steam',
     video: 'https://www.youtube.com/embed/TmR3AQp_Ekk',
+    image: 'https://images.unsplash.com/photo-1748466989671-07e55c0c55b6?w=1200&q=80&fit=crop&auto=format',
     sections: [
       {
         heading: 'My Role',
@@ -377,6 +387,7 @@ const projects: Record<string, Project> = {
       '5,000+ students engaged across the LA network',
       '60% sustained engagement rate across program cycles',
     ],
+    image: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=1200&q=80&fit=crop&auto=format',
   },
 
   'kiwi-connect-press-release': {
@@ -411,6 +422,7 @@ const projects: Record<string, Project> = {
       'School rollout framing: select U.S. schools early 2026, nationwide by year-end',
     ],
     document: '/documents/alongside-prd-press-release.pdf',
+    image: 'https://images.unsplash.com/photo-1527525443983-6e60c75fff46?w=1200&q=80&fit=crop&auto=format',
   },
 
   'the-sims-gtm': {
@@ -455,6 +467,7 @@ const projects: Record<string, Project> = {
       'Positions The Sims as a lifestyle brand, not just a game',
     ],
     document: '/documents/sims-gtm.pdf',
+    image: 'https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?w=1200&q=80&fit=crop&auto=format',
   },
 
   'fable-marketing': {
@@ -500,6 +513,7 @@ const projects: Record<string, Project> = {
       'Positioned Fable as a cultural event, not just a game launch',
     ],
     document: '/documents/fable-marketing.pdf',
+    image: 'https://images.unsplash.com/photo-1485465053475-dd55ed3894b9?w=1200&q=80&fit=crop&auto=format',
   },
 
   'pokemon-pokopia-gtm': {
@@ -552,6 +566,7 @@ const projects: Record<string, Project> = {
       '500M+ organic social impressions via #Pokopia',
     ],
     document: '/documents/pokemon-pokopia-gtm.pdf',
+    image: 'https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=1200&q=80&fit=crop&auto=format',
   },
 };
 
@@ -594,8 +609,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
       </nav>
 
+      {/* Hero Image */}
+      {project.image && (
+        <div className="w-full h-72 md:h-96 overflow-hidden mt-[57px]">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
       {/* Hero */}
-      <section className={`pt-32 pb-16 px-6 bg-gradient-to-b ${accentClasses.hero} to-white`}>
+      <section className={`${project.image ? 'pt-12' : 'pt-32'} pb-16 px-6 bg-gradient-to-b ${accentClasses.hero} to-white`}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-wrap gap-2 mb-6">
             <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide border ${accentClasses.badge}`}>
