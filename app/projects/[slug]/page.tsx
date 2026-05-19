@@ -15,7 +15,7 @@ type Project = {
   document?: string;
   video?: string;
   image?: string;
-  imageFit?: 'cover' | 'contain';
+  imagePosition?: string;
 };
 
 const projects: Record<string, Project> = {
@@ -197,7 +197,7 @@ const projects: Record<string, Project> = {
     link: '/pokemonteambuilder',
     linkLabel: 'Try the Team Builder',
     image: '/documents/pokemon-team-builder.avif',
-    imageFit: 'contain',
+    imagePosition: 'center top',
   },
 
   'ai-time-entry': {
@@ -331,7 +331,7 @@ const projects: Record<string, Project> = {
     linkLabel: 'View on Steam',
     video: 'https://www.youtube.com/embed/TmR3AQp_Ekk',
     image: '/documents/potion-problems.jpg',
-    imageFit: 'contain',
+    imagePosition: 'center top',
     sections: [
       {
         heading: 'My Role',
@@ -471,7 +471,7 @@ const projects: Record<string, Project> = {
     ],
     document: '/documents/sims-gtm.pdf',
     image: '/documents/sims.png',
-    imageFit: 'contain',
+    imagePosition: 'center top',
   },
 
   'fable-marketing': {
@@ -518,7 +518,7 @@ const projects: Record<string, Project> = {
     ],
     document: '/documents/fable-marketing.pdf',
     image: '/documents/fable.jpg',
-    imageFit: 'contain',
+    imagePosition: 'center top',
   },
 
   'pokemon-pokopia-gtm': {
@@ -572,7 +572,7 @@ const projects: Record<string, Project> = {
     ],
     document: '/documents/pokemon-pokopia-gtm.pdf',
     image: '/documents/pokopia.avif',
-    imageFit: 'contain',
+    imagePosition: 'center top',
   },
 };
 
@@ -617,11 +617,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Hero Image */}
       {project.image && (
-        <div className={`w-full h-64 md:h-[480px] mt-[57px] overflow-hidden flex items-center justify-center ${project.imageFit === 'contain' ? 'bg-gray-950' : ''}`}>
+        <div className="w-full h-64 md:h-[480px] mt-[57px] overflow-hidden">
           <img
             src={project.image}
             alt={project.title}
-            className={`w-full h-full ${project.imageFit === 'contain' ? 'object-contain p-8' : 'object-cover object-center'}`}
+            className="w-full h-full object-cover"
+            style={{ objectPosition: project.imagePosition ?? 'center' }}
           />
         </div>
       )}
