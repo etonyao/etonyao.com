@@ -629,7 +629,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <div className="max-w-6xl mx-auto space-y-14">
           {project.sections.map((section, i) => (
             <div key={i}>
-              <h2 className={`text-xs font-bold uppercase tracking-widest mb-3 ${accentClasses.heading}`}>{section.heading}</h2>
+              <h2 className={`text-sm font-extrabold uppercase tracking-widest mb-3 border-b pb-2 ${accentClasses.heading}`}>{section.heading}</h2>
               <p className="text-gray-700 leading-relaxed text-base mb-4">{section.body}</p>
               {section.bullets && (
                 <ul className="space-y-2">
@@ -647,7 +647,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           {/* Outcomes */}
           {project.outcomes && project.outcomes.length > 0 && (
             <div>
-              <h2 className={`text-xs font-bold uppercase tracking-widest mb-4 ${accentClasses.heading}`}>Key Outcomes</h2>
+              <h2 className={`text-sm font-extrabold uppercase tracking-widest mb-4 border-b pb-2 ${accentClasses.heading}`}>Key Outcomes</h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {project.outcomes.map((outcome, i) => (
                   <div key={i} className={`px-4 py-3 rounded-xl border text-sm font-medium ${accentClasses.outcome}`}>
@@ -661,7 +661,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           {/* Video Embed */}
           {project.video && (
             <div>
-              <h2 className={`text-xs font-bold uppercase tracking-widest mb-4 ${accentClasses.heading}`}>Trailer</h2>
+              <h2 className={`text-sm font-extrabold uppercase tracking-widest mb-4 border-b pb-2 ${accentClasses.heading}`}>Trailer</h2>
               <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-200 aspect-video">
                 <iframe
                   src={project.video}
@@ -677,7 +677,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           {/* Document Embed */}
           {project.document && (
             <div>
-              <h2 className={`text-xs font-bold uppercase tracking-widest mb-4 ${accentClasses.heading}`}>Full Document</h2>
+              <h2 className={`text-sm font-extrabold uppercase tracking-widest mb-4 border-b pb-2 ${accentClasses.heading}`}>Full Document</h2>
               <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                 <iframe
                   src={project.document}
