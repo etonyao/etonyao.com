@@ -577,7 +577,7 @@ const projects: Record<string, Project> = {
     ],
     document: '/documents/pokemon-pokopia-gtm.pdf',
     image: '/documents/pokopia.avif',
-    imagePosition: 'center top',
+    imagePosition: 'center 25%',
   },
 };
 
