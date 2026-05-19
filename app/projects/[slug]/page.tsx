@@ -17,6 +17,7 @@ type Project = {
   image?: string;
   imagePosition?: string;
   imageFit?: 'cover' | 'contain';
+  imageBg?: string;
 };
 
 const projects: Record<string, Project> = {
@@ -474,7 +475,8 @@ const projects: Record<string, Project> = {
     ],
     document: '/documents/sims-gtm.pdf',
     image: '/documents/sims.png',
-    imagePosition: 'center 40%',
+    imageFit: 'contain',
+    imageBg: '#0d1b5e',
   },
 
   'fable-marketing': {
@@ -620,7 +622,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Hero Image */}
       {project.image && (
-        <div className={`w-full h-64 md:h-[480px] mt-[57px] overflow-hidden flex items-center justify-center ${project.imageFit === 'contain' ? 'bg-gray-100' : ''}`}>
+        <div
+          className="w-full h-64 md:h-[480px] mt-[57px] overflow-hidden flex items-center justify-center"
+          style={{ backgroundColor: project.imageBg ?? (project.imageFit === 'contain' ? '#f3f4f6' : 'transparent') }}
+        >
           <img
             src={project.image}
             alt={project.title}
