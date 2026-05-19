@@ -582,7 +582,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <div className="min-h-screen bg-white">
       {/* Nav */}
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-xl border-b border-gray-200 z-40 shadow-sm">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-4">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
           <a href={backHref} className={`flex items-center gap-2 text-gray-600 ${accentClasses.back} transition-colors font-medium text-sm`}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -596,7 +596,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Hero */}
       <section className={`pt-32 pb-16 px-6 bg-gradient-to-b ${accentClasses.hero} to-white`}>
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="flex flex-wrap gap-2 mb-6">
             <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide border ${accentClasses.badge}`}>
               {project.category}
@@ -626,7 +626,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Sections */}
       <section className="px-6 pb-24">
-        <div className="max-w-3xl mx-auto space-y-14">
+        <div className="max-w-6xl mx-auto space-y-14">
           {project.sections.map((section, i) => (
             <div key={i}>
               <h2 className={`text-xs font-bold uppercase tracking-widest mb-3 ${accentClasses.heading}`}>{section.heading}</h2>
