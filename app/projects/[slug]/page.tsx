@@ -611,11 +611,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Hero Image */}
       {project.image && (
-        <div className="w-full h-72 md:h-96 overflow-hidden mt-[57px]">
+        <div className="w-full mt-[57px] bg-gray-50 flex items-center justify-center">
           <img
             src={project.image}
             alt={project.title}
-            className="w-full h-full object-cover"
+            className="w-full max-h-[500px] object-contain"
           />
         </div>
       )}
