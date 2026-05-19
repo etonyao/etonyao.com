@@ -476,7 +476,7 @@ const projects: Record<string, Project> = {
     document: '/documents/sims-gtm.pdf',
     image: '/documents/sims.png',
     imageFit: 'contain',
-    imageBg: '#0d1b5e',
+    imageBg: '#02015C',
   },
 
   'fable-marketing': {
