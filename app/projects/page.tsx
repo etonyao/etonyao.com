@@ -77,6 +77,13 @@ const projects = [
     slug: 'sustainability-dashboard',
   },
   {
+    title: 'APASA Night Market 2024 — Event Planning Lead',
+    category: 'Marketing',
+    tags: ['Event Planning', 'Community Engagement', 'Program Management'],
+    description: 'Led all activities programming for USC\'s largest APIDA cultural event — designing games, coordinating member organization booths, and running a prize ticket system for 500+ attendees at McCarthy Quad.',
+    slug: 'apasa-night-market',
+  },
+  {
     title: 'APASA Community Impact Program',
     category: 'Marketing',
     tags: ['Program Management', 'Community Engagement'],

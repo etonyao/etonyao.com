@@ -397,6 +397,54 @@ const projects: Record<string, Project> = {
     imageFit: 'contain',
   },
 
+  'apasa-night-market': {
+    title: 'APASA Night Market 2024 — Event Planning Lead',
+    category: 'Marketing',
+    tags: ['Event Planning', 'Community Engagement', 'Program Management'],
+    tagline: 'Producing USC\'s largest APIDA cultural celebration from the ground up.',
+    overview: 'As Activities Lead for the APASA Night Market 2024, I was responsible for designing and executing the full activities programming for USC\'s signature APIDA cultural event — held at McCarthy Quad and drawing 500+ students across the USC community. The Night Market celebrates Asian and Pacific Islander cultures through food, performances, and interactive experiences inspired by night markets across Asia and the 626 Night Market.',
+    sections: [
+      {
+        heading: 'My Role',
+        body: 'I led all activities and games programming for the 2024 Night Market, owning the experience design from concept through execution. While other teams handled logistics, food vendors, and performances, I was solely responsible for the interactive layer of the event — the booths, games, and prize systems that drove engagement across the entire night.',
+      },
+      {
+        heading: 'What I Organized',
+        body: 'I coordinated with member organizations to design and run activity booths, created a unified prize ticket system, and curated games that reflected APIDA cultural traditions.',
+        bullets: [
+          'Designed the full activities programming for the event',
+          'Coordinated member organization booths and game formats',
+          'Built a prize ticket system with tiered rewards (grand prizes and small prizes)',
+          'Managed setup, flow, and real-time operations across all activity stations on event night',
+          'Ensured activities were culturally relevant and accessible to all attendees',
+        ],
+      },
+      {
+        heading: 'Event Context',
+        body: 'The Night Market is APASA\'s flagship annual event — a celebration of APIDA identity on campus featuring local food vendors serving Thai, Vietnamese, Indian, and Filipino cuisine, live performances from 12+ member organizations including taiko drumming, a cappella, and traditional dance, and interactive cultural activities.',
+        bullets: [
+          '500+ APIDA students in attendance',
+          '12+ member organization performances',
+          '6 local food vendors representing cuisines across Asia',
+          'Held at McCarthy Quad, USC\'s central outdoor venue',
+        ],
+      },
+      {
+        heading: 'Impact',
+        body: 'The activities programming was central to the event\'s energy and community engagement — giving attendees a reason to move through the space, interact with member organizations, and stay connected throughout the night. The Night Market has become one of the most anticipated events in USC\'s APIDA calendar.',
+      },
+    ],
+    outcomes: [
+      '500+ students attended the 2024 Night Market',
+      'Full activities programming designed and executed solo',
+      'Prize ticket system drove sustained engagement across the event',
+      'Supported USC\'s largest annual APIDA cultural celebration',
+    ],
+    image: '/documents/apasa-logo.webp',
+    imagePosition: 'center center',
+    imageFit: 'contain',
+  },
+
   'kiwi-connect-press-release': {
     title: 'Alongside AI — Kiwi Connect Press Release',
     category: 'Marketing',

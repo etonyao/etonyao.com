@@ -30,6 +30,12 @@ const projects = [
     link: '/projects/kiwi-connect-press-release',
   },
   {
+    title: 'APASA Night Market 2024 — Event Planning Lead',
+    tags: ['Event Planning', 'Community Engagement', 'Program Management'],
+    description: 'Led all activities programming for USC\'s largest APIDA cultural event — designing games, coordinating member organization booths, and running a prize ticket system for 500+ attendees at McCarthy Quad.',
+    link: '/projects/apasa-night-market',
+  },
+  {
     title: 'APASA Community Impact Program',
     tags: ['Program Management', 'Community Engagement'],
     description: 'Designed and launched a service initiative requiring 40+ member organizations to conduct community projects across Los Angeles, achieving 60% sustained engagement.',
