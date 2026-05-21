@@ -11,9 +11,9 @@ export default function Home() {
   const heroRef = useRef<HTMLElement>(null);
 
   const roles = [
+    'Business Student',
     'Product Manager',
     'Marketing Strategist',
-    'USC Student',
     'Video Game Enthusiast'
   ];
 
