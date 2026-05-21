@@ -309,57 +309,79 @@ export default function Home() {
             <p className="text-gray-600 mb-12 text-lg">Explore my work across product management and product marketing</p>
 
             {/* Two-panel split */}
-            <div className="grid md:grid-cols-2 gap-6 min-h-[420px]">
+            <div className="grid md:grid-cols-2 gap-6">
               {/* Product Management panel */}
               <a
                 href="/product"
-                className="group relative flex flex-col justify-between rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-10 overflow-hidden hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                className="group relative flex flex-col justify-between rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-8 overflow-hidden hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
               >
-                {/* Background accent */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-500/10 transition-all duration-500" />
 
                 <div className="relative z-10">
-                  <span className="inline-block mb-4 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-blue-200">
-                    Product Management
-                  </span>
-                  <h4 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-blue-200">
+                      Product Management
+                    </span>
+                    <span className="text-xs text-gray-400 font-medium">8 projects</span>
+                  </div>
+                  <h4 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                     PM Projects
                   </h4>
-                  <p className="text-gray-500 text-base leading-relaxed">
+                  <p className="text-gray-500 text-sm leading-relaxed mb-6">
                     PRDs, roadmaps, feature strategy, and end-to-end product work.
                   </p>
+                  <div className="space-y-2">
+                    {['Netflix — Mood Meter PRD + Lean Canvas', 'Alongside AI — Kiwi Connect PRD', 'AI Time Entry System — Concept Prototype', 'Pokémon Team Builder'].map((name) => (
+                      <div key={name} className="flex items-center gap-2 text-xs text-gray-400">
+                        <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
+                        {name}
+                      </div>
+                    ))}
+                    <div className="text-xs text-blue-400 pl-3">+ 4 more</div>
+                  </div>
                 </div>
 
-                <div className="relative z-10 mt-8 flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
-                  View Projects
+                <div className="relative z-10 mt-6 flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
+                  View All
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </div>
               </a>
 
-              {/* Product Marketing panel */}
+              {/* Marketing panel */}
               <a
                 href="/marketing"
-                className="group relative flex flex-col justify-between rounded-2xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white p-10 overflow-hidden hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                className="group relative flex flex-col justify-between rounded-2xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white p-8 overflow-hidden hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
               >
-                {/* Background accent */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-purple-500/10 transition-all duration-500" />
 
                 <div className="relative z-10">
-                  <span className="inline-block mb-4 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-purple-200">
-                    Marketing
-</span>
-                  <h4 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-purple-200">
+                      Marketing
+                    </span>
+                    <span className="text-xs text-gray-400 font-medium">7 projects</span>
+                  </div>
+                  <h4 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
                     Marketing Projects
                   </h4>
-                  <p className="text-gray-500 text-base leading-relaxed">
+                  <p className="text-gray-500 text-sm leading-relaxed mb-6">
                     Go-to-market strategy, campaigns, and brand storytelling.
                   </p>
+                  <div className="space-y-2">
+                    {['Pokémon Pokopia — Full GTM Strategy', 'Fable — Marketing Launch Campaign', 'The Sims — GTM & Brand Strategy', 'APASA Night Market 2024'].map((name) => (
+                      <div key={name} className="flex items-center gap-2 text-xs text-gray-400">
+                        <span className="w-1 h-1 rounded-full bg-purple-300 shrink-0" />
+                        {name}
+                      </div>
+                    ))}
+                    <div className="text-xs text-purple-400 pl-3">+ 3 more</div>
+                  </div>
                 </div>
 
-                <div className="relative z-10 mt-8 flex items-center gap-2 text-purple-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
-                  View Projects
+                <div className="relative z-10 mt-6 flex items-center gap-2 text-purple-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
+                  View All
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
