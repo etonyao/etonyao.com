@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eton Yao - Portfolio",
-  description: "Personal portfolio showcasing my projects and experience as a student developer.",
+  title: "Eton Yao",
+  description: "USC '27 — working where product meets marketing.",
   icons: {
     icon: '/favicon.svg',
     apple: '/favicon.svg',

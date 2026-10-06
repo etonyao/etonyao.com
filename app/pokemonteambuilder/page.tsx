@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, Download, Upload, Shield, X, Search, Edit, Save, FolderPlus, ChevronDown } from 'lucide-react';
 import { POKEMON_DATABASE, NATURES, ITEMS, type PokemonData, type EVSpread } from './pokemonData';
-import Image from 'next/image';
+import Link from 'next/link';
 
 interface Pokemon {
   id: string;
@@ -25,786 +24,798 @@ interface Team {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  normal: 'bg-gray-400', fire: 'bg-red-500', water: 'bg-blue-500', electric: 'bg-yellow-400',
-  grass: 'bg-green-500', ice: 'bg-cyan-300', fighting: 'bg-red-700', poison: 'bg-purple-500',
-  ground: 'bg-yellow-600', flying: 'bg-indigo-300', psychic: 'bg-pink-500', bug: 'bg-lime-500',
-  rock: 'bg-yellow-700', ghost: 'bg-purple-700', dragon: 'bg-indigo-600', dark: 'bg-gray-700',
-  steel: 'bg-gray-500', fairy: 'bg-pink-300',
+  normal: '#9098a1', fire: '#ff7144', water: '#4d90d5', electric: '#f3c63d',
+  grass: '#5cba5f', ice: '#74cfc4', fighting: '#e0533d', poison: '#a85fc6',
+  ground: '#dba94e', flying: '#8aa8e8', psychic: '#f5698f', bug: '#a3b333',
+  rock: '#c6b766', ghost: '#6a5ba0', dragon: '#5a6fe0', dark: '#5b5468',
+  steel: '#7f8ca3', fairy: '#ec8fc9',
 };
 
 const GAMES_AND_FORMATS = [
-  { id: 'vgc-reg-i', name: 'VGC Regulation I', game: 'Scarlet/Violet', description: 'Paldea/Kitakami/Blueberry dex + 2 Restricted', format: 'Doubles' },
-  { id: 'vgc-reg-h', name: 'VGC Regulation H', game: 'Scarlet/Violet', description: 'No Paradox/Legendaries', format: 'Doubles' },
-  { id: 'pokemon-champions', name: 'Pokemon Champions', game: 'Pokemon Champions', description: '263 Pokemon + Mega Evolutions', format: 'Doubles' },
+  { id: 'vgc-reg-i', name: 'VGC Reg I', game: 'Scarlet/Violet', description: 'Paldea/Kitakami/Blueberry + 2 Restricted', format: 'Doubles' },
+  { id: 'vgc-reg-h', name: 'VGC Reg H', game: 'Scarlet/Violet', description: 'No Paradox/Legendaries', format: 'Doubles' },
+  { id: 'pokemon-champions', name: 'Pokémon Champions', game: 'Champions', description: '263 Pokémon + Mega Evolutions', format: 'Doubles' },
   { id: 'smogon-ou', name: 'Smogon OU', game: 'Gen 9', description: 'OverUsed tier singles', format: 'Singles' },
 ];
 
-// Nature effects: [increased stat, decreased stat]
-const NATURE_EFFECTS: Record<string, { increases?: string; decreases?: string; description: string }> = {
-  'Hardy': { description: 'Neutral - No stat changes' },
-  'Lonely': { increases: 'Attack', decreases: 'Defense', description: '+Atk / -Def' },
-  'Brave': { increases: 'Attack', decreases: 'Speed', description: '+Atk / -Spe' },
-  'Adamant': { increases: 'Attack', decreases: 'Sp. Atk', description: '+Atk / -SpA' },
-  'Naughty': { increases: 'Attack', decreases: 'Sp. Def', description: '+Atk / -SpD' },
-  'Bold': { increases: 'Defense', decreases: 'Attack', description: '+Def / -Atk' },
-  'Docile': { description: 'Neutral - No stat changes' },
-  'Relaxed': { increases: 'Defense', decreases: 'Speed', description: '+Def / -Spe' },
-  'Impish': { increases: 'Defense', decreases: 'Sp. Atk', description: '+Def / -SpA' },
-  'Lax': { increases: 'Defense', decreases: 'Sp. Def', description: '+Def / -SpD' },
-  'Timid': { increases: 'Speed', decreases: 'Attack', description: '+Spe / -Atk' },
-  'Hasty': { increases: 'Speed', decreases: 'Defense', description: '+Spe / -Def' },
-  'Serious': { description: 'Neutral - No stat changes' },
-  'Jolly': { increases: 'Speed', decreases: 'Sp. Atk', description: '+Spe / -SpA' },
-  'Naive': { increases: 'Speed', decreases: 'Sp. Def', description: '+Spe / -SpD' },
-  'Modest': { increases: 'Sp. Atk', decreases: 'Attack', description: '+SpA / -Atk' },
-  'Mild': { increases: 'Sp. Atk', decreases: 'Defense', description: '+SpA / -Def' },
-  'Quiet': { increases: 'Sp. Atk', decreases: 'Speed', description: '+SpA / -Spe' },
-  'Bashful': { description: 'Neutral - No stat changes' },
-  'Rash': { increases: 'Sp. Atk', decreases: 'Sp. Def', description: '+SpA / -SpD' },
-  'Calm': { increases: 'Sp. Def', decreases: 'Attack', description: '+SpD / -Atk' },
-  'Gentle': { increases: 'Sp. Def', decreases: 'Defense', description: '+SpD / -Def' },
-  'Sassy': { increases: 'Sp. Def', decreases: 'Speed', description: '+SpD / -Spe' },
-  'Careful': { increases: 'Sp. Def', decreases: 'Sp. Atk', description: '+SpD / -SpA' },
-  'Quirky': { description: 'Neutral - No stat changes' }
+const NATURE_EFFECTS: Record<string, { increases?: string; decreases?: string; note: string }> = {
+  'Hardy': { note: 'Neutral' }, 'Lonely': { increases: 'atk', decreases: 'def', note: '+Atk / −Def' },
+  'Brave': { increases: 'atk', decreases: 'spe', note: '+Atk / −Spe' }, 'Adamant': { increases: 'atk', decreases: 'spa', note: '+Atk / −SpA' },
+  'Naughty': { increases: 'atk', decreases: 'spd', note: '+Atk / −SpD' }, 'Bold': { increases: 'def', decreases: 'atk', note: '+Def / −Atk' },
+  'Docile': { note: 'Neutral' }, 'Relaxed': { increases: 'def', decreases: 'spe', note: '+Def / −Spe' },
+  'Impish': { increases: 'def', decreases: 'spa', note: '+Def / −SpA' }, 'Lax': { increases: 'def', decreases: 'spd', note: '+Def / −SpD' },
+  'Timid': { increases: 'spe', decreases: 'atk', note: '+Spe / −Atk' }, 'Hasty': { increases: 'spe', decreases: 'def', note: '+Spe / −Def' },
+  'Serious': { note: 'Neutral' }, 'Jolly': { increases: 'spe', decreases: 'spa', note: '+Spe / −SpA' },
+  'Naive': { increases: 'spe', decreases: 'spd', note: '+Spe / −SpD' }, 'Modest': { increases: 'spa', decreases: 'atk', note: '+SpA / −Atk' },
+  'Mild': { increases: 'spa', decreases: 'def', note: '+SpA / −Def' }, 'Quiet': { increases: 'spa', decreases: 'spe', note: '+SpA / −Spe' },
+  'Bashful': { note: 'Neutral' }, 'Rash': { increases: 'spa', decreases: 'spd', note: '+SpA / −SpD' },
+  'Calm': { increases: 'spd', decreases: 'atk', note: '+SpD / −Atk' }, 'Gentle': { increases: 'spd', decreases: 'def', note: '+SpD / −Def' },
+  'Sassy': { increases: 'spd', decreases: 'spe', note: '+SpD / −Spe' }, 'Careful': { increases: 'spd', decreases: 'spa', note: '+SpD / −SpA' },
+  'Quirky': { note: 'Neutral' },
 };
 
-// Item sprite mapping (using Pokemon item sprites)
-const ITEM_SPRITES: Record<string, string> = {
-  'Assault Vest': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/assault-vest.png',
-  'Choice Band': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-band.png',
-  'Choice Scarf': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png',
-  'Choice Specs': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-specs.png',
-  'Focus Sash': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png',
-  'Life Orb': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/life-orb.png',
-  'Leftovers': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/leftovers.png',
-  'Sitrus Berry': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sitrus-berry.png',
-  'Safety Goggles': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safety-goggles.png',
-  'Rocky Helmet': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rocky-helmet.png',
-  'Heavy-Duty Boots': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heavy-duty-boots.png',
-  'Weakness Policy': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/weakness-policy.png',
-  'Covert Cloak': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/covert-cloak.png',
-  'Mirror Herb': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mirror-herb.png',
-  'Clear Amulet': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/clear-amulet.png',
-  'Booster Energy': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/booster-energy.png',
-  'Loaded Dice': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/loaded-dice.png',
-};
+const STAT_LABELS: Record<string, string> = { hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+const STAT_KEYS = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
+
+const ACCENT = '#1E9E5A';
+const BG = '#EFF3EC';
+const PANEL = 'rgba(255,255,255,0.72)';
+const BORDER = 'rgba(22,36,27,0.1)';
+const INK = '#16241B';
+const INK2 = '#5E6E63';
+const INK3 = '#8A988D';
+const MONO = "'JetBrains Mono',monospace";
+
+function TypeBadge({ type, mini }: { type: string; mini?: boolean }) {
+  const col = TYPE_COLORS[type.toLowerCase()] ?? '#9098a1';
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center',
+      padding: mini ? '2px 7px' : '3px 10px',
+      borderRadius: 6, fontSize: mini ? 10 : 11, fontWeight: 700,
+      color: '#fff', background: col, letterSpacing: '0.02em', textTransform: 'capitalize',
+    }}>{type}</span>
+  );
+}
+
+function SpriteBox({ pokemon, size = 52 }: { pokemon: Pokemon; size?: number }) {
+  const c1 = TYPE_COLORS[pokemon.types[0]?.toLowerCase()] ?? ACCENT;
+  const c2 = TYPE_COLORS[pokemon.types[1]?.toLowerCase()] ?? c1;
+  return (
+    <div style={{
+      position: 'relative', width: size, height: size, borderRadius: size * 0.22,
+      flexShrink: 0, overflow: 'hidden',
+      background: `linear-gradient(140deg,${c1},${c2})`,
+    }}>
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,.10) 0 5px,transparent 5px 11px)' }} />
+      {pokemon.sprite && (
+        <img src={pokemon.sprite} alt={pokemon.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', transform: 'scale(1.18) translateY(-3%)', filter: 'drop-shadow(0 1px 3px rgba(0,0,0,.25))' }} />
+      )}
+    </div>
+  );
+}
 
 export default function TeamBuilder() {
   const [teams, setTeams] = useState<Team[]>([
-    { id: '1', name: 'Team 1', game: 'vgc-reg-i', pokemon: Array(6).fill(null) }
+    { id: '1', name: 'My Team', game: 'vgc-reg-i', pokemon: Array(6).fill(null) }
   ]);
   const [currentTeamId, setCurrentTeamId] = useState('1');
-  const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
+  const [activeSlot, setActiveSlot] = useState(0);
   const [showPokemonModal, setShowPokemonModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showTeamModal, setShowTeamModal] = useState(false);
+  const [showTeamsMenu, setShowTeamsMenu] = useState(false);
+  const [addingToSlot, setAddingToSlot] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [editingPokemon, setEditingPokemon] = useState<Pokemon | null>(null);
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamGame, setNewTeamGame] = useState('vgc-reg-i');
+  const [view, setView] = useState<'builder' | 'overview'>('builder');
+  const [editingName, setEditingName] = useState(false);
+  const [nameVal, setNameVal] = useState('');
 
   const currentTeam = teams.find(t => t.id === currentTeamId)!;
   const currentGame = GAMES_AND_FORMATS.find(g => g.id === currentTeam.game);
+  const filledPokemon = currentTeam.pokemon.filter(Boolean) as Pokemon[];
+  const activePokemon = currentTeam.pokemon[activeSlot] ?? null;
 
-  const addPokemon = (slot: number) => {
-    setSelectedSlot(slot);
-    setShowPokemonModal(true);
-    setSearchQuery('');
+  const updateTeamPokemon = (slot: number, pokemon: Pokemon | null) => {
+    setTeams(teams.map(t => t.id === currentTeamId ? { ...t, pokemon: t.pokemon.map((p, i) => i === slot ? pokemon : p) } : t));
   };
 
   const selectPokemon = (pokemonData: PokemonData) => {
-    if (selectedSlot === null) return;
-
-    const newPokemon: Pokemon = {
-      id: pokemonData.id.toString(),
-      name: pokemonData.name,
-      types: pokemonData.types,
-      ability: pokemonData.abilities[0],
-      item: 'None',
-      moves: [],
-      evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-      nature: 'Serious',
-      sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonData.id}.png`
-    };
-
-    updateTeamPokemon(selectedSlot, newPokemon);
+    const slot = addingToSlot ?? activeSlot;
+    updateTeamPokemon(slot, {
+      id: pokemonData.id.toString(), name: pokemonData.name, types: pokemonData.types,
+      ability: pokemonData.abilities[0], item: 'None', moves: ['', '', '', ''],
+      evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, nature: 'Jolly',
+      sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonData.id}.png`,
+    });
+    setActiveSlot(slot);
     setShowPokemonModal(false);
-    setSelectedSlot(null);
+    setAddingToSlot(null);
   };
 
-  const editPokemon = (slot: number) => {
-    const pokemon = currentTeam.pokemon[slot];
-    if (!pokemon) return;
-    setEditingPokemon({...pokemon});
-    setSelectedSlot(slot);
+  const openEdit = (slot: number) => {
+    const p = currentTeam.pokemon[slot];
+    if (!p) return;
+    setEditingPokemon({ ...p, moves: [...(p.moves.length === 4 ? p.moves : ['', '', '', ''])] });
     setShowEditModal(true);
   };
 
-  const applyEVSpread = (spread: EVSpread) => {
-    if (!editingPokemon) return;
-    setEditingPokemon({
-      ...editingPokemon,
-      evs: {
-        hp: spread.hp,
-        atk: spread.atk,
-        def: spread.def,
-        spa: spread.spa,
-        spd: spread.spd,
-        spe: spread.spe
-      }
-    });
-  };
-
   const saveEditedPokemon = () => {
-    if (selectedSlot === null || !editingPokemon) return;
-    updateTeamPokemon(selectedSlot, editingPokemon);
+    if (!editingPokemon) return;
+    updateTeamPokemon(activeSlot, editingPokemon);
     setShowEditModal(false);
     setEditingPokemon(null);
-    setSelectedSlot(null);
-  };
-
-  const removePokemon = (slot: number) => {
-    updateTeamPokemon(slot, null);
-  };
-
-  const updateTeamPokemon = (slot: number, pokemon: Pokemon | null) => {
-    setTeams(teams.map(t =>
-      t.id === currentTeamId
-        ? {...t, pokemon: t.pokemon.map((p, i) => i === slot ? pokemon : p)}
-        : t
-    ));
   };
 
   const updateEV = (stat: keyof Pokemon['evs'], value: number) => {
     if (!editingPokemon) return;
-    const newEvs = {...editingPokemon.evs, [stat]: value};
-    const total = Object.values(newEvs).reduce((sum, val) => sum + val, 0);
-    if (total <= 510) {
-      setEditingPokemon({...editingPokemon, evs: newEvs});
-    }
+    const newEvs = { ...editingPokemon.evs, [stat]: value };
+    if (Object.values(newEvs).reduce((a, b) => a + b, 0) <= 510)
+      setEditingPokemon({ ...editingPokemon, evs: newEvs });
+  };
+
+  const applyEVSpread = (spread: EVSpread) => {
+    if (!editingPokemon) return;
+    setEditingPokemon({ ...editingPokemon, evs: { hp: spread.hp, atk: spread.atk, def: spread.def, spa: spread.spa, spd: spread.spd, spe: spread.spe } });
   };
 
   const createTeam = () => {
     if (!newTeamName.trim()) return;
-    const newTeam: Team = {
-      id: Date.now().toString(),
-      name: newTeamName,
-      game: newTeamGame,
-      pokemon: Array(6).fill(null)
-    };
-    setTeams([...teams, newTeam]);
-    setCurrentTeamId(newTeam.id);
+    const t: Team = { id: Date.now().toString(), name: newTeamName, game: newTeamGame, pokemon: Array(6).fill(null) };
+    setTeams([...teams, t]);
+    setCurrentTeamId(t.id);
+    setActiveSlot(0);
     setShowTeamModal(false);
     setNewTeamName('');
   };
 
-  const deleteTeam = (teamId: string) => {
+  const deleteTeam = (id: string) => {
     if (teams.length === 1) return;
-    const newTeams = teams.filter(t => t.id !== teamId);
-    setTeams(newTeams);
-    if (currentTeamId === teamId) {
-      setCurrentTeamId(newTeams[0].id);
-    }
+    const next = teams.filter(t => t.id !== id);
+    setTeams(next);
+    if (currentTeamId === id) setCurrentTeamId(next[0].id);
   };
 
-  const renameTeam = (teamId: string, newName: string) => {
-    setTeams(teams.map(t => t.id === teamId ? {...t, name: newName} : t));
-  };
-
-  const changeTeamGame = (teamId: string, newGame: string) => {
-    setTeams(teams.map(t => t.id === teamId ? {...t, game: newGame} : t));
-  };
-
-  const filteredPokemon = POKEMON_DATABASE.filter(pokemon => {
-    const matchesSearch = pokemon.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const isAvailable = pokemon.availableIn.includes(currentTeam.game);
-
-    // If there's a search query, show all matching Pokemon
-    // If no search query, only show Pokemon available in the current game
-    if (searchQuery.trim()) {
-      return matchesSearch;
-    } else {
-      return isAvailable;
-    }
+  const filteredPokemon = POKEMON_DATABASE.filter(p => {
+    const q = searchQuery.trim().toLowerCase();
+    return q ? p.name.toLowerCase().includes(q) : p.availableIn.includes(currentTeam.game);
   }).sort((a, b) => {
-    const aAvailable = a.availableIn.includes(currentTeam.game);
-    const bAvailable = b.availableIn.includes(currentTeam.game);
-    if (aAvailable && !bAvailable) return -1;
-    if (!aAvailable && bAvailable) return 1;
-    return a.name.localeCompare(b.name);
+    const av = a.availableIn.includes(currentTeam.game), bv = b.availableIn.includes(currentTeam.game);
+    return av === bv ? a.name.localeCompare(b.name) : av ? -1 : 1;
   });
 
-  // ESC key handler for modals
+  const totalEvs = editingPokemon ? Object.values(editingPokemon.evs).reduce((a, b) => a + b, 0) : 0;
+
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    const h = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (showPokemonModal) {
-          setShowPokemonModal(false);
-          setSelectedSlot(null);
-          setSearchQuery('');
-        } else if (showEditModal) {
-          setShowEditModal(false);
-          setEditingPokemon(null);
-          setSelectedSlot(null);
-        } else if (showTeamModal) {
-          setShowTeamModal(false);
-          setNewTeamName('');
-        }
+        setShowPokemonModal(false); setShowEditModal(false); setShowTeamModal(false); setShowTeamsMenu(false);
+        setAddingToSlot(null); setEditingPokemon(null); setSearchQuery('');
       }
     };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, []);
 
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [showPokemonModal, showEditModal, showTeamModal]);
+  const accent = filledPokemon.length > 0
+    ? TYPE_COLORS[filledPokemon[0].types[0]?.toLowerCase()] ?? ACCENT
+    : ACCENT;
 
-  const totalEvs = editingPokemon ? Object.values(editingPokemon.evs).reduce((sum, val) => sum + val, 0) : 0;
+  // Active pokemon accent (from selected slot)
+  const activeAccent = activePokemon
+    ? TYPE_COLORS[activePokemon.types[0]?.toLowerCase()] ?? accent
+    : accent;
+
+  const natEffect = (nature: string, stat: string) => {
+    const n = NATURE_EFFECTS[nature];
+    if (!n) return '';
+    if (n.increases === stat) return '+';
+    if (n.decreases === stat) return '−';
+    return '';
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-red-100 to-blue-100">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-red-500 via-yellow-400 to-blue-500 shadow-lg sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-4 border-gray-800 hover:scale-110 transition-transform">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                    <Shield className="w-7 h-7 text-white" />
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; background: ${BG}; font-family: 'Geist','Geist Fallback',system-ui,sans-serif; -webkit-font-smoothing: antialiased; }
+        input, button, select, textarea { font-family: inherit; }
+        input[type=range] { accent-color: ${ACCENT}; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: rgba(22,36,27,0.18); border-radius: 6px; }
+        @keyframes pop { from { opacity:0; transform:translateY(-6px) scale(.97); } to { opacity:1; transform:none; } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        .move-btn { transition: border-color .12s, background .12s; }
+        .move-btn:hover { border-color: rgba(22,36,27,0.22) !important; }
+        .slot-row { transition: background .12s, border-color .12s; }
+        .slot-row:hover { background: rgba(22,36,27,0.04) !important; }
+      `}</style>
+
+      <div style={{ minHeight: '100vh', background: BG, display: 'flex', flexDirection: 'column' }}>
+
+        {/* Nav */}
+        <header style={{ position: 'sticky', top: 0, zIndex: 20, display: 'flex', alignItems: 'center', gap: 16, padding: '12px 24px', borderBottom: `1px solid ${BORDER}`, background: 'rgba(239,243,236,0.92)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}>
+          <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: INK2, textDecoration: 'none', fontWeight: 500 }}>
+            <span>←</span> Home
+          </Link>
+          <div style={{ width: 1, height: 22, background: BORDER }} />
+
+          {/* Team name */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 6px 3px 8px', borderRadius: 10, border: `1px solid transparent` }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = BORDER}
+            onMouseLeave={e => { if (!editingName) (e.currentTarget as HTMLElement).style.borderColor = 'transparent'; }}>
+            {editingName ? (
+              <input
+                value={nameVal}
+                autoFocus
+                onChange={e => setNameVal(e.target.value)}
+                onBlur={() => { setTeams(teams.map(t => t.id === currentTeamId ? { ...t, name: nameVal } : t)); setEditingName(false); }}
+                onKeyDown={e => { if (e.key === 'Enter') { setTeams(teams.map(t => t.id === currentTeamId ? { ...t, name: nameVal } : t)); setEditingName(false); } }}
+                style={{ fontFamily: "'Geist',sans-serif", fontWeight: 600, fontSize: 15, color: INK, background: 'transparent', border: 'none', outline: 'none', width: 180, padding: '4px 2px' }}
+              />
+            ) : (
+              <button onClick={() => { setNameVal(currentTeam.name); setEditingName(true); }} style={{ all: 'unset', fontWeight: 600, fontSize: 15, color: INK, cursor: 'text', padding: '4px 2px' }}>
+                {currentTeam.name}
+              </button>
+            )}
+            <button onClick={() => setShowTeamsMenu(v => !v)} style={{ all: 'unset', cursor: 'pointer', fontSize: 10, color: INK3, padding: '4px 5px', lineHeight: 1 }}>▾</button>
+          </div>
+
+          {/* Format pill */}
+          <button
+            style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '6px 13px', borderRadius: 999, background: activeAccent + '22', border: `1px solid ${activeAccent}44`, cursor: 'pointer', fontSize: 12, fontWeight: 700, color: activeAccent, whiteSpace: 'nowrap' }}
+          >
+            <span style={{ fontFamily: MONO, fontSize: 9, fontWeight: 800, letterSpacing: '0.06em', opacity: 0.7 }}>FORMAT</span>
+            <span>{currentGame?.name}</span>
+          </button>
+
+          <div style={{ flex: 1 }} />
+
+          {/* Builder / Overview toggle */}
+          <div style={{ display: 'flex', background: 'rgba(22,36,27,0.06)', border: `1px solid ${BORDER}`, borderRadius: 10, padding: 3, gap: 2 }}>
+            {(['builder', 'overview'] as const).map(v => (
+              <button key={v} onClick={() => setView(v)} style={{ padding: '6px 15px', borderRadius: 8, fontSize: 12.5, fontWeight: view === v ? 700 : 600, cursor: 'pointer', border: 'none', background: view === v ? '#fff' : 'transparent', color: view === v ? INK : INK3, boxShadow: view === v ? '0 1px 3px rgba(0,0,0,.08)' : 'none', textTransform: 'capitalize' }}>
+                {v}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setShowTeamModal(true)}
+            style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', borderRadius: 10, background: 'rgba(22,36,27,0.05)', border: `1px solid ${BORDER}`, fontSize: 13, fontWeight: 700, color: INK2, cursor: 'pointer' }}
+          >
+            + New team
+          </button>
+        </header>
+
+        {/* Teams dropdown */}
+        {showTeamsMenu && (
+          <>
+            <div onClick={() => setShowTeamsMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 42, animation: 'fadeIn .1s' }} />
+            <div style={{ position: 'fixed', left: 200, top: 58, width: 300, zIndex: 43, background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, boxShadow: '0 16px 44px rgba(0,0,0,.18)', animation: 'pop .14s', paddingBottom: 8 }}>
+              <div style={{ padding: '12px 14px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.1em', color: INK3 }}>YOUR TEAMS</span>
+                <span style={{ fontFamily: MONO, fontSize: 10, color: INK3 }}>{teams.length}</span>
+              </div>
+              <div style={{ maxHeight: 300, overflowY: 'auto', padding: '0 6px', display: 'flex', flexDirection: 'column', gap: 3 }}>
+                {teams.map(t => (
+                  <div key={t.id} onClick={() => { setCurrentTeamId(t.id); setActiveSlot(0); setShowTeamsMenu(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 10, cursor: 'pointer', border: `1px solid ${t.id === currentTeamId ? activeAccent + '44' : 'transparent'}`, background: t.id === currentTeamId ? activeAccent + '14' : 'transparent' }}>
+                    <div style={{ width: 9, height: 9, borderRadius: '50%', background: activeAccent, flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 14, color: INK, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</div>
+                      <div style={{ fontSize: 11, color: INK3 }}>{GAMES_AND_FORMATS.find(g => g.id === t.game)?.name} · {t.pokemon.filter(Boolean).length}/6</div>
+                    </div>
+                    {teams.length > 1 && (
+                      <button onClick={e => { e.stopPropagation(); deleteTeam(t.id); }} style={{ all: 'unset', cursor: 'pointer', fontSize: 11, color: INK3, padding: '2px 5px', borderRadius: 5 }}>✕</button>
+                    )}
                   </div>
-                </div>
+                ))}
               </div>
-              <div>
-                <h1 className="text-3xl font-black text-white drop-shadow-lg" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>
-                  ⚡ Pokémon Team Builder ⚡
-                </h1>
-                <p className="text-sm text-yellow-100 font-semibold">Gotta Build 'Em All!</p>
+              <div style={{ padding: '8px 8px 2px', borderTop: `1px solid ${BORDER}`, marginTop: 4, display: 'flex', gap: 7 }}>
+                <button onClick={() => { setShowTeamModal(true); setShowTeamsMenu(false); }} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, padding: '9px', borderRadius: 10, background: activeAccent, color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                  ＋ New empty team
+                </button>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setShowTeamModal(true)}
-                className="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-full hover:from-green-600 hover:to-green-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 border-2 border-green-700"
-              >
-                <FolderPlus className="w-4 h-4" />
-                New Team
-              </button>
-              <button className="px-5 py-2.5 text-sm font-bold text-gray-800 bg-white rounded-full hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 border-2 border-gray-300">
-                <Upload className="w-4 h-4" />
-                Import
-              </button>
-              <button className="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 border-2 border-blue-700">
-                <Download className="w-4 h-4" />
-                Export
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+          </>
+        )}
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Team Tabs */}
-        <div className="bg-white/90 backdrop-blur rounded-2xl shadow-xl border-4 border-yellow-400 p-5 mb-6">
-          <div className="flex items-center gap-3 overflow-x-auto">
-            {teams.map((team) => (
-              <button
-                key={team.id}
-                onClick={() => setCurrentTeamId(team.id)}
-                className={`px-5 py-3 rounded-full font-bold whitespace-nowrap transition-all shadow-md hover:shadow-lg hover:scale-105 ${
-                  currentTeamId === team.id
-                    ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white border-2 border-red-700'
-                    : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 border-2 border-gray-300 hover:from-gray-200 hover:to-gray-300'
-                }`}
-              >
-                ⭐ {team.name}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Builder view */}
+        {view === 'builder' && (
+          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '300px 1fr', gap: 20, padding: '20px 24px 32px', minHeight: 0 }}>
 
-        {/* Game/Format Selection */}
-        <div className="bg-white/90 backdrop-blur rounded-3xl shadow-xl border-4 border-blue-400 p-7 mb-8">
-          <h2 className="text-2xl font-black text-gray-900 mb-5 flex items-center gap-2">
-            🎮 Choose Your Battle Format
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {GAMES_AND_FORMATS.map((game) => (
-              <button
-                key={game.id}
-                onClick={() => changeTeamGame(currentTeamId, game.id)}
-                className={`p-5 rounded-2xl border-4 transition-all text-left shadow-lg hover:shadow-2xl hover:scale-105 ${
-                  currentTeam.game === game.id
-                    ? 'border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 scale-105'
-                    : 'border-gray-300 bg-white hover:border-blue-300'
-                }`}
-              >
-                <h3 className="font-black text-gray-900 mb-2 text-lg">{game.name}</h3>
-                <p className="text-xs text-purple-600 mb-2 font-bold">{game.game}</p>
-                <p className="text-xs text-gray-700 mb-3">{game.description}</p>
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold shadow ${
-                  game.format === 'Doubles' ? 'bg-blue-500 text-white' : 'bg-purple-500 text-white'
-                }`}>
-                  {game.format}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
+            {/* Left: team slots */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minHeight: 0, overflowY: 'auto', paddingRight: 4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '2px 4px 4px' }}>
+                <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 800, letterSpacing: '.1em', color: INK3 }}>YOUR TEAM</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, color: INK2 }}>{filledPokemon.length}/6</span>
+              </div>
 
-        {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {currentTeam.pokemon.map((pokemon, index) => (
-            <div
-              key={index}
-              className="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-xl border-4 border-red-400 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all"
-            >
-              {pokemon ? (
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      {pokemon.sprite && (
-                        <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl p-2 border-3 border-yellow-400 shadow-lg">
-                          <Image
-                            src={pokemon.sprite}
-                            alt={pokemon.name}
-                            width={64}
-                            height={64}
-                            className="pixelated"
-                          />
+              {currentTeam.pokemon.map((pokemon, index) => {
+                const isActive = index === activeSlot;
+                const slotAccent = pokemon ? (TYPE_COLORS[pokemon.types[0]?.toLowerCase()] ?? ACCENT) : ACCENT;
+                return (
+                  <div key={index}>
+                    {pokemon ? (
+                      <div
+                        className="slot-row"
+                        onClick={() => setActiveSlot(index)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 13px', borderRadius: 14, cursor: 'pointer', background: isActive ? slotAccent + '22' : PANEL, backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: `1px solid ${isActive ? slotAccent : BORDER}`, boxShadow: isActive ? `0 2px 10px ${slotAccent}44` : '0 2px 10px rgba(22,36,27,0.05)' }}
+                      >
+                        <SpriteBox pokemon={pokemon} size={46} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontWeight: 600, fontSize: 14, color: INK, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pokemon.name}</div>
+                          <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
+                            {pokemon.types.map(t => <TypeBadge key={t} type={t} mini />)}
+                          </div>
                         </div>
-                      )}
-                      <div>
-                        <h3 className="text-xl font-black text-gray-900">{pokemon.name}</h3>
-                        <div className="flex gap-1.5 mt-2">
-                          {pokemon.types.map((type) => (
-                            <span
-                              key={type}
-                              className={`px-3 py-1.5 ${TYPE_COLORS[type.toLowerCase()]} text-white rounded-full text-xs font-black uppercase shadow-md`}
-                            >
-                              {type}
-                            </span>
-                          ))}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 5, alignItems: 'flex-end' }}>
+                          <button onClick={e => { e.stopPropagation(); updateTeamPokemon(index, null); if (isActive) setActiveSlot(0); }} style={{ all: 'unset', cursor: 'pointer', width: 22, height: 22, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: INK3, fontSize: 11 }}>✕</button>
+                          <span style={{ fontFamily: MONO, fontSize: 9.5, color: INK3 }}>{pokemon.item !== 'None' ? pokemon.item.slice(0, 14) : ''}</span>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex gap-2">
+                    ) : (
                       <button
-                        onClick={() => editPokemon(index)}
-                        className="w-9 h-9 bg-blue-100 hover:bg-blue-200 rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-md"
+                        onClick={() => { setAddingToSlot(index); setShowPokemonModal(true); setSearchQuery(''); }}
+                        style={{ all: 'unset', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px', borderRadius: 14, border: `1.5px dashed ${BORDER}`, color: INK3, fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .12s' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = ACCENT; (e.currentTarget as HTMLElement).style.color = ACCENT; (e.currentTarget as HTMLElement).style.background = ACCENT + '10'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; (e.currentTarget as HTMLElement).style.color = INK3; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                       >
-                        <Edit className="w-4 h-4 text-blue-600" />
+                        <span style={{ fontSize: 16 }}>＋</span> Add Pokémon
                       </button>
-                      <button
-                        onClick={() => removePokemon(index)}
-                        className="w-9 h-9 bg-red-100 hover:bg-red-200 rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-md"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-600" />
-                      </button>
-                    </div>
+                    )}
                   </div>
-                  <div className="space-y-2.5 text-sm">
-                    <div className="bg-purple-50 rounded-xl p-3 border-2 border-purple-200">
-                      <p className="font-bold text-purple-900">⚡ {pokemon.ability}</p>
-                    </div>
-                    <div className="bg-blue-50 rounded-xl p-3 border-2 border-blue-200">
-                      <p className="font-bold text-blue-900">🎒 {pokemon.item}</p>
-                    </div>
-                    <div className="bg-green-50 rounded-xl p-3 border-2 border-green-200">
-                      <p className="font-bold text-green-900">🌟 {pokemon.nature}</p>
-                    </div>
-                    <div className="bg-orange-50 rounded-xl p-2.5 border-2 border-orange-200 text-xs font-semibold text-orange-900">
-                      EVs: {pokemon.evs.hp} HP / {pokemon.evs.atk} Atk / {pokemon.evs.def} Def / {pokemon.evs.spa} SpA / {pokemon.evs.spd} SpD / {pokemon.evs.spe} Spe
-                    </div>
+                );
+              })}
+
+              {/* Format selector */}
+              <div style={{ marginTop: 4, background: PANEL, backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: `1px solid ${BORDER}`, borderRadius: 14, padding: '14px 15px' }}>
+                <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.09em', color: INK3, marginBottom: 10 }}>FORMAT</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {GAMES_AND_FORMATS.map(g => (
+                    <button key={g.id} onClick={() => setTeams(teams.map(t => t.id === currentTeamId ? { ...t, game: g.id } : t))} style={{ all: 'unset', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 10, border: `1px solid ${currentTeam.game === g.id ? activeAccent + '55' : BORDER}`, background: currentTeam.game === g.id ? activeAccent + '12' : 'transparent', transition: 'all .12s' }}>
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: currentTeam.game === g.id ? activeAccent : BORDER, flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 600, fontSize: 13, color: currentTeam.game === g.id ? INK : INK2 }}>{g.name}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 10, color: INK3, marginTop: 1 }}>{g.format}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right: active pokemon detail or empty state */}
+            <div style={{ minHeight: 0, overflowY: 'auto' }}>
+              {!activePokemon ? (
+                <div style={{ height: '100%', minHeight: 440, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: 16, background: PANEL, backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: `1.5px dashed ${BORDER}`, borderRadius: 18, padding: 40 }}>
+                  <div style={{ width: 72, height: 72, borderRadius: 18, background: ACCENT + '18', border: `1px solid ${ACCENT}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: ACCENT, fontSize: 32 }}>＋</div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 22, color: INK, letterSpacing: '-0.02em' }}>Start building</div>
+                    <div style={{ fontSize: 14, color: INK2, maxWidth: 340, marginTop: 6, lineHeight: 1.5 }}>Add up to six Pokémon, then dial in their moves, items, and EVs.</div>
                   </div>
+                  <button onClick={() => { setAddingToSlot(0); setShowPokemonModal(true); setSearchQuery(''); }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '11px 20px', borderRadius: 11, background: ACCENT, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer', boxShadow: `0 6px 18px -6px ${ACCENT}` }}>
+                    <span style={{ fontSize: 16 }}>＋</span> Add your first Pokémon
+                  </button>
                 </div>
               ) : (
-                <button
-                  onClick={() => addPokemon(index)}
-                  className="w-full h-full min-h-[280px] flex flex-col items-center justify-center gap-4 p-6 hover:bg-gradient-to-br hover:from-blue-50 hover:to-purple-50 transition-all group"
-                >
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-400 to-red-500 group-hover:from-red-500 group-hover:to-red-600 flex items-center justify-center transition-all shadow-lg group-hover:shadow-xl group-hover:scale-110 border-4 border-white">
-                    <Plus className="w-10 h-10 text-white" />
-                  </div>
-                  <div className="text-center">
-                    <p className="font-black text-gray-900 mb-1 text-lg">Add Pokémon</p>
-                    <p className="text-sm text-gray-600 font-bold">Slot {index + 1} / 6</p>
-                  </div>
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+                <div style={{ background: PANEL, backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: `1px solid ${BORDER}`, borderRadius: 18, overflow: 'hidden' }}>
 
-      {/* Pokemon Selection Modal */}
-      {showPokemonModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden border-8 border-yellow-400">
-            <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 p-7 text-white sticky top-0 z-10">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-3xl font-black mb-2 drop-shadow-lg">✨ Choose Your Pokémon! ✨</h2>
-                  <p className="text-yellow-100 text-sm font-bold bg-white/20 inline-block px-3 py-1 rounded-full">{currentGame?.name} - {currentGame?.game}</p>
-                </div>
-                <button
-                  onClick={() => {
-                    setShowPokemonModal(false);
-                    setSelectedSlot(null);
-                  }}
-                  className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-lg"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-              <div className="mt-5 relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for your favorite Pokémon..."
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-semibold shadow-lg border-2 border-white"
-                  autoFocus
-                />
-              </div>
-            </div>
-
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-220px)] bg-gradient-to-br from-blue-50 to-purple-50">
-              {filteredPokemon.length === 0 && !searchQuery.trim() && (
-                <div className="text-center py-12">
-                  <p className="text-xl font-bold text-gray-700 mb-2">🔍 No Pokémon available in this format!</p>
-                  <p className="text-sm text-gray-600 font-semibold">Try searching for a specific Pokémon to see all options.</p>
-                </div>
-              )}
-              {filteredPokemon.length === 0 && searchQuery.trim() && (
-                <div className="text-center py-12">
-                  <p className="text-xl font-bold text-gray-700">😢 No Pokémon found matching "{searchQuery}"</p>
-                </div>
-              )}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {filteredPokemon.map((pokemon) => {
-                  const isAvailable = pokemon.availableIn.includes(currentTeam.game);
-                  return (
-                    <button
-                      key={pokemon.id}
-                      onClick={() => isAvailable && selectPokemon(pokemon)}
-                      disabled={!isAvailable}
-                      className={`p-4 rounded-2xl border-4 transition-all shadow-lg ${
-                        isAvailable
-                          ? 'border-blue-300 hover:border-yellow-400 hover:bg-gradient-to-br hover:from-yellow-50 hover:to-orange-50 cursor-pointer bg-white hover:scale-110 hover:shadow-2xl'
-                          : 'border-gray-200 bg-gray-100 opacity-40 cursor-not-allowed'
-                      }`}
-                    >
-                      <div className={`bg-gradient-to-br ${isAvailable ? 'from-blue-50 to-purple-50' : 'from-gray-50 to-gray-100'} rounded-xl p-2 mb-2`}>
-                        <Image
-                          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-                          alt={pokemon.name}
-                          width={96}
-                          height={96}
-                          className="mx-auto pixelated"
-                        />
-                      </div>
-                      <div className="text-center">
-                        <h3 className="text-sm font-black text-gray-900 mb-2">{pokemon.name}</h3>
-                        {isAvailable ? (
-                          <span className="px-3 py-1 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-full text-xs font-black shadow-md">
-                            ✓ Available
-                          </span>
-                        ) : (
-                          <span className="px-3 py-1 bg-gray-300 text-gray-600 rounded-full text-xs font-black">
-                            ✗ Unavailable
-                          </span>
-                        )}
-                        <div className="flex gap-1 justify-center mt-2 flex-wrap">
-                          {pokemon.types.map((type) => (
-                            <span
-                              key={type}
-                              className={`px-2 py-1 ${TYPE_COLORS[type.toLowerCase()]} text-white rounded-full text-xs font-black uppercase shadow`}
-                            >
-                              {type}
-                            </span>
-                          ))}
+                  {/* Header: big sprite + name + types */}
+                  {(() => {
+                    const c1 = TYPE_COLORS[activePokemon.types[0]?.toLowerCase()] ?? activeAccent;
+                    const c2 = TYPE_COLORS[activePokemon.types[1]?.toLowerCase()] ?? c1;
+                    const pd = POKEMON_DATABASE.find(p => p.id === parseInt(activePokemon.id));
+                    return (
+                      <div style={{ position: 'relative', padding: '22px 24px', background: `linear-gradient(165deg,${c1}22,transparent 75%)`, borderBottom: `1px solid ${BORDER}`, display: 'flex', gap: 18, alignItems: 'flex-start' }}>
+                        <div style={{ position: 'relative', width: 92, height: 92, borderRadius: 18, flexShrink: 0, overflow: 'hidden', background: `linear-gradient(150deg,${c1},${c2})`, boxShadow: `0 6px 18px ${c1}40` }}>
+                          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,.10) 0 7px,transparent 7px 14px)' }} />
+                          {activePokemon.sprite && (
+                            <img src={activePokemon.sprite} alt={activePokemon.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', transform: 'scale(1.18) translateY(-3%)', filter: 'drop-shadow(0 3px 6px rgba(0,0,0,.28))' }} />
+                          )}
                         </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                            <h1 style={{ fontWeight: 700, fontSize: 27, letterSpacing: '-0.02em', margin: 0, color: INK }}>{activePokemon.name}</h1>
+                            {pd && <span style={{ fontFamily: MONO, fontSize: 12, color: INK3, fontWeight: 500 }}>#{String(pd.id).padStart(4, '0')}</span>}
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 9, flexWrap: 'wrap' }}>
+                            {activePokemon.types.map(t => <TypeBadge key={t} type={t} />)}
+                          </div>
+                        </div>
+                        <button onClick={() => { setAddingToSlot(activeSlot); setShowPokemonModal(true); setSearchQuery(''); }} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.7)', border: `1px solid ${BORDER}`, fontSize: 12.5, fontWeight: 700, color: INK2, cursor: 'pointer', whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>Change ⇄</button>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Item + Ability */}
+                  <div style={{ padding: '20px 24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 13, borderBottom: `1px solid ${BORDER}` }}>
+                    {[
+                      { label: 'ITEM', value: activePokemon.item, onClick: () => openEdit(activeSlot) },
+                      { label: 'ABILITY', value: activePokemon.ability, onClick: () => openEdit(activeSlot) },
+                    ].map(({ label, value, onClick }) => (
+                      <button key={label} onClick={onClick} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3, background: 'rgba(22,36,27,0.04)', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '12px 14px', cursor: 'pointer', textAlign: 'left', transition: 'border-color .12s' }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(22,36,27,0.2)'}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = BORDER}>
+                        <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.08em', color: INK3 }}>{label}</span>
+                        <span style={{ fontSize: 14, fontWeight: 600, color: INK }}>{value}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Moves */}
+                  <div style={{ padding: '20px 24px', borderBottom: `1px solid ${BORDER}` }}>
+                    <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 800, letterSpacing: '.09em', color: INK3, marginBottom: 13 }}>MOVES</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 11 }}>
+                      {[0, 1, 2, 3].map(mi => {
+                        const moveName = activePokemon.moves[mi] || '';
+                        const moveColor = activeAccent;
+                        return (
+                          <button key={mi} className="move-btn" onClick={() => openEdit(activeSlot)} style={{ display: 'flex', alignItems: 'center', gap: 0, background: 'rgba(22,36,27,0.04)', border: `1px solid ${BORDER}`, borderRadius: 11, overflow: 'hidden', cursor: 'pointer', height: 50 }}>
+                            <div style={{ width: 5, alignSelf: 'stretch', background: moveName ? moveColor : 'rgba(22,36,27,0.12)', flexShrink: 0 }} />
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', padding: '0 13px', minWidth: 0 }}>
+                              <span style={{ fontSize: 14, fontWeight: 600, color: moveName ? INK : INK3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {moveName || '—'}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* EV Spread */}
+                  <div style={{ padding: '20px 24px 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
+                      <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 800, letterSpacing: '.09em', color: INK3 }}>EV SPREAD</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <button onClick={() => openEdit(activeSlot)} style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(22,36,27,0.04)', border: `1px solid ${BORDER}`, borderRadius: 9, padding: '7px 12px', cursor: 'pointer' }}>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: INK }}>{activePokemon.nature}</span>
+                          <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 600, color: INK3 }}>{NATURE_EFFECTS[activePokemon.nature]?.note || 'Neutral'}</span>
+                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, color: INK3 }}>EVs</span>
+                          <div style={{ width: 88, height: 7, borderRadius: 5, background: 'rgba(22,36,27,0.07)', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', width: `${Math.min(100, (Object.values(activePokemon.evs).reduce((a, b) => a + b, 0) / 508) * 100)}%`, background: activeAccent, borderRadius: 5, transition: 'width .15s' }} />
+                          </div>
+                          <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: INK }}>
+                            {Object.values(activePokemon.evs).reduce((a, b) => a + b, 0)}<span style={{ color: INK3 }}>/508</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {STAT_KEYS.map(k => {
+                        const ev = activePokemon.evs[k];
+                        const sign = natEffect(activePokemon.nature, k);
+                        const pct = Math.min(100, (ev / 252) * 100);
+                        return (
+                          <div key={k} style={{ display: 'grid', gridTemplateColumns: '74px 1fr 118px', alignItems: 'center', gap: 15, padding: '5px 0' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <span style={{ fontSize: 12, fontWeight: 700, color: INK2, width: 30 }}>{STAT_LABELS[k]}</span>
+                              <span style={{ fontSize: 14, fontWeight: 800, color: sign === '+' ? '#3fae6a' : sign === '−' ? '#e0533d' : 'transparent', width: 10 }}>{sign || '·'}</span>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                              <div style={{ height: 7, borderRadius: 5, background: 'rgba(22,36,27,0.07)', overflow: 'hidden' }}>
+                                <div style={{ height: '100%', width: `${pct}%`, background: activeAccent, borderRadius: 5, transition: 'width .15s' }} />
+                              </div>
+                              <input type="range" min={0} max={252} step={4} value={ev}
+                                onChange={e => {
+                                  const p = { ...activePokemon, evs: { ...activePokemon.evs, [k]: +e.target.value } };
+                                  const total = Object.values(p.evs).reduce((a, b) => a + b, 0);
+                                  if (total <= 510) updateTeamPokemon(activeSlot, p);
+                                }}
+                                style={{ width: '100%', height: 14, cursor: 'pointer' }} />
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'flex-end', gap: 9 }}>
+                              <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 500, color: INK3, width: 48, textAlign: 'right' }}>EV {ev}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <button onClick={() => openEdit(activeSlot)} style={{ marginTop: 16, width: '100%', padding: '12px', borderRadius: 12, background: activeAccent, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer', boxShadow: `0 6px 18px -6px ${activeAccent}` }}>
+                      Edit details
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Overview view */}
+        {view === 'overview' && (
+          <div style={{ flex: 1, overflowY: 'auto', padding: '22px 24px 32px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              {filledPokemon.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '80px 40px', color: INK3, fontSize: 15 }}>No Pokémon yet. Switch to Builder to add some.</div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+                  {currentTeam.pokemon.map((pokemon, i) => {
+                    if (!pokemon) return (
+                      <button key={i} onClick={() => { setAddingToSlot(i); setShowPokemonModal(true); setSearchQuery(''); }} style={{ all: 'unset', cursor: 'pointer', minHeight: 150, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 9, borderRadius: 16, border: `1.5px dashed ${BORDER}`, color: INK2, fontSize: 13, fontWeight: 700, transition: 'all .12s' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = ACCENT; (e.currentTarget as HTMLElement).style.color = ACCENT; (e.currentTarget as HTMLElement).style.background = ACCENT + '10'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; (e.currentTarget as HTMLElement).style.color = INK2; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                      >
+                        <span style={{ fontSize: 26, fontWeight: 300 }}>＋</span> Add Pokémon
+                      </button>
+                    );
+                    const c1 = TYPE_COLORS[pokemon.types[0]?.toLowerCase()] ?? ACCENT;
+                    const c2 = TYPE_COLORS[pokemon.types[1]?.toLowerCase()] ?? c1;
+                    return (
+                      <div key={i} onClick={() => { setActiveSlot(i); setView('builder'); }} style={{ background: PANEL, backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: `1px solid ${BORDER}`, borderRadius: 16, overflow: 'hidden', cursor: 'pointer', transition: 'transform .12s, box-shadow .12s' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = `0 10px 28px rgba(0,0,0,.09)`; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = ''; }}
+                      >
+                        {/* Card header */}
+                        <div style={{ position: 'relative', padding: '15px 16px', background: `linear-gradient(150deg,${c1}1e,transparent 80%)`, display: 'flex', gap: 13, alignItems: 'center', borderBottom: `1px solid ${BORDER}` }}>
+                          <SpriteBox pokemon={pokemon} size={52} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontWeight: 600, fontSize: 16, color: INK, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pokemon.name}</div>
+                            <div style={{ display: 'flex', gap: 5, marginTop: 5, alignItems: 'center', flexWrap: 'wrap' }}>
+                              {pokemon.types.map(t => <TypeBadge key={t} type={t} mini />)}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ padding: '13px 16px', display: 'flex', flexDirection: 'column', gap: 11 }}>
+                          {/* Item + Ability */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+                            <span style={{ fontWeight: 700, color: INK2 }}>{pokemon.item !== 'None' ? pokemon.item : '—'}</span>
+                            <span style={{ color: INK3 }}>·</span>
+                            <span style={{ fontWeight: 600, color: INK3 }}>{pokemon.ability}</span>
+                          </div>
+
+                          {/* Moves */}
+                          {pokemon.moves && pokemon.moves.some(m => m) && (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5 }}>
+                              {pokemon.moves.map((mv, mi) => (
+                                <div key={mi} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                                  <div style={{ width: 8, height: 8, borderRadius: 3, background: mv ? c1 : 'rgba(22,36,27,0.12)', flexShrink: 0 }} />
+                                  <span style={{ fontSize: 11.5, fontWeight: 600, color: mv ? INK2 : INK3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{mv || '—'}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* EV sparkbars */}
+                          <div style={{ display: 'flex', gap: 4 }}>
+                            {STAT_KEYS.map(k => {
+                              const pct = Math.min(100, (pokemon.evs[k] / 252) * 100);
+                              return (
+                                <div key={k} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                                  <div style={{ width: '100%', height: 38, borderRadius: 4, background: 'rgba(22,36,27,0.06)', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}>
+                                    <div style={{ width: '100%', height: pct + '%', background: c1, borderRadius: '3px 3px 0 0' }} />
+                                  </div>
+                                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, color: INK3 }}>{STAT_LABELS[k]}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Pokemon Selection Modal */}
+        {showPokemonModal && (
+          <div onClick={() => { setShowPokemonModal(false); setAddingToSlot(null); }} style={{ position: 'fixed', inset: 0, background: 'rgba(22,32,25,0.45)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn .15s' }}>
+            <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 20, width: '100%', maxWidth: 720, maxHeight: '88vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 24px 64px rgba(0,0,0,.22)', animation: 'pop .16s' }}>
+              <div style={{ padding: '18px 20px 14px', borderBottom: `1px solid ${BORDER}`, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.09em', color: INK3, marginBottom: 4 }}>ADD POKÉMON · SLOT {(addingToSlot ?? activeSlot) + 1}</div>
+                    <div style={{ fontWeight: 600, fontSize: 18, color: INK }}>{currentGame?.name}</div>
+                  </div>
+                  <button onClick={() => { setShowPokemonModal(false); setAddingToSlot(null); }} style={{ all: 'unset', cursor: 'pointer', width: 36, height: 36, borderRadius: '50%', border: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, color: INK2 }}>✕</button>
+                </div>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 14, color: INK3 }}>🔍</span>
+                  <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus placeholder="Search Pokémon…" style={{ width: '100%', padding: '9px 12px 9px 34px', border: `1px solid ${BORDER}`, borderRadius: 10, fontSize: 14, fontWeight: 500, color: INK, background: 'rgba(22,36,27,0.04)', outline: 'none', fontFamily: 'inherit' }} />
+                </div>
+              </div>
+              <div style={{ overflowY: 'auto', padding: 14, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 10 }}>
+                {filteredPokemon.map(p => {
+                  const avail = p.availableIn.includes(currentTeam.game);
+                  const c1 = TYPE_COLORS[p.types[0]?.toLowerCase()] ?? ACCENT;
+                  const c2 = TYPE_COLORS[p.types[1]?.toLowerCase()] ?? c1;
+                  return (
+                    <button key={p.id} onClick={() => avail && selectPokemon(p)} disabled={!avail} style={{ all: 'unset', cursor: avail ? 'pointer' : 'not-allowed', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '12px 10px', borderRadius: 12, border: `1px solid ${avail ? BORDER : 'rgba(22,36,27,0.06)'}`, background: 'rgba(22,36,27,0.02)', opacity: avail ? 1 : 0.4, transition: 'border-color .12s, background .12s' }}
+                      onMouseEnter={e => avail && ((e.currentTarget as HTMLElement).style.borderColor = c1, (e.currentTarget as HTMLElement).style.background = c1 + '14')}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; (e.currentTarget as HTMLElement).style.background = 'rgba(22,36,27,0.02)'; }}
+                    >
+                      <div style={{ position: 'relative', width: 72, height: 72, borderRadius: 14, background: `linear-gradient(140deg,${c1},${c2})`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,.1) 0 4px,transparent 4px 9px)' }} />
+                        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`} alt={p.name} width={64} height={64} style={{ position: 'relative', imageRendering: 'pixelated', transform: 'scale(1.15)' }} />
+                      </div>
+                      <div style={{ fontWeight: 600, fontSize: 12, color: INK, textAlign: 'center' }}>{p.name}</div>
+                      <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {p.types.map(t => <TypeBadge key={t} type={t} mini />)}
                       </div>
                     </button>
                   );
                 })}
               </div>
-              {filteredPokemon.length > 0 && !searchQuery.trim() && (
-                <div className="text-center mt-6 bg-blue-100 rounded-2xl p-4 border-2 border-blue-300">
-                  <p className="text-sm font-bold text-blue-900">
-                    💡 Showing only Pokémon available in {currentGame?.name}. Use search to see all Pokémon!
-                  </p>
-                </div>
-              )}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Edit Pokemon Modal */}
-      {showEditModal && editingPokemon && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border-8 border-purple-400">
-            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-7 text-white sticky top-0">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  {editingPokemon.sprite && (
-                    <div className="bg-white rounded-2xl p-3 border-4 border-white shadow-xl">
-                      <Image
-                        src={editingPokemon.sprite}
-                        alt={editingPokemon.name}
-                        width={80}
-                        height={80}
-                        className="pixelated"
-                      />
+        {/* Edit Modal — item, ability, nature, moves, EV spreads */}
+        {showEditModal && editingPokemon && (
+          <div onClick={() => setShowEditModal(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(22,32,25,0.45)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn .15s' }}>
+            <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 20, width: '100%', maxWidth: 640, maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 24px 64px rgba(0,0,0,.22)', animation: 'pop .16s' }}>
+              {(() => {
+                const c1 = TYPE_COLORS[editingPokemon.types[0]?.toLowerCase()] ?? ACCENT;
+                const c2 = TYPE_COLORS[editingPokemon.types[1]?.toLowerCase()] ?? c1;
+                return (
+                  <div style={{ padding: '22px 24px', background: `linear-gradient(165deg,${c1}22,transparent 75%)`, borderBottom: `1px solid ${BORDER}`, display: 'flex', gap: 18, alignItems: 'flex-start' }}>
+                    <SpriteBox pokemon={editingPokemon} size={80} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h2 style={{ fontWeight: 700, fontSize: 26, letterSpacing: '-0.02em', margin: '0 0 10px', color: INK }}>{editingPokemon.name}</h2>
+                      <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
+                        {editingPokemon.types.map(t => <TypeBadge key={t} type={t} />)}
+                      </div>
                     </div>
-                  )}
-                  <div>
-                    <h2 className="text-3xl font-black mb-3 drop-shadow-lg">⚡ Customize {editingPokemon.name}</h2>
-                    <div className="flex gap-2">
-                      {editingPokemon.types.map((type) => (
-                        <span key={type} className={`px-4 py-1.5 ${TYPE_COLORS[type.toLowerCase()]} text-white rounded-full text-xs font-black uppercase shadow-lg border-2 border-white`}>
-                          {type}
-                        </span>
-                      ))}
-                    </div>
+                    <button onClick={() => setShowEditModal(false)} style={{ all: 'unset', cursor: 'pointer', width: 36, height: 36, borderRadius: '50%', border: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, color: INK2, flexShrink: 0 }}>✕</button>
                   </div>
-                </div>
-                <button onClick={() => setShowEditModal(false)} className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-lg">
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
+                );
+              })()}
 
-            <div className="p-7 space-y-6 bg-gradient-to-br from-purple-50 to-pink-50">
-              {/* Nature & Item */}
-              <div className="grid md:grid-cols-2 gap-5">
-                <div className="bg-white rounded-2xl p-5 shadow-lg border-3 border-green-300">
-                  <label className="block text-sm font-black text-gray-900 mb-3 flex items-center gap-2">
-                    🌟 Nature
-                  </label>
-                  <select
-                    value={editingPokemon.nature}
-                    onChange={(e) => setEditingPokemon({...editingPokemon, nature: e.target.value})}
-                    className="w-full px-4 py-3 border-3 border-green-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-400 font-bold shadow-md"
-                  >
-                    {NATURES.map(nature => {
-                      const effect = NATURE_EFFECTS[nature];
+              <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {/* Item & Ability */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  {[
+                    { label: 'ITEM', value: editingPokemon.item, opts: ITEMS, onChange: (v: string) => setEditingPokemon({ ...editingPokemon, item: v }) },
+                    { label: 'ABILITY', value: editingPokemon.ability, opts: (POKEMON_DATABASE.find(p => p.id === parseInt(editingPokemon.id))?.abilities ?? [editingPokemon.ability]), onChange: (v: string) => setEditingPokemon({ ...editingPokemon, ability: v }) },
+                  ].map(({ label, value, opts, onChange }) => (
+                    <div key={label} style={{ background: 'rgba(22,36,27,0.04)', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '12px 14px' }}>
+                      <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.08em', color: INK3, marginBottom: 6 }}>{label}</div>
+                      <select value={value} onChange={e => onChange(e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent', fontSize: 14, fontWeight: 600, color: INK, fontFamily: 'inherit', cursor: 'pointer', outline: 'none' }}>
+                        {opts.map((o: string) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Moves */}
+                <div>
+                  <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.08em', color: INK3, marginBottom: 10 }}>MOVES</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    {[0, 1, 2, 3].map(mi => {
+                      const movePool: string[] = [];
+                      const c1 = TYPE_COLORS[editingPokemon.types[0]?.toLowerCase()] ?? ACCENT;
+                      const currentMove = editingPokemon.moves[mi] || '';
                       return (
-                        <option key={nature} value={nature}>
-                          {nature} {effect.description ? `- ${effect.description}` : ''}
-                        </option>
+                        <div key={mi} style={{ background: 'rgba(22,36,27,0.04)', border: `1px solid ${BORDER}`, borderRadius: 12, overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
+                          <div style={{ width: 5, background: currentMove ? c1 : 'rgba(22,36,27,0.1)', flexShrink: 0 }} />
+                          <div style={{ flex: 1, padding: '8px 10px' }}>
+                            <div style={{ fontFamily: MONO, fontSize: 9, fontWeight: 800, letterSpacing: '.08em', color: INK3, marginBottom: 4 }}>MOVE {mi + 1}</div>
+                            {movePool.length > 0 ? (
+                              <select value={currentMove} onChange={e => { const nm = [...editingPokemon.moves]; nm[mi] = e.target.value; setEditingPokemon({ ...editingPokemon, moves: nm }); }} style={{ width: '100%', border: 'none', background: 'transparent', fontSize: 13, fontWeight: 600, color: currentMove ? INK : INK3, fontFamily: 'inherit', cursor: 'pointer', outline: 'none' }}>
+                                <option value="">—</option>
+                                {movePool.map((m: string) => <option key={m} value={m}>{m}</option>)}
+                              </select>
+                            ) : (
+                              <input value={currentMove} onChange={e => { const nm = [...editingPokemon.moves]; nm[mi] = e.target.value; setEditingPokemon({ ...editingPokemon, moves: nm }); }} placeholder="Move name" style={{ width: '100%', border: 'none', background: 'transparent', fontSize: 13, fontWeight: 600, color: INK, fontFamily: 'inherit', outline: 'none' }} />
+                            )}
+                          </div>
+                        </div>
                       );
                     })}
-                  </select>
-                  {editingPokemon.nature && NATURE_EFFECTS[editingPokemon.nature] && (
-                    <div className="mt-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-3 text-xs font-bold border-2 border-green-200">
-                      {NATURE_EFFECTS[editingPokemon.nature].increases && (
-                        <span className="text-green-700">
-                          ⬆️ +10% {NATURE_EFFECTS[editingPokemon.nature].increases}
-                        </span>
-                      )}
-                      {NATURE_EFFECTS[editingPokemon.nature].increases && NATURE_EFFECTS[editingPokemon.nature].decreases && <span className="text-gray-500"> • </span>}
-                      {NATURE_EFFECTS[editingPokemon.nature].decreases && (
-                        <span className="text-red-700">
-                          ⬇️ -10% {NATURE_EFFECTS[editingPokemon.nature].decreases}
-                        </span>
-                      )}
-                      {!NATURE_EFFECTS[editingPokemon.nature].increases && !NATURE_EFFECTS[editingPokemon.nature].decreases && (
-                        <span className="text-gray-600">➖ No stat changes</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <div className="bg-white rounded-2xl p-5 shadow-lg border-3 border-blue-300">
-                  <label className="block text-sm font-black text-gray-900 mb-3 flex items-center gap-2">
-                    🎒 Held Item
-                  </label>
-                  <select
-                    value={editingPokemon.item}
-                    onChange={(e) => setEditingPokemon({...editingPokemon, item: e.target.value})}
-                    className="w-full px-4 py-3 border-3 border-blue-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 font-bold shadow-md"
-                  >
-                    {ITEMS.map(item => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
-                  {editingPokemon.item && editingPokemon.item !== 'None' && ITEM_SPRITES[editingPokemon.item] && (
-                    <div className="mt-3 flex items-center gap-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-3 border-2 border-blue-200">
-                      <Image
-                        src={ITEM_SPRITES[editingPokemon.item]}
-                        alt={editingPokemon.item}
-                        width={32}
-                        height={32}
-                        className="pixelated"
-                      />
-                      <span className="text-xs font-bold text-blue-900">{editingPokemon.item}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* EVs */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-3 border-orange-300">
-                <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-xl font-black text-gray-900 flex items-center gap-2">
-                    📊 Effort Values (EVs)
-                  </h3>
-                  <span className={`px-4 py-2 rounded-full text-sm font-black shadow-md ${totalEvs > 510 ? 'bg-red-500 text-white' : 'bg-gradient-to-r from-orange-400 to-yellow-400 text-white'}`}>
-                    {totalEvs} / 510
-                  </span>
+                  </div>
                 </div>
 
-                {/* EV Presets */}
+                {/* Nature */}
+                <div style={{ background: 'rgba(22,36,27,0.04)', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '12px 14px' }}>
+                  <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.08em', color: INK3, marginBottom: 6 }}>NATURE</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <select value={editingPokemon.nature} onChange={e => setEditingPokemon({ ...editingPokemon, nature: e.target.value })} style={{ flex: 1, border: 'none', background: 'transparent', fontSize: 14, fontWeight: 600, color: INK, fontFamily: 'inherit', cursor: 'pointer', outline: 'none' }}>
+                      {NATURES.map(n => <option key={n} value={n}>{n}</option>)}
+                    </select>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: INK3 }}>
+                      {NATURE_EFFECTS[editingPokemon.nature]?.note || 'Neutral'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* EV Spreads */}
                 {(() => {
-                  const pokemonData = POKEMON_DATABASE.find(p => p.id === parseInt(editingPokemon.id));
-                  if (pokemonData?.commonSpreads && pokemonData.commonSpreads.length > 0) {
-                    return (
-                      <div className="mb-6 p-5 bg-gradient-to-br from-blue-50 to-purple-50 border-3 border-blue-300 rounded-2xl shadow-md">
-                        <h4 className="text-sm font-black text-gray-900 mb-4 flex items-center gap-2">
-                          ⭐ Popular EV Spreads
-                        </h4>
-                        <div className="space-y-3">
-                          {pokemonData.commonSpreads.map((spread, index) => (
-                            <button
-                              key={index}
-                              onClick={() => applyEVSpread(spread)}
-                              className="w-full text-left p-4 bg-white border-3 border-blue-200 rounded-xl hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 hover:border-purple-400 transition-all shadow-md hover:shadow-lg hover:scale-102"
-                            >
-                              <div className="flex items-center justify-between mb-2">
-                                <span className="font-black text-gray-900">{spread.name}</span>
-                                <span className="text-xs font-bold bg-blue-500 text-white px-3 py-1 rounded-full">{spread.hp + spread.atk + spread.def + spread.spa + spread.spd + spread.spe} EVs</span>
-                              </div>
-                              <p className="text-xs text-gray-700 mb-3 font-semibold">{spread.description}</p>
-                              <div className="flex gap-2 text-xs font-bold flex-wrap">
-                                {spread.hp > 0 && <span className="bg-red-100 text-red-700 px-2 py-1 rounded-full">{spread.hp} HP</span>}
-                                {spread.atk > 0 && <span className="bg-orange-100 text-orange-700 px-2 py-1 rounded-full">{spread.atk} Atk</span>}
-                                {spread.def > 0 && <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">{spread.def} Def</span>}
-                                {spread.spa > 0 && <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">{spread.spa} SpA</span>}
-                                {spread.spd > 0 && <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full">{spread.spd} SpD</span>}
-                                {spread.spe > 0 && <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-full">{spread.spe} Spe</span>}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
+                  const pd = POKEMON_DATABASE.find(p => p.id === parseInt(editingPokemon.id));
+                  if (!pd?.commonSpreads?.length) return null;
+                  return (
+                    <div>
+                      <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.09em', color: INK3, marginBottom: 10 }}>POPULAR EV SPREADS</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                        {pd.commonSpreads.map((sp, i) => (
+                          <button key={i} onClick={() => applyEVSpread(sp)} style={{ all: 'unset', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 4, padding: '10px 13px', borderRadius: 11, border: `1px solid ${BORDER}`, background: 'rgba(22,36,27,0.03)', transition: 'border-color .12s, background .12s' }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = ACCENT; (e.currentTarget as HTMLElement).style.background = ACCENT + '10'; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; (e.currentTarget as HTMLElement).style.background = 'rgba(22,36,27,0.03)'; }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <span style={{ fontWeight: 600, fontSize: 13, color: INK }}>{sp.name}</span>
+                              <span style={{ fontFamily: MONO, fontSize: 10, color: INK3 }}>{sp.hp + sp.atk + sp.def + sp.spa + sp.spd + sp.spe} EVs</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                              {STAT_KEYS.filter(k => sp[k] > 0).map(k => (
+                                <span key={k} style={{ fontFamily: MONO, fontSize: 10, padding: '2px 7px', borderRadius: 5, background: 'rgba(22,36,27,0.07)', color: INK2 }}>{sp[k]} {STAT_LABELS[k]}</span>
+                              ))}
+                            </div>
+                          </button>
+                        ))}
                       </div>
-                    );
-                  }
-                  return null;
+                    </div>
+                  );
                 })()}
 
-                <div className="space-y-5">
-                  {(['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const).map((stat) => (
-                    <div key={stat} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="text-sm font-black text-gray-900 uppercase">{stat}</label>
-                        <span className="px-3 py-1 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-full text-sm font-black shadow-md">{editingPokemon.evs[stat]}</span>
+                {/* EV Sliders */}
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                    <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.09em', color: INK3 }}>EV SPREAD</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 80, height: 6, borderRadius: 4, background: 'rgba(22,36,27,0.08)', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${Math.min(100, (totalEvs / 508) * 100)}%`, background: totalEvs > 508 ? '#e0533d' : ACCENT, borderRadius: 4, transition: 'width .15s' }} />
                       </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="252"
-                        step="4"
-                        value={editingPokemon.evs[stat]}
-                        onChange={(e) => updateEV(stat, parseInt(e.target.value))}
-                        className="w-full h-3 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full appearance-none cursor-pointer accent-purple-600 shadow-inner"
-                      />
+                      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, color: totalEvs > 508 ? '#e0533d' : totalEvs === 508 ? '#3fae6a' : INK }}>{totalEvs}<span style={{ color: INK3 }}>/508</span></span>
                     </div>
-                  ))}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    {STAT_KEYS.map(k => (
+                      <div key={k} style={{ display: 'grid', gridTemplateColumns: '60px 1fr 80px', alignItems: 'center', gap: 14, padding: '4px 0' }}>
+                        <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, color: INK2 }}>{STAT_LABELS[k]}</span>
+                        <input type="range" min={0} max={252} step={4} value={editingPokemon.evs[k]} onChange={e => updateEV(k, +e.target.value)} style={{ width: '100%', cursor: 'pointer' }} />
+                        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'flex-end', gap: 6 }}>
+                          <span style={{ fontFamily: MONO, fontSize: 11, color: INK3 }}>EV</span>
+                          <span style={{ fontFamily: MONO, fontSize: 15, fontWeight: 700, color: INK }}>{editingPokemon.evs[k]}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button onClick={saveEditedPokemon} style={{ width: '100%', padding: '14px', borderRadius: 12, background: ACCENT, color: '#fff', fontSize: 15, fontWeight: 700, border: 'none', cursor: 'pointer', boxShadow: `0 8px 22px -8px ${ACCENT}` }}>
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* New Team Modal */}
+        {showTeamModal && (
+          <div onClick={() => { setShowTeamModal(false); setNewTeamName(''); }} style={{ position: 'fixed', inset: 0, background: 'rgba(22,32,25,0.45)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn .15s' }}>
+            <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 20, width: '100%', maxWidth: 420, padding: '28px 28px 24px', boxShadow: '0 24px 64px rgba(0,0,0,.22)', animation: 'pop .16s' }}>
+              <h2 style={{ fontWeight: 700, fontSize: 22, color: INK, margin: '0 0 22px', letterSpacing: '-0.02em' }}>New team</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.08em', color: INK3, display: 'block', marginBottom: 7 }}>TEAM NAME</label>
+                  <input autoFocus value={newTeamName} onChange={e => setNewTeamName(e.target.value)} onKeyDown={e => e.key === 'Enter' && createTeam()} placeholder="e.g. Rain Balance, Trick Room…" style={{ width: '100%', padding: '10px 13px', border: `1px solid ${BORDER}`, borderRadius: 10, fontSize: 14, fontWeight: 500, color: INK, outline: 'none', fontFamily: 'inherit' }} />
+                </div>
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: 10, fontWeight: 800, letterSpacing: '.08em', color: INK3, display: 'block', marginBottom: 7 }}>FORMAT</label>
+                  <select value={newTeamGame} onChange={e => setNewTeamGame(e.target.value)} style={{ width: '100%', padding: '10px 13px', border: `1px solid ${BORDER}`, borderRadius: 10, fontSize: 14, fontWeight: 500, color: INK, background: '#fff', fontFamily: 'inherit', outline: 'none', cursor: 'pointer' }}>
+                    {GAMES_AND_FORMATS.map(g => <option key={g.id} value={g.id}>{g.name} — {g.format}</option>)}
+                  </select>
+                </div>
+                <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                  <button onClick={createTeam} style={{ flex: 1, padding: '12px', borderRadius: 11, background: ACCENT, color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>Create team</button>
+                  <button onClick={() => { setShowTeamModal(false); setNewTeamName(''); }} style={{ flex: 1, padding: '12px', borderRadius: 11, border: `1px solid ${BORDER}`, color: INK2, fontSize: 14, fontWeight: 600, background: 'transparent', cursor: 'pointer' }}>Cancel</button>
                 </div>
               </div>
-
-              {/* Save Button */}
-              <button
-                onClick={saveEditedPokemon}
-                className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl font-black text-lg hover:from-green-600 hover:to-green-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-3 border-4 border-green-700"
-              >
-                <Save className="w-6 h-6" />
-                💾 Save Changes
-              </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* New Team Modal */}
-      {showTeamModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-6">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 border-8 border-green-400">
-            <h2 className="text-3xl font-black text-gray-900 mb-6 text-center">✨ Create New Team ✨</h2>
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-black text-gray-900 mb-3 flex items-center gap-2">
-                  🏆 Team Name
-                </label>
-                <input
-                  type="text"
-                  value={newTeamName}
-                  onChange={(e) => setNewTeamName(e.target.value)}
-                  placeholder="e.g., Rain Team, Trick Room, etc."
-                  className="w-full px-5 py-3 border-3 border-blue-300 rounded-2xl focus:ring-4 focus:ring-blue-200 focus:border-blue-400 font-bold shadow-lg"
-                  autoFocus
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-black text-gray-900 mb-3 flex items-center gap-2">
-                  🎮 Game/Format
-                </label>
-                <select
-                  value={newTeamGame}
-                  onChange={(e) => setNewTeamGame(e.target.value)}
-                  className="w-full px-5 py-3 border-3 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-400 font-bold shadow-lg"
-                >
-                  {GAMES_AND_FORMATS.map(game => (
-                    <option key={game.id} value={game.id}>{game.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={createTeam}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl font-black hover:from-green-600 hover:to-green-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 border-3 border-green-700"
-                >
-                  ✅ Create
-                </button>
-                <button
-                  onClick={() => {
-                    setShowTeamModal(false);
-                    setNewTeamName('');
-                  }}
-                  className="flex-1 px-6 py-3 border-3 border-gray-300 text-gray-700 rounded-2xl font-black hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105"
-                >
-                  ❌ Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <style jsx global>{`
-        .pixelated {
-          image-rendering: pixelated;
-          image-rendering: -moz-crisp-edges;
-          image-rendering: crisp-edges;
-        }
-
-        @keyframes bounce-in {
-          0% { transform: scale(0.8); opacity: 0; }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
-        }
-
-        .animate-bounce-in {
-          animation: bounce-in 0.3s ease-out;
-        }
-      `}</style>
-    </div>
+        )}
+      </div>
+    </>
   );
 }

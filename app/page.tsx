@@ -1,525 +1,304 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import Bubbles from '@/components/Bubbles';
+import CaseDrawer from '@/components/CaseDrawer';
+import { projects } from '@/app/data/projects';
+
+const ACCENT = '#1E9E5A';
+const WORDS = ['products', 'campaigns', 'brands', 'stories', 'experiences', 'communities'];
+const FEATURED_SLUGS = ['headliners', 'pokemon-team-builder', 'potion-problems'];
+const featured = projects.filter((p) => FEATURED_SLUGS.includes(p.slug));
+
+const SKILLS = ['Product Management', 'Figma', 'Python', 'AI', 'Data Analysis', 'Airtable', 'Linear', 'Marketing', 'Agile / Scrum'];
+const INTERESTS = ['Video Games', 'Sustainability', 'Vibe Coding', 'Cooking', 'Travel', 'Kung Fu', 'Pickleball', 'Karaoke', 'Museums'];
 
 export default function Home() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isMouseInHero, setIsMouseInHero] = useState(false);
-  const [typedText, setTypedText] = useState('');
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
-
-  const roles = [
-    'Business Student',
-    'Product Manager',
-    'Marketing Strategist',
-    'Video Game Enthusiast'
-  ];
+  const [wordIdx, setWordIdx] = useState(0);
+  const [openSlug, setOpenSlug] = useState<string | null>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const isInside =
-          e.clientX >= rect.left &&
-          e.clientX <= rect.right &&
-          e.clientY >= rect.top &&
-          e.clientY <= rect.bottom;
-
-        setIsMouseInHero(isInside);
-
-        if (isInside) {
-          setMousePosition({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-          });
-        }
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const id = setInterval(() => setWordIdx((i) => (i + 1) % WORDS.length), 2100);
+    return () => clearInterval(id);
   }, []);
 
-  // Typing effect
   useEffect(() => {
-    const currentRole = roles[roleIndex];
-    const typingSpeed = isDeleting ? 50 : 100;
-    const pauseTime = isDeleting ? 500 : 2000;
+    const onMove = (e: MouseEvent) => {
+      const el = glowRef.current;
+      if (!el) return;
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        if (el) el.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+        rafRef.current = null;
+      });
+    };
+    window.addEventListener('mousemove', onMove);
+    return () => window.removeEventListener('mousemove', onMove);
+  }, []);
 
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        if (typedText.length < currentRole.length) {
-          setTypedText(currentRole.slice(0, typedText.length + 1));
-        } else {
-          setTimeout(() => setIsDeleting(true), pauseTime);
-        }
-      } else {
-        if (typedText.length > 0) {
-          setTypedText(currentRole.slice(0, typedText.length - 1));
-        } else {
-          setIsDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
-        }
-      }
-    }, typingSpeed);
-
-    return () => clearTimeout(timeout);
-  }, [typedText, isDeleting, roleIndex, roles]);
-
-  const handleProjectHover = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = (y - centerY) / 10;
-    const rotateY = (centerX - x) / 10;
-
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-  };
-
-  const handleProjectLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-  };
+  const openProject = projects.find((p) => p.slug === openSlug) ?? null;
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
-      {/* Subtle Background Accents */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-400/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
-      </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        *{box-sizing:border-box;}
+        html{scroll-behavior:smooth;}
+        body{margin:0;background:#EFF3EC;color:#16241B;font-family:'Geist','Geist Fallback',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+        ::selection{background:#1E9E5A;color:#fff;}
+        a{color:inherit;text-decoration:none;}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+        @keyframes ovIn{from{opacity:0;}to{opacity:1;}}
+        @keyframes drawerIn{from{transform:translateX(50px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+        @keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+        @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(30,158,90,0.5);}50%{opacity:0.7;box-shadow:0 0 0 5px rgba(30,158,90,0);}}
+        @keyframes bub1{0%{transform:translate(0,0) scale(1) rotate(0deg);}100%{transform:translate(7vw,9vh) scale(1.12) rotate(8deg);}}
+        @keyframes bub2{0%{transform:translate(0,0) scale(1.05) rotate(0deg);}100%{transform:translate(-8vw,-7vh) scale(0.9) rotate(-10deg);}}
+        @keyframes bub3{0%{transform:translate(0,0) scale(0.95) rotate(0deg);}100%{transform:translate(6vw,-10vh) scale(1.1) rotate(6deg);}}
+        @keyframes bub4{0%{transform:translate(0,0) scale(1) rotate(0deg);}100%{transform:translate(-6vw,8vh) scale(1.1) rotate(-7deg);}}
+        @keyframes bub5{0%{transform:translate(0,0) scale(1.1) rotate(0deg);}100%{transform:translate(9vw,-5vh) scale(0.92) rotate(12deg);}}
+        @keyframes bub6{0%{transform:translate(0,0) scale(0.9) rotate(0deg);}100%{transform:translate(-5vw,-9vh) scale(1.15) rotate(-6deg);}}
+        @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+        @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+        .project-card{transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),border-color 0.3s,box-shadow 0.3s;}
+        .skill-pill{transition:border-color 0.2s,color 0.2s;}
+        .skill-pill:hover{border-color:rgba(30,158,90,0.55);color:#16241B;}
+      `}</style>
 
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Navigation */}
-        <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-xl border-b border-gray-200 z-40 shadow-sm">
-          <div className="max-w-6xl mx-auto px-6 py-4">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                {/* Animated Logo */}
-                <div className="relative w-12 h-12 group cursor-pointer">
-                  {/* Rotating rings */}
-                  <div className="absolute inset-0 animate-spin-slow">
-                    <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-blue-600 border-r-blue-500"></div>
-                  </div>
-                  <div className="absolute inset-1 animate-spin-reverse">
-                    <div className="absolute inset-0 rounded-full border-2 border-transparent border-b-blue-500 border-l-blue-400"></div>
-                  </div>
+      <div style={{ position: 'relative', minHeight: '100vh', overflowX: 'hidden' }}>
+        <Bubbles />
 
-                  {/* Logo container */}
-                  <div className="relative w-12 h-12 rounded-full bg-white flex items-center justify-center border border-blue-200 group-hover:border-blue-400 transition-all duration-300 group-hover:scale-110 shadow-sm group-hover:shadow-md">
-                    {/* Glowing background */}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-50 to-blue-100 group-hover:from-blue-100 group-hover:to-blue-200 transition-all duration-300"></div>
+        {/* Grid overlay */}
+        <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(22,36,27,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(22,36,27,0.045) 1px,transparent 1px)', backgroundSize: '72px 72px', maskImage: 'radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 78%)', WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 78%)' }} />
 
-                    {/* Abstract EY symbol */}
-                    <svg className="w-7 h-7 relative z-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      {/* E shape - three horizontal bars */}
-                      <path
-                        d="M12 10 L20 10 M12 20 L18 20 M12 30 L20 30"
-                        stroke="url(#logo-grad-light)"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        className="group-hover:stroke-[3.5] transition-all duration-300"
-                      />
-                      {/* Y shape - diagonal lines meeting */}
-                      <path
-                        d="M22 10 L28 18 M34 10 L28 18 L28 30"
-                        stroke="url(#logo-grad-light)"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="group-hover:stroke-[3.5] transition-all duration-300"
-                      />
-                      {/* Accent dot */}
-                      <circle
-                        cx="28"
-                        cy="20"
-                        r="2"
-                        fill="url(#logo-grad-light)"
-                        className="group-hover:animate-pulse"
-                      />
-                      <defs>
-                        <linearGradient id="logo-grad-light" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#2563eb">
-                            <animate attributeName="stop-color" values="#2563eb; #0ea5e9; #3b82f6; #2563eb" dur="4s" repeatCount="indefinite" />
-                          </stop>
-                          <stop offset="100%" stopColor="#0ea5e9">
-                            <animate attributeName="stop-color" values="#0ea5e9; #3b82f6; #2563eb; #0ea5e9" dur="4s" repeatCount="indefinite" />
-                          </stop>
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </div>
-                </div>
-                <h1 className="text-xl font-bold text-gray-900">
+        {/* Mouse glow */}
+        <div ref={glowRef} style={{ position: 'fixed', top: 0, left: 0, width: 480, height: 480, margin: '-240px 0 0 -240px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(30,158,90,0.13),transparent 60%)', pointerEvents: 'none', zIndex: 1, willChange: 'transform' }} />
+
+        <div style={{ position: 'relative', zIndex: 2 }}>
+
+          {/* Nav */}
+          <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', background: 'rgba(239,243,236,0.72)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(22,36,27,0.08)' }}>
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 5vw' }}>
+              <a href="#top" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 600, fontSize: 17, letterSpacing: '-0.3px' }}>
+                <span style={{ width: 9, height: 9, borderRadius: '50%', background: ACCENT, boxShadow: `0 0 12px ${ACCENT}`, display: 'inline-block' }} />
+                Eton Yao
+              </a>
+              <nav style={{ display: 'flex', alignItems: 'center', gap: 26 }}>
+                <a href="#about" style={{ fontSize: 14, color: '#5E6E63' }}>About</a>
+                <a href="#work" style={{ fontSize: 14, color: '#5E6E63' }}>Work</a>
+                <Link href="/projects" style={{ fontSize: 14, color: '#5E6E63' }}>Projects</Link>
+                <a href="#contact" style={{ fontSize: 14, color: '#5E6E63' }}>Contact</a>
+              </nav>
+            </div>
+          </header>
+
+          {/* Hero */}
+          <section id="top" style={{ padding: '20vh 5vw 13vh', animation: 'fadeUp 0.6s ease both' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(36px,6vw,80px)', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+              <div style={{ flex: '1 1 460px', minWidth: 300 }}>
+                <h1 style={{ fontWeight: 600, fontSize: 'clamp(56px,9.5vw,138px)', lineHeight: 0.92, letterSpacing: '-0.04em', margin: 0 }}>
                   Eton Yao
                 </h1>
-              </div>
-              <div className="flex gap-8">
-                <a href="#about" className="text-gray-600 hover:text-blue-600 transition-all duration-300 relative group font-medium">
-                  About
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <a href="#projects" className="text-gray-600 hover:text-blue-600 transition-all duration-300 relative group font-medium">
-                  Projects
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </a>
-                <a href="#contact" className="text-gray-600 hover:text-blue-600 transition-all duration-300 relative group font-medium">
-                  Contact
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        {/* Hero Section */}
-        <section ref={heroRef} className="pt-32 pb-20 px-6 min-h-screen flex items-center relative overflow-hidden">
-          {/* Interactive Mouse Spotlight Effect - Hero Only */}
-          {isMouseInHero && (
-            <>
-              <div
-                className="absolute pointer-events-none z-20 transition-opacity duration-300"
-                style={{
-                  background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
-                  inset: 0,
-                }}
-              />
-              <div
-                className="absolute pointer-events-none z-20"
-                style={{
-                  background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 211, 238, 0.1), transparent 40%)`,
-                  inset: 0,
-                }}
-              />
-            </>
-          )}
-          <div className="max-w-6xl mx-auto relative z-30">
-            <div className="max-w-3xl">
-              {/* Badges */}
-              <div className="flex gap-3 mb-6 animate-fade-in">
-                <span className="px-4 py-2 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-sm font-medium">
-                  USC '27
-                </span>
-                <span className="px-4 py-2 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-sm font-medium">
-                  Open to Opportunities
-                </span>
-              </div>
-
-              <div className="mb-6 overflow-hidden">
-                <h2 className="text-6xl md:text-8xl font-bold text-gray-900 mb-2 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                  Hi, I'm
-                </h2>
-                <h2 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                  Eton Yao
-                </h2>
-              </div>
-
-              {/* Typing animation */}
-              <div className="mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <p className="text-xl md:text-2xl text-gray-600 mb-2">
-                  <span className="text-gray-500">I'm a </span>
-                  <span className="text-blue-600 font-semibold">
-                    {typedText}
-                    <span className="animate-pulse">|</span>
+                <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: 14, marginTop: 24, fontSize: 'clamp(22px,3.4vw,38px)', fontWeight: 500 }}>
+                  <span style={{ color: '#5E6E63' }}>I build</span>
+                  <span style={{ fontWeight: 600, background: 'linear-gradient(100deg,#1E9E5A,#0E9488 55%,#5B9A2E)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>
+                    {WORDS[wordIdx]}
                   </span>
+                  <span style={{ display: 'inline-block', width: 3, height: '0.95em', background: ACCENT, transform: 'translateY(3px)', animation: 'blink 1.1s step-end infinite' }} />
+                </div>
+                <p style={{ maxWidth: 540, fontSize: 18, lineHeight: 1.65, color: '#5E6E63', margin: '30px 0 0' }}>
+                  A dual-degree student at USC — <strong style={{ color: '#16241B', fontWeight: 500 }}>Business Administration</strong> and a <strong style={{ color: '#16241B', fontWeight: 500 }}>Master of International Trade Law &amp; Economics</strong> — working where product meets marketing.
                 </p>
-                <p className="text-lg md:text-xl text-gray-700">
-                  Business Administration @ USC | Product Management & Marketing Intern
-                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 38 }}>
+                  <a href="#work" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: ACCENT, color: '#fff', fontWeight: 600, fontSize: 15, padding: '15px 26px', borderRadius: 10, boxShadow: `0 10px 28px -10px ${ACCENT}` }}>
+                    View work <span>→</span>
+                  </a>
+                  <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, fontWeight: 500, fontSize: 15, padding: '15px 26px', borderRadius: 10, border: '1px solid rgba(22,36,27,0.16)', background: 'rgba(255,255,255,0.5)' }}>
+                    Get in touch
+                  </a>
+                </div>
               </div>
 
-              <div className="flex gap-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-                <a
-                  href="#contact"
-                  className="group px-8 py-4 bg-blue-600 text-white rounded-lg font-medium relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-600/30 hover:bg-blue-700"
-                >
-                  <span className="relative z-10">Get in Touch</span>
-                </a>
-                <a
-                  href="#projects"
-                  className="px-8 py-4 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-all duration-300 hover:scale-105"
-                >
-                  View Projects
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section id="about" className="py-20 px-6 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-12">
-              About Me
-            </h3>
-            <div className="grid md:grid-cols-2 gap-12">
-              <div>
-                <p className="text-lg text-gray-700 mb-4 leading-relaxed">
-                  I'm a Business Administration student at USC (expected graduation May 2027), pursuing a Master of International Trade Law and Economics (MITLE). My passion lies at the intersection of product management, marketing, and technology.
-                </p>
-                <p className="text-lg text-gray-700 mb-4 leading-relaxed">
-                  Currently a Marketing Intern at <span className="text-blue-600 font-semibold">Clouted (a16z speedrun 003)</span>, where I drive social media campaigns reaching over 5M+ monthly views. Previously, I worked as a Product Management Intern at <span className="text-blue-600 font-semibold">Ringley Group</span> in London, defining roadmaps for sustainability dashboards tracking 10,000+ data points.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  I love building products that make a difference, from leading marketing for USC's Advanced Games Project to designing community programs that engage 5,000+ students across LA.
-                </p>
-              </div>
-              <div>
-                <h4 className="text-2xl font-semibold text-gray-900 mb-6">Skills & Tools</h4>
-                <div className="flex flex-wrap gap-3">
-                  {['Product Management', 'Figma', 'Python', 'AI', 'Data Analysis', 'Airtable', 'Linear', 'Microsoft Office', 'Marketing', 'Agile/Scrum'].map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-4 py-2 bg-white text-blue-700 rounded-lg border border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 cursor-default hover:scale-105 shadow-sm"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                <h4 className="text-2xl font-semibold text-gray-900 mb-6 mt-8">Interests</h4>
-                <div className="flex flex-wrap gap-3">
-                  {['Video Games', 'Sustainability', 'Vibe Coding', 'Cooking', 'Travel', 'Kung Fu', 'Pickleball', 'Karaoke', 'Museums'].map((interest) => (
-                    <span
-                      key={interest}
-                      className="px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 cursor-default hover:scale-105 shadow-sm"
-                    >
-                      {interest}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Projects Section */}
-        <section id="projects" className="py-20 px-6 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Featured Projects
-            </h3>
-            <p className="text-gray-600 mb-12 text-lg">Explore my work across product management and product marketing</p>
-
-            {/* Two-panel split */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Product Management panel */}
-              <a
-                href="/product"
-                className="group relative flex flex-col justify-between rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-8 overflow-hidden hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-500/10 transition-all duration-500" />
-
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-blue-200">
-                      Product Management
-                    </span>
-                    <span className="text-xs text-gray-400 font-medium">8 projects</span>
+              {/* Status card */}
+              <div style={{ flex: '0 1 320px', minWidth: 260, background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', border: '1px solid rgba(22,36,27,0.1)', borderRadius: 18, padding: 24, boxShadow: '0 18px 40px -28px rgba(22,36,27,0.5)' }}>
+                <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A988D', margin: '0 0 18px' }}>// Currently</p>
+                {[['Location', 'Los Angeles, CA'], ['Focus', 'Product · Marketing'], ['Graduating', 'USC \'27']].map(([label, value], i, arr) => (
+                  <div key={label}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'baseline', padding: '8px 0' }}>
+                      <span style={{ fontSize: 14, color: '#5E6E63' }}>{label}</span>
+                      <span style={{ fontSize: 14, fontWeight: 500 }}>{value}</span>
+                    </div>
+                    {i < arr.length - 1 && <div style={{ height: 1, background: 'rgba(22,36,27,0.08)' }} />}
                   </div>
-                  <h4 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    PM Projects
-                  </h4>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                    PRDs, roadmaps, feature strategy, and end-to-end product work.
-                  </p>
-                  <div className="space-y-2">
-                    {['Netflix — Mood Meter PRD + Lean Canvas', 'Alongside AI — Kiwi Connect PRD', 'AI Time Entry System — Concept Prototype', 'Pokémon Team Builder'].map((name) => (
-                      <div key={name} className="flex items-center gap-2 text-xs text-gray-400">
-                        <span className="w-1 h-1 rounded-full bg-blue-300 shrink-0" />
-                        {name}
-                      </div>
-                    ))}
-                    <div className="text-xs text-blue-400 pl-3">+ 4 more</div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 mt-6 flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
-                  View All
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
-              </a>
-
-              {/* Marketing panel */}
-              <a
-                href="/marketing"
-                className="group relative flex flex-col justify-between rounded-2xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white p-8 overflow-hidden hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-purple-500/10 transition-all duration-500" />
-
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold uppercase tracking-wide border border-purple-200">
-                      Marketing
-                    </span>
-                    <span className="text-xs text-gray-400 font-medium">7 projects</span>
-                  </div>
-                  <h4 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
-                    Marketing Projects
-                  </h4>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                    Go-to-market strategy, campaigns, and brand storytelling.
-                  </p>
-                  <div className="space-y-2">
-                    {['Pokémon Pokopia — Full GTM Strategy', 'Fable — Marketing Launch Campaign', 'The Sims — GTM & Brand Strategy', 'APASA Night Market 2024'].map((name) => (
-                      <div key={name} className="flex items-center gap-2 text-xs text-gray-400">
-                        <span className="w-1 h-1 rounded-full bg-purple-300 shrink-0" />
-                        {name}
-                      </div>
-                    ))}
-                    <div className="text-xs text-purple-400 pl-3">+ 3 more</div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 mt-6 flex items-center gap-2 text-purple-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
-                  View All
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
-              </a>
-            </div>
-
-            {/* Subtle scrolling project ticker */}
-            <a href="/projects" className="block mt-12 overflow-hidden relative cursor-pointer group">
-              <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-              <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-              <div className="flex gap-8 animate-ticker whitespace-nowrap group-hover:[animation-play-state:paused]">
-                {[
-                  'Potion Problems — Game Marketing Campaign',
-                  'Sustainability Dashboard — Ringley Group',
-                  'APASA Community Impact Program',
-                  'Anthropogenic Climate Change Analysis',
-                  'Pokemon Stats ML Predictor',
-                  'Alongside AI — Kiwi Connect PRD',
-                  'Alongside AI — Kiwi Connect Press Release',
-                  'Pokémon Team Builder',
-                  'AI Time Entry System — Concept Prototype',
-                  'Netflix — Film of the Week PRD',
-                  'Netflix — Mood Meter PRD + Lean Canvas',
-                  'The Sims — GTM & Brand Strategy',
-                  'Fable — Marketing Launch Campaign',
-                  'Pokémon Pokopia — Full GTM Strategy',
-                  'Potion Problems — Game Marketing Campaign',
-                  'Sustainability Dashboard — Ringley Group',
-                  'APASA Community Impact Program',
-                  'Anthropogenic Climate Change Analysis',
-                  'Pokemon Stats ML Predictor',
-                  'Alongside AI — Kiwi Connect PRD',
-                  'Alongside AI — Kiwi Connect Press Release',
-                  'Pokémon Team Builder',
-                  'AI Time Entry System — Concept Prototype',
-                  'Netflix — Film of the Week PRD',
-                  'Netflix — Mood Meter PRD + Lean Canvas',
-                  'The Sims — GTM & Brand Strategy',
-                  'Fable — Marketing Launch Campaign',
-                ].map((project, i) => (
-                  <span key={i} className="text-xs text-gray-300 font-medium tracking-widest uppercase shrink-0">
-                    {project} <span className="text-gray-200 mx-2">·</span>
-                  </span>
                 ))}
               </div>
-            </a>
-          </div>
-        </section>
+            </div>
+          </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="py-20 px-6 bg-gray-50">
-          <div className="max-w-6xl mx-auto text-center">
-            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Get In Touch
-            </h3>
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-              I'm always open to new opportunities and interesting projects. Feel free to reach out!
+          {/* About */}
+          <section id="about" style={{ padding: '7vh 5vw', borderTop: '1px solid rgba(22,36,27,0.09)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,0.85fr) minmax(0,1.4fr)', gap: 'clamp(32px,6vw,90px)', alignItems: 'start' }}>
+              <div style={{ position: 'sticky', top: 96 }}>
+                <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A988D', margin: '0 0 18px' }}>(01) — About</p>
+                <h2 style={{ fontWeight: 600, fontSize: 'clamp(30px,4vw,48px)', lineHeight: 1.05, letterSpacing: '-0.03em', margin: 0 }}>So, what's my deal?</h2>
+              </div>
+              <div>
+                <p style={{ fontSize: 20, lineHeight: 1.6, color: '#3C4A41', margin: '0 0 18px' }}>
+                  I'm pursuing <strong style={{ color: '#16241B', fontWeight: 500 }}>two degrees at once</strong> at USC — a B.S. in Business Administration and a Master of International Trade Law &amp; Economics (MITLE), class of '27 — living at the intersection of product, marketing and technology.
+                </p>
+                <p style={{ fontSize: 18, lineHeight: 1.65, color: '#5E6E63', margin: '0 0 40px' }}>
+                  I like making things that matter: reaching 5M+ monthly views at Clouted, shaping sustainability roadmaps in London, and leading community programs for thousands of students across LA. Otherwise, I am probably watching youtube videos, playing video games, or pickleballing.
+                </p>
+
+                <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A988D', margin: '0 0 16px' }}>Skills &amp; tools</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36 }}>
+                  {SKILLS.map((s) => (
+                    <span key={s} className="skill-pill" style={{ fontSize: 14, padding: '9px 15px', border: '1px solid rgba(22,36,27,0.12)', borderRadius: 999, background: 'rgba(255,255,255,0.5)', color: '#3C4A41', cursor: 'default' }}>{s}</span>
+                  ))}
+                </div>
+
+                <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A988D', margin: '0 0 16px' }}>Off the clock</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                  {INTERESTS.map((h) => (
+                    <span key={h} style={{ fontSize: 14, padding: '9px 15px', borderRadius: 999, background: 'rgba(22,36,27,0.05)', color: '#5E6E63' }}>{h}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Work */}
+          <section id="work" style={{ padding: '7vh 5vw 9vh', borderTop: '1px solid rgba(22,36,27,0.09)' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 44 }}>
+              <div>
+                <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A988D', margin: '0 0 16px' }}>(02) — Selected work</p>
+                <h2 style={{ fontWeight: 600, fontSize: 'clamp(30px,4vw,48px)', lineHeight: 1.02, letterSpacing: '-0.03em', margin: 0 }}>Highlighted work.</h2>
+              </div>
+              <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: '#8A988D', margin: 0 }}>A FEW FAVORITES →</p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {featured.map((p, i) => (
+                <div
+                  key={p.slug}
+                  className="project-card"
+                  style={{
+                    display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 24,
+                    padding: '28px 32px', borderRadius: 18,
+                    background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(22,36,27,0.1)', boxShadow: '0 14px 34px -26px rgba(22,36,27,0.5)',
+                    position: 'relative', overflow: 'hidden',
+                    transition: 'border-color 0.22s, box-shadow 0.22s',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = p.color;
+                    (e.currentTarget as HTMLElement).style.boxShadow = `0 18px 42px -22px ${p.color}`;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(22,36,27,0.1)';
+                    (e.currentTarget as HTMLElement).style.boxShadow = '0 14px 34px -26px rgba(22,36,27,0.5)';
+                  }}
+                >
+                  <div style={{ position: 'absolute', top: '-60%', right: '-10%', width: '40%', height: '200%', borderRadius: '50%', background: `radial-gradient(circle,${p.color},transparent 65%)`, opacity: 0.1, filter: 'blur(24px)', pointerEvents: 'none' }} />
+
+                  {/* Left: description */}
+                  <div style={{ position: 'relative' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                      <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: p.color }}>{String(i + 1).padStart(2, '0')}</span>
+                      <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, letterSpacing: '1px', textTransform: 'uppercase', color: '#5E6E63', border: '1px solid rgba(22,36,27,0.16)', borderRadius: 999, padding: '4px 10px' }}>{p.type}</span>
+                      <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, letterSpacing: '1px', textTransform: 'uppercase', color: '#8A988D' }}>{p.role}</span>
+                    </div>
+                    <h3 style={{ fontWeight: 600, fontSize: 'clamp(20px,2.2vw,26px)', lineHeight: 1.06, letterSpacing: '-0.02em', margin: '0 0 8px', color: '#16241B' }}>{p.title}</h3>
+                    <p style={{ fontSize: 15, lineHeight: 1.55, color: '#5E6E63', margin: 0, maxWidth: 640 }}>{p.overview}</p>
+                  </div>
+
+                  {/* Right: buttons */}
+                  <div style={{ position: 'relative', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch' }}>
+                    {p.link && (
+                      <a
+                        href={p.link}
+                        target={p.link.startsWith('http') ? '_blank' : undefined}
+                        rel={p.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 9,
+                          background: p.color, color: '#fff',
+                          fontWeight: 600, fontSize: 14, padding: '13px 22px',
+                          borderRadius: 10, boxShadow: `0 8px 22px -8px ${p.color}`,
+                          whiteSpace: 'nowrap', textDecoration: 'none',
+                        }}
+                      >
+                        View project <span>↗</span>
+                      </a>
+                    )}
+                    <Link
+                      href={`/projects/${p.slug}`}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 9,
+                        background: 'rgba(255,255,255,0.7)', color: '#3C4A41',
+                        fontWeight: 500, fontSize: 14, padding: '13px 22px',
+                        borderRadius: 10, border: '1px solid rgba(22,36,27,0.14)',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Case study
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Link
+              href="/projects"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 11, marginTop: 38,
+                background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+                border: '1px solid rgba(22,36,27,0.12)', boxShadow: '0 14px 34px -26px rgba(22,36,27,0.5)',
+                color: '#16241B', fontWeight: 600, fontSize: 16, padding: '17px 30px', borderRadius: 12,
+                transition: 'transform 0.25s,border-color 0.25s,box-shadow 0.25s',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)';
+                (e.currentTarget as HTMLElement).style.borderColor = ACCENT;
+                (e.currentTarget as HTMLElement).style.boxShadow = `0 22px 46px -22px ${ACCENT}`;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = '';
+                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(22,36,27,0.12)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 14px 34px -26px rgba(22,36,27,0.5)';
+              }}
+            >
+              Explore all projects <span style={{ color: ACCENT, fontSize: 18 }}>→</span>
+            </Link>
+          </section>
+
+          {/* Contact / Footer */}
+          <footer id="contact" style={{ padding: '9vh 5vw 7vh', borderTop: '1px solid rgba(22,36,27,0.09)' }}>
+            <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#8A988D', margin: '0 0 22px' }}>(03) — Contact</p>
+            <h2 style={{ fontWeight: 600, fontSize: 'clamp(44px,9vw,128px)', lineHeight: 0.92, letterSpacing: '-0.04em', margin: '0 0 34px' }}>Let's talk.</h2>
+            <p style={{ maxWidth: 520, fontSize: 18, lineHeight: 1.6, color: '#5E6E63', margin: '0 0 36px' }}>
+              Always open to new opportunities and interesting problems — especially in product and marketing. Reach out.
             </p>
-            <div className="flex justify-center gap-6">
-              <a
-                href="mailto:etonyao@gmail.com"
-                className="px-8 py-4 bg-blue-600 text-white rounded-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-600/30 hover:bg-blue-700"
-              >
-                Email Me
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+              <a href="mailto:eayao@usc.edu" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: ACCENT, color: '#fff', fontWeight: 600, fontSize: 16, padding: '16px 28px', borderRadius: 10, boxShadow: `0 10px 28px -10px ${ACCENT}` }}>
+                Email me <span>↗</span>
               </a>
-              <a
-                href="https://www.linkedin.com/in/eton-yao/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-4 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-all duration-300 hover:scale-105"
-              >
-                LinkedIn
+              <a href="https://www.linkedin.com/in/eton-yao/" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, border: '1px solid rgba(22,36,27,0.16)', background: 'rgba(255,255,255,0.5)', color: '#16241B', fontWeight: 500, fontSize: 16, padding: '16px 28px', borderRadius: 10 }}>
+                LinkedIn <span>↗</span>
               </a>
             </div>
-          </div>
-        </section>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 14, marginTop: '9vh', paddingTop: 26, borderTop: '1px solid rgba(22,36,27,0.09)', fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: '#8A988D' }}>
+              <span>© 2026 Eton Yao</span>
+              <span>USC '27 · Los Angeles</span>
+            </div>
+          </footer>
 
-        {/* Footer */}
-        <footer className="py-8 px-6 border-t border-gray-200 bg-white">
-          <div className="max-w-6xl mx-auto text-center text-gray-600">
-            <p>&copy; {new Date().getFullYear()} Eton Yao. All rights reserved.</p>
-          </div>
-        </footer>
+        </div>
       </div>
 
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out forwards;
-          opacity: 0;
-        }
-
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-
-        @keyframes spin-reverse {
-          from {
-            transform: rotate(360deg);
-          }
-          to {
-            transform: rotate(0deg);
-          }
-        }
-
-        .animate-spin-reverse {
-          animation: spin-reverse 6s linear infinite;
-        }
-
-        @keyframes ticker {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-
-        .animate-ticker {
-          animation: ticker 30s linear infinite;
-        }
-      `}</style>
-    </div>
+      {openProject && <CaseDrawer project={openProject} onClose={() => setOpenSlug(null)} />}
+    </>
   );
 }
