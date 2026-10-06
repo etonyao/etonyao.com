@@ -12,7 +12,7 @@ export default function WorkPage() {
     <div className="mx-auto max-w-5xl px-5 pt-12 sm:pt-16">
       <h1 className="font-heading text-4xl font-semibold tracking-tight">Work</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        Case studies from product management, marketing and program work, alongside the products I&rsquo;ve built.
+        Case studies from product management, marketing and program work.
       </p>
       <div className="mt-8">
         <WorkList projects={projects} />

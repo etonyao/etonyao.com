@@ -44,7 +44,7 @@ export const products: Product[] = [
       'Gamers keep backlogs, half-finished playthroughs and opinions in their heads, in notes apps or scattered across storefronts. There is no simple, social place to log what you played and see what your friends think.',
     approach: [
       'Started from one question: what is the fastest way to log a game in under 30 seconds? That led to a search dropdown, a one-tap status and a rating, with everything else optional.',
-      'Built a shared backend so the website and the iPhone app show the same feed, profiles and notifications.',
+      'One shared backend, so the website and the iPhone app show the same feed, profiles and notifications.',
       'Made sign-in forgiving: sign up with just a username, or add an email for password resets, or continue with Google or Apple.',
       'Added the trust and safety basics early: report and block tools, in-app account deletion and privacy and terms pages.',
     ],
@@ -78,7 +78,7 @@ export const products: Product[] = [
       { n: 'On time', label: 'trailer delivery' },
     ],
     problem:
-      'A student-developed game had to build an audience from scratch with no budget, only student talent and the ability to coordinate many teams.',
+      'A student-developed game had to find an audience from scratch with no budget, only student talent and the ability to coordinate many teams.',
     approach: [
       'Defined the positioning and key messaging so every asset told the same story.',
       'Coordinated asset delivery across 8 cross-functional teams.',

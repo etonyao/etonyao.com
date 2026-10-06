@@ -48,7 +48,7 @@ export default function Home() {
       {/* Products */}
       <section id="products" className="scroll-mt-20 py-12">
         <h2 className="font-heading text-2xl font-semibold tracking-tight">Products</h2>
-        <p className="mt-1 text-muted-foreground">Things I&rsquo;ve built and shipped.</p>
+        <p className="mt-1 text-muted-foreground">Joystick and Potion Problems.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {products.map((p) => (
             <ProductCard key={p.slug} product={p} />
@@ -89,7 +89,7 @@ export default function Home() {
           <p className="text-muted-foreground">
             I&rsquo;m pursuing two degrees at once at USC: a B.S. in Business Administration and a Master of International
             Trade Law &amp; Economics, class of &rsquo;27. I live at the intersection of product, marketing and technology,
-            and I like building the thing myself so I understand it end to end.
+            and I like getting hands-on with every part of a product.
           </p>
           <div className="flex flex-col gap-4">
             <div>
@@ -114,7 +114,7 @@ export default function Home() {
           <CardContent className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="font-heading text-2xl font-semibold tracking-tight">Let&rsquo;s talk.</h2>
-              <p className="mt-1 text-muted-foreground">Building something, or hiring? I&rsquo;d love to hear about it.</p>
+              <p className="mt-1 text-muted-foreground">Working on something, or hiring? I&rsquo;d love to hear about it.</p>
             </div>
             <div className="flex gap-3">
               <Link href="mailto:eayao@usc.edu" className={buttonVariants()}>Email me</Link>
