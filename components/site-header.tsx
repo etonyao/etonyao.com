@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/#products", label: "Products" },
+  { href: "/#products", label: "Projects" },
   { href: "/work", label: "Work" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },

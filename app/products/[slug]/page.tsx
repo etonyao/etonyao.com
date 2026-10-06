@@ -25,7 +25,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <article className="mx-auto max-w-5xl px-5 pt-12 pb-4 sm:pt-16">
-      <Link href="/#products" className="text-sm text-muted-foreground hover:text-foreground">← Products</Link>
+      <Link href="/#products" className="text-sm text-muted-foreground hover:text-foreground">← Projects</Link>
 
       <header className="mt-6 grid items-center gap-8 md:grid-cols-[3fr_2fr]">
         <div>

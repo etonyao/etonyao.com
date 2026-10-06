@@ -47,7 +47,7 @@ export default function Home() {
 
       {/* Products */}
       <section id="products" className="scroll-mt-20 py-12">
-        <h2 className="font-heading text-2xl font-semibold tracking-tight">Products</h2>
+        <h2 className="font-heading text-2xl font-semibold tracking-tight">Projects</h2>
         <p className="mt-1 text-muted-foreground">Joystick and Potion Problems.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {products.map((p) => (
@@ -89,7 +89,7 @@ export default function Home() {
           <p className="text-muted-foreground">
             I&rsquo;m pursuing two degrees at once at USC: a B.S. in Business Administration and a Master of International
             Trade Law &amp; Economics, class of &rsquo;27. I live at the intersection of product, marketing and technology,
-            and I like getting hands-on with every part of a product.
+            and I like getting hands-on with every part of a project.
           </p>
           <div className="flex flex-col gap-4">
             <div>
