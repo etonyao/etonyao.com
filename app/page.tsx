@@ -20,13 +20,21 @@ export default function Home() {
       {/* Hero */}
       <section className="pt-16 pb-12 sm:pt-24">
         <Badge variant="secondary">USC &rsquo;27 · Los Angeles</Badge>
-        <h1 className="mt-5 max-w-3xl font-heading text-4xl font-semibold tracking-tight sm:text-6xl">
-          I build products people actually use.
-        </h1>
+        <h1 className="mt-5 font-heading text-5xl font-semibold tracking-tight sm:text-7xl">Eton Yao</h1>
         <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-          Right now that&rsquo;s Joystick, a social app for video games, and Potion Problems, a game released on Steam.
-          I work where product meets marketing.
+          A dual-degree student at USC, in{" "}
+          <strong className="font-medium text-foreground">Business Administration</strong> and a{" "}
+          <strong className="font-medium text-foreground">Master of International Trade Law &amp; Economics</strong>,
+          working where product meets marketing.
         </p>
+        <dl className="mt-6 grid max-w-xl grid-cols-3 gap-4 text-sm">
+          {[["Location", "Los Angeles, CA"], ["Focus", "Product · Marketing"], ["Graduating", "USC \u201927"]].map(([k, v]) => (
+            <div key={k}>
+              <dt className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{k}</dt>
+              <dd className="mt-1 font-medium">{v}</dd>
+            </div>
+          ))}
+        </dl>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/products/joystick" className={buttonVariants({ size: "lg" })}>
             See Joystick <ArrowRightIcon data-icon="inline-end" />

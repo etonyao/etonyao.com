@@ -11,16 +11,16 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://etonyao.com"),
-  title: { default: "Eton Yao — Product builder", template: "%s · Eton Yao" },
-  description: "I build products. Joystick, a social app for video games, and Potion Problems, a game on Steam. USC '27, Los Angeles.",
+  title: { default: "Eton Yao", template: "%s · Eton Yao" },
+  description: "USC '27 — working where product meets marketing.",
   openGraph: {
-    title: "Eton Yao — Product builder",
-    description: "I build products. Joystick and Potion Problems, plus product and marketing case studies.",
+    title: "Eton Yao",
+    description: "USC '27 — working where product meets marketing.",
     url: "https://etonyao.com",
     siteName: "Eton Yao",
     type: "website",
   },
-  twitter: { card: "summary_large_image", title: "Eton Yao — Product builder" },
+  twitter: { card: "summary_large_image", title: "Eton Yao" },
   icons: { icon: "/favicon.svg", apple: "/favicon.svg" },
 };
 
