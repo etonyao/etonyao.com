@@ -27,13 +27,13 @@ export default function Home() {
   const selected = SELECTED.map((s) => projects.find((p) => p.slug === s)).filter((p) => !!p);
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-4">
+    <div className="w-full px-5 sm:px-8 lg:px-12 pb-4">
       {/* Hero */}
-      <section className="grid gap-4 pt-10 sm:pt-14 lg:grid-cols-5">
-        <div className="flex flex-col justify-center lg:col-span-3 lg:pr-8">
+      <section className="grid gap-4 pt-10 sm:pt-14 lg:grid-cols-5 xl:grid-cols-7">
+        <div className="flex flex-col justify-center lg:col-span-3 lg:pr-8 xl:col-span-5">
           <Badge variant="secondary" className="w-fit">USC &rsquo;27 · Los Angeles</Badge>
-          <h1 className="mt-4 font-heading text-5xl font-semibold tracking-tight sm:text-7xl">Eton Yao</h1>
-          <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+          <h1 className="mt-4 font-heading text-5xl font-semibold tracking-tight sm:text-7xl xl:text-8xl">Eton Yao</h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground xl:text-2xl xl:leading-snug">
             A dual-degree student at USC, in{" "}
             <strong className="font-medium text-foreground">Business Administration</strong> and a{" "}
             <strong className="font-medium text-foreground">Master of International Trade Law &amp; Economics</strong>,
@@ -49,7 +49,7 @@ export default function Home() {
           </div>
         </div>
 
-        <Window title="eton.profile" className="lg:col-span-2">
+        <Window title="eton.profile" className="lg:col-span-2 xl:col-span-2">
           <dl className="flex flex-col gap-4 text-sm">
             <div className="flex gap-3">
               <GraduationCapIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
@@ -111,7 +111,7 @@ export default function Home() {
             All work <ArrowRightIcon data-icon="inline-end" />
           </Link>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 min-[1800px]:grid-cols-6">
           {selected.map((p) => (
             <Link key={p.slug} href={`/work/${p.slug}`} className="group block">
               <Window title={`${p.slug}.md`} className="h-full transition-shadow group-hover:shadow-md" bodyClassName="flex h-full flex-col gap-2">

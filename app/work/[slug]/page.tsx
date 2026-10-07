@@ -23,7 +23,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   if (!study) notFound();
 
   return (
-    <article className="mx-auto max-w-3xl px-5 pt-12 sm:pt-16">
+    <article className="mx-auto max-w-4xl px-5 pt-12 sm:pt-16">
       <Link href="/work" className="text-sm text-muted-foreground hover:text-foreground">← Work</Link>
 
       <header className="mt-6">

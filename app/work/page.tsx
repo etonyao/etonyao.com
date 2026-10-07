@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function WorkPage() {
   return (
-    <div className="mx-auto max-w-5xl px-5 pt-12 sm:pt-16">
+    <div className="w-full px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16">
       <h1 className="font-heading text-4xl font-semibold tracking-tight">Work</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
         Case studies from product management, marketing and program work.

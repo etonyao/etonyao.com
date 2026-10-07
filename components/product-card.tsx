@@ -9,7 +9,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/products/${product.slug}`} className="group block h-full">
       <Window title={`${product.slug}.app`} className="h-full transition-shadow group-hover:shadow-md" bodyClassName="flex h-full flex-col gap-4 p-0">
-        <div className="relative aspect-[16/9] border-b bg-muted/50">
+        <div className="relative aspect-[16/9] border-b bg-muted/50 xl:aspect-[21/9]">
           <Image
             src={product.image}
             alt={product.imageAlt}
