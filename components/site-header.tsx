@@ -18,7 +18,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-5">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
         <Link href="/" className="font-heading text-sm font-semibold tracking-tight">
           Eton Yao
         </Link>

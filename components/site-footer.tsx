@@ -3,9 +3,9 @@ import { Separator } from "@/components/ui/separator";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24">
+    <footer className="mt-12">
       <Separator />
-      <div className="mx-auto flex max-w-5xl flex-col gap-2 px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} Eton Yao · USC &rsquo;27 · Los Angeles</p>
         <div className="flex gap-4">
           <Link href="mailto:eayao@usc.edu" className="hover:text-foreground">Email</Link>
