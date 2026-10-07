@@ -9,6 +9,8 @@ export interface Product {
   platforms: string[];
   role: string;
   stack: string[];
+  /** When set, the stack gets its own section with this heading (e.g. 'Tech stack') instead of sitting under My role. */
+  stackTitle?: string;
   links: ProductLink[];
   image: string;
   imageAlt: string;
@@ -16,6 +18,8 @@ export interface Product {
   cardImage?: string;
   /** A YouTube/Vimeo link, or a video file path like '/videos/joystick.mp4'. Empty shows a "coming soon" frame. */
   video?: string;
+  /** Extra videos shown under the main one: a heading and a YouTube/Vimeo link or file path. */
+  moreVideos?: { heading: string; url: string }[];
   /** Why I made it, in my own words. One string per paragraph. Hidden until filled in. */
   why?: string[];
   features: string[];
@@ -32,6 +36,7 @@ export const products: Product[] = [
     platforms: ['Web', 'iOS'],
     role: 'Product, design and engineering',
     stack: ['Next.js', 'Expo / React Native', 'Prisma', 'Neon Postgres', 'Clerk', 'shadcn/ui', 'Vercel'],
+    stackTitle: 'Tech stack',
     links: [
       { label: 'Open Joystick', href: 'https://web-jet-nu-77nsp8th5d.vercel.app', primary: true },
       { label: 'Source on GitHub', href: 'https://github.com/etonyao/joystick' },
@@ -39,6 +44,7 @@ export const products: Product[] = [
     image: '/products/joystick/icon.png',
     imageAlt: 'Joystick app icon: a red joystick ball on a dark green stick',
     video: 'https://www.youtube.com/watch?v=noeTTnTgugc',
+    moreVideos: [{ heading: 'Related video', url: 'https://www.youtube.com/watch?v=F-CvM4s21P0' }],
     features: [
       'Log games with a status (playing, finished, dropped, want to play), a rating, minutes played, a review and a photo',
       'Game search powered by IGDB, with a dropdown of suggestions and custom games for anything not in the database',

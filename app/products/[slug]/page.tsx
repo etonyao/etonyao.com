@@ -68,6 +68,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <h2 className="mb-4 font-heading text-xl font-semibold tracking-tight">Why I made it</h2>
             <VideoEmbed title={`why-i-made-${product.slug}.mov`} url={product.video} />
           </section>
+          {product.moreVideos?.map((v) => (
+            <section key={v.url}>
+              <h2 className="mb-4 font-heading text-xl font-semibold tracking-tight">{v.heading}</h2>
+              <VideoEmbed title={`${product.slug}-more.mov`} url={v.url} />
+            </section>
+          ))}
           {product.why ? (
             <section>
               <h2 className="font-heading text-xl font-semibold tracking-tight">In writing</h2>
@@ -87,10 +93,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <section>
             <h2 className="font-heading text-xl font-semibold tracking-tight">My role</h2>
             <p className="mt-3 text-muted-foreground">{product.role}</p>
-            <div className="mt-4 flex flex-wrap gap-1.5">
-              {product.stack.map((s) => <Badge key={s} variant="outline">{s}</Badge>)}
-            </div>
+            {product.stackTitle ? null : (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {product.stack.map((s) => <Badge key={s} variant="outline">{s}</Badge>)}
+              </div>
+            )}
           </section>
+          {product.stackTitle ? (
+            <section>
+              <h2 className="font-heading text-xl font-semibold tracking-tight">{product.stackTitle}</h2>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {product.stack.map((s) => <Badge key={s} variant="outline">{s}</Badge>)}
+              </div>
+            </section>
+          ) : null}
         </aside>
       </div>
     </article>

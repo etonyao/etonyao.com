@@ -10,7 +10,6 @@ import { VideoEmbed } from "@/components/video-embed";
 import { Window } from "@/components/window";
 
 const SKILLS = ["Product Management", "Figma", "Python", "AI", "Data Analysis", "Airtable", "Linear", "Marketing", "Agile / Scrum"];
-const INTERESTS = ["Video Games", "Sustainability", "Vibe Coding", "Cooking", "Travel", "Kung Fu", "Pickleball", "Karaoke", "Museums"];
 
 function SectionLabel({ children }: { children: string }) {
   return <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">{children}</p>;
@@ -97,9 +96,22 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Interests: a tab that opens its own page */}
+      <section className="pt-10">
+        <Link href="/interests" className="group block">
+          <Window title="interests.txt" className="transition-shadow group-hover:shadow-md" bodyClassName="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="font-heading text-xl font-semibold tracking-tight">Interests</h2>
+              <p className="mt-1 text-sm text-muted-foreground">A collage of my favorite things: books, music, movies, games and more.</p>
+            </div>
+            <ArrowRightIcon className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+          </Window>
+        </Link>
+      </section>
+
       {/* About */}
       <section id="about" className="grid scroll-mt-20 gap-4 pt-10 lg:grid-cols-3">
-        <Window title="about.md" className="lg:col-span-2" bodyClassName="flex flex-col gap-3">
+        <Window title="about.md" className="lg:col-span-3" bodyClassName="flex flex-col gap-3">
           <p className="text-muted-foreground">
             I&rsquo;m pursuing two degrees at once at USC: a B.S. in Business Administration and a Master of International
             Trade Law &amp; Economics, class of &rsquo;27. I live at the intersection of product, marketing and technology,
@@ -110,11 +122,6 @@ export default function Home() {
             <div className="flex flex-wrap gap-1.5">
               {SKILLS.map((s) => <Badge key={s} variant="secondary">{s}</Badge>)}
             </div>
-          </div>
-        </Window>
-        <Window title="interests.txt" bodyClassName="flex flex-col gap-2">
-          <div className="flex flex-wrap gap-1.5">
-            {INTERESTS.map((s) => <Badge key={s} variant="outline">{s}</Badge>)}
           </div>
         </Window>
       </section>
