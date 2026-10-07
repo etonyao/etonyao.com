@@ -23,7 +23,7 @@ export const products: Product[] = [
   {
     slug: 'joystick',
     name: 'Joystick',
-    tagline: 'Letterboxd for video games.',
+    tagline: 'Log and review the games you play.',
     description:
       'A social app for logging the games you play. Rate them, write reviews, follow friends and see what everyone is playing, on the web and on iPhone.',
     status: 'Live',
