@@ -12,6 +12,8 @@ export interface Product {
   links: ProductLink[];
   image: string;
   imageAlt: string;
+  /** Optional wide image for the home-page card, if different from `image`. */
+  cardImage?: string;
   /** A YouTube/Vimeo link, or a video file path like '/videos/joystick.mp4'. Empty shows a "coming soon" frame. */
   video?: string;
   /** Why I made it, in my own words. One string per paragraph. Hidden until filled in. */
@@ -36,6 +38,7 @@ export const products: Product[] = [
     ],
     image: '/products/joystick/icon.png',
     imageAlt: 'Joystick app icon: a red joystick ball on a dark green stick',
+    video: 'https://www.youtube.com/watch?v=noeTTnTgugc',
     features: [
       'Log games with a status (playing, finished, dropped, want to play), a rating, minutes played, a review and a photo',
       'Game search powered by IGDB, with a dropdown of suggestions and custom games for anything not in the database',
@@ -60,6 +63,7 @@ export const products: Product[] = [
     ],
     image: '/documents/potion-problems.jpg',
     imageAlt: 'Potion Problems key art',
+    video: 'https://www.youtube.com/watch?v=J7WEbRuXfkw',
     features: [
       'Official game trailer and launch campaign',
       'Steam store page messaging and positioning',

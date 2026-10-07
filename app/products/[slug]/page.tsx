@@ -48,7 +48,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             ))}
           </div>
         </div>
-        <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
+        <div className={cn("relative overflow-hidden rounded-2xl bg-muted", product.image.endsWith(".png") ? "aspect-square" : "aspect-video")}>
           <Image
             src={product.image}
             alt={product.imageAlt}

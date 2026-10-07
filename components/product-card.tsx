@@ -9,13 +9,13 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/products/${product.slug}`} className="group block h-full">
       <Window title={`${product.slug}.app`} className="h-full transition-shadow group-hover:shadow-md" bodyClassName="flex h-full flex-col gap-4 p-0">
-        <div className="relative aspect-[16/9] border-b bg-muted/50 xl:aspect-[21/9]">
+        <div className="relative aspect-[16/9] border-b bg-muted/50">
           <Image
-            src={product.image}
+            src={product.cardImage ?? product.image}
             alt={product.imageAlt}
             fill
             sizes="(min-width: 1024px) 560px, 100vw"
-            className={product.image.endsWith(".png") ? "object-contain p-8" : "object-cover"}
+            className={(product.cardImage ?? product.image).endsWith(".png") ? "object-contain p-8" : "object-cover"}
           />
         </div>
         <div className="flex flex-1 flex-col gap-3 px-4 pb-4">
