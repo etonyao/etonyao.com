@@ -12,7 +12,6 @@ export interface Product {
   links: ProductLink[];
   image: string;
   imageAlt: string;
-  highlights: { n: string; label: string }[];
   problem: string;
   approach: string[];
   features: string[];
@@ -35,11 +34,6 @@ export const products: Product[] = [
     ],
     image: '/products/joystick/icon.png',
     imageAlt: 'Joystick app icon: a red joystick ball on a dark green stick',
-    highlights: [
-      { n: '2', label: 'platforms from one backend' },
-      { n: '4', label: 'ways to sign in: email, username, Google, Apple' },
-      { n: '3', label: 'push notification types' },
-    ],
     problem:
       'Gamers keep backlogs, half-finished playthroughs and opinions in their heads, in notes apps or scattered across storefronts. There is no simple, social place to log what you played and see what your friends think.',
     approach: [
@@ -72,11 +66,6 @@ export const products: Product[] = [
     ],
     image: '/documents/potion-problems.jpg',
     imageAlt: 'Potion Problems key art',
-    highlights: [
-      { n: '8', label: 'teams coordinated' },
-      { n: 'Steam', label: 'published' },
-      { n: 'On time', label: 'trailer delivery' },
-    ],
     problem:
       'A student-developed game had to find an audience from scratch with no budget, only student talent and the ability to coordinate many teams.',
     approach: [

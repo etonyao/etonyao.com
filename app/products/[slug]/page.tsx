@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { getProduct, products } from "@/app/data/products";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -59,17 +58,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           />
         </div>
       </header>
-
-      <div className="mt-12 grid gap-4 sm:grid-cols-3">
-        {product.highlights.map((h) => (
-          <Card key={h.label}>
-            <CardContent>
-              <p className="font-heading text-3xl font-semibold tracking-tight">{h.n}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{h.label}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
 
       <Separator className="my-12" />
 
