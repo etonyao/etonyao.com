@@ -12,6 +12,8 @@ export interface Product {
   links: ProductLink[];
   image: string;
   imageAlt: string;
+  /** A YouTube/Vimeo link, or a video file path like '/videos/joystick.mp4'. Empty shows a "coming soon" frame. */
+  video?: string;
   /** Why I made it, in my own words. One string per paragraph. Hidden until filled in. */
   why?: string[];
   features: string[];

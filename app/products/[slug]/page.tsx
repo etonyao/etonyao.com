@@ -7,6 +7,7 @@ import { getProduct, products } from "@/app/data/products";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { VideoEmbed } from "@/components/video-embed";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -61,26 +62,36 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
       <Separator className="my-12" />
 
-      <div className={cn("grid gap-10", product.why ? "md:grid-cols-2" : "max-w-2xl")}>
-        {product.why ? (
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="flex flex-col gap-8 lg:col-span-2">
           <section>
-            <h2 className="font-heading text-xl font-semibold tracking-tight">Why I made it</h2>
-            <div className="mt-3 flex flex-col gap-3 text-muted-foreground">
-              {product.why.map((para) => <p key={para}>{para}</p>)}
+            <h2 className="mb-4 font-heading text-xl font-semibold tracking-tight">Why I made it</h2>
+            <VideoEmbed title={`why-i-made-${product.slug}.mov`} url={product.video} />
+          </section>
+          {product.why ? (
+            <section>
+              <h2 className="font-heading text-xl font-semibold tracking-tight">In writing</h2>
+              <div className="mt-3 flex max-w-2xl flex-col gap-3 text-muted-foreground">
+                {product.why.map((para) => <p key={para}>{para}</p>)}
+              </div>
+            </section>
+          ) : null}
+        </div>
+        <aside className="flex flex-col gap-8">
+          <section>
+            <h2 className="font-heading text-xl font-semibold tracking-tight">What it does</h2>
+            <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 text-muted-foreground">
+              {product.features.map((f) => <li key={f}>{f}</li>)}
+            </ul>
+          </section>
+          <section>
+            <h2 className="font-heading text-xl font-semibold tracking-tight">My role</h2>
+            <p className="mt-3 text-muted-foreground">{product.role}</p>
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {product.stack.map((s) => <Badge key={s} variant="outline">{s}</Badge>)}
             </div>
           </section>
-        ) : null}
-        <section>
-          <h2 className="font-heading text-xl font-semibold tracking-tight">What it does</h2>
-          <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 text-muted-foreground">
-            {product.features.map((f) => <li key={f}>{f}</li>)}
-          </ul>
-          <h2 className="mt-8 font-heading text-xl font-semibold tracking-tight">My role</h2>
-          <p className="mt-3 text-muted-foreground">{product.role}</p>
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {product.stack.map((s) => <Badge key={s} variant="outline">{s}</Badge>)}
-          </div>
-        </section>
+        </aside>
       </div>
     </article>
   );
