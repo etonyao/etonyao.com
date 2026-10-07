@@ -1,31 +1,19 @@
 import { ArrowRightIcon, GraduationCapIcon, MailIcon, MapPinIcon, TargetIcon } from "lucide-react";
 import Link from "next/link";
 import { products } from "@/app/data/products";
-import { projects } from "@/app/data/projects";
 import { ProductCard } from "@/components/product-card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Window } from "@/components/window";
-import { cn } from "@/lib/utils";
 
-const SELECTED = ["headliners", "pokemon-team-builder", "ai-time-entry", "netflix-mood-meter", "clouted", "the-sims-gtm"];
 const SKILLS = ["Product Management", "Figma", "Python", "AI", "Data Analysis", "Airtable", "Linear", "Marketing", "Agile / Scrum"];
 const INTERESTS = ["Video Games", "Sustainability", "Vibe Coding", "Cooking", "Travel", "Kung Fu", "Pickleball", "Karaoke", "Museums"];
-
-const STATS = [
-  { title: "education", n: "2", label: "degrees at USC" },
-  { title: "work.count", n: String(projects.length), label: "case studies" },
-  { title: "clouted", n: "5M+", label: "monthly views on Clouted" },
-  { title: "potion-problems", n: "8", label: "teams coordinated on Potion Problems" },
-];
 
 function SectionLabel({ children }: { children: string }) {
   return <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">{children}</p>;
 }
 
 export default function Home() {
-  const selected = SELECTED.map((s) => projects.find((p) => p.slug === s)).filter((p) => !!p);
-
   return (
     <div className="w-full px-5 sm:px-8 lg:px-12 pb-4">
       {/* Hero */}
@@ -83,49 +71,12 @@ export default function Home() {
         </Window>
       </section>
 
-      {/* Stats */}
-      <section className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {STATS.map((s) => (
-          <Window key={s.label} title={s.title} bodyClassName="py-5">
-            <p className="font-heading text-3xl font-semibold tracking-tight">{s.n}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{s.label}</p>
-          </Window>
-        ))}
-      </section>
-
       {/* Projects */}
       <section id="products" className="scroll-mt-20 pt-10">
         <SectionLabel>Projects</SectionLabel>
         <div className="grid gap-4 md:grid-cols-2">
           {products.map((p) => (
             <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
-      </section>
-
-      {/* Selected work */}
-      <section className="pt-10">
-        <div className="mb-3 flex items-end justify-between gap-4">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Selected work</p>
-          <Link href="/work" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "shrink-0")}>
-            All work <ArrowRightIcon data-icon="inline-end" />
-          </Link>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 min-[1800px]:grid-cols-6">
-          {selected.map((p) => (
-            <Link key={p.slug} href={`/work/${p.slug}`} className="group block">
-              <Window title={`${p.slug}.md`} className="h-full transition-shadow group-hover:shadow-md" bodyClassName="flex h-full flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary">{p.type}</Badge>
-                  <span className="truncate text-xs text-muted-foreground">{p.kicker}</span>
-                </div>
-                <h3 className="font-heading text-lg font-semibold tracking-tight">{p.title}</h3>
-                <p className="text-sm text-muted-foreground">{p.tagline}</p>
-                <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
-                  {p.tags.slice(0, 3).map((t) => <Badge key={t} variant="outline">{t}</Badge>)}
-                </div>
-              </Window>
-            </Link>
           ))}
         </div>
       </section>
