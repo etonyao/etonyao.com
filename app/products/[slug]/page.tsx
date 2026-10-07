@@ -48,14 +48,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             ))}
           </div>
         </div>
-        <div className={cn("relative overflow-hidden rounded-2xl bg-muted", product.image.endsWith(".png") ? "aspect-square" : "aspect-video")}>
+        <div className="relative aspect-video overflow-hidden rounded-2xl bg-muted">
           <Image
             src={product.image}
             alt={product.imageAlt}
             fill
             priority
             sizes="(min-width: 768px) 400px, 100vw"
-            className={product.image.endsWith(".png") ? "object-contain p-10" : "object-cover"}
+            className={product.image.endsWith(".png") ? "object-contain p-8" : "object-cover"}
           />
         </div>
       </header>
