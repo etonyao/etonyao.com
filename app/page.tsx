@@ -1,9 +1,12 @@
 import { ArrowRightIcon, GraduationCapIcon, MailIcon, MapPinIcon, TargetIcon } from "lucide-react";
 import Link from "next/link";
+import { tracks } from "@/app/data/music";
 import { products } from "@/app/data/products";
+import { MusicPlayer } from "@/components/music-player";
 import { ProductCard } from "@/components/product-card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { VideoEmbed } from "@/components/video-embed";
 import { Window } from "@/components/window";
 
 const SKILLS = ["Product Management", "Figma", "Python", "AI", "Data Analysis", "Airtable", "Linear", "Marketing", "Agile / Scrum"];
@@ -17,8 +20,8 @@ export default function Home() {
   return (
     <div className="w-full px-5 sm:px-8 lg:px-12 pb-4">
       {/* Hero */}
-      <section className="grid gap-4 pt-10 sm:pt-14 lg:grid-cols-5 xl:grid-cols-7">
-        <div className="flex flex-col justify-center lg:col-span-3 lg:pr-8 xl:col-span-5">
+      <section className="grid gap-4 pt-10 sm:pt-14 lg:grid-cols-5 xl:grid-cols-12 xl:items-stretch">
+        <div className="flex flex-col justify-center lg:col-span-3 lg:pr-8 xl:col-span-5 2xl:col-span-4">
           <Badge variant="secondary" className="w-fit">USC &rsquo;27 · Los Angeles</Badge>
           <h1 className="mt-4 font-heading text-5xl font-semibold tracking-tight sm:text-7xl xl:text-8xl">Eton Yao</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground xl:text-2xl xl:leading-snug">
@@ -37,7 +40,11 @@ export default function Home() {
           </div>
         </div>
 
-        <Window title="eton.profile" className="lg:col-span-2 xl:col-span-2">
+        <div className="flex flex-col gap-4 lg:col-span-2 xl:contents">
+        <div className="xl:col-span-4 2xl:col-span-5">
+          <VideoEmbed title="intro.mov" fill url="https://www.youtube.com/watch?v=fEWX8UWg7u4" />
+        </div>
+        <Window title="eton.profile" className="xl:col-span-3">
           <dl className="flex flex-col gap-4 text-sm">
             <div className="flex gap-3">
               <GraduationCapIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
@@ -69,7 +76,18 @@ export default function Home() {
             </div>
           </dl>
         </Window>
+        </div>
       </section>
+
+      {/* Music */}
+      {tracks.length > 0 ? (
+        <section className="pt-10">
+          <SectionLabel>Favorite music</SectionLabel>
+          <div className="max-w-3xl">
+            <MusicPlayer tracks={tracks} />
+          </div>
+        </section>
+      ) : null}
 
       {/* Projects */}
       <section id="products" className="scroll-mt-20 pt-10">
