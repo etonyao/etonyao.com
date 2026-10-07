@@ -3,10 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { PauseIcon, PlayIcon, Volume2Icon, VolumeXIcon } from "lucide-react";
 import { Window } from "@/components/window";
+import { announceVideoPlay as announcePlay } from "@/lib/media-events";
 
-/** Fired on window whenever a video on the page starts playing, so other media (the music player) can pause. */
-export const VIDEO_PLAY_EVENT = "site:video-play";
-const announcePlay = () => window.dispatchEvent(new Event(VIDEO_PLAY_EVENT));
 
 // Turns a pasted YouTube / Vimeo link into its embeddable address.
 function toEmbed(url: string, ambient: boolean): { kind: "iframe" | "file"; src: string } {

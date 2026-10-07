@@ -28,7 +28,7 @@ export default function Home() {
             A dual-degree student at USC, in{" "}
             <strong className="font-medium text-foreground">Business Administration</strong> and a{" "}
             <strong className="font-medium text-foreground">Master of International Trade Law &amp; Economics</strong>,
-            working where product meets marketing.
+            an aspiring product manager.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/products/joystick" className={buttonVariants({ size: "lg" })}>
@@ -82,16 +82,14 @@ export default function Home() {
       {/* Music */}
       {tracks.length > 0 ? (
         <section className="pt-10">
-          <SectionLabel>Favorite music</SectionLabel>
-          <div className="max-w-3xl">
-            <MusicPlayer tracks={tracks} />
-          </div>
+          <SectionLabel>Some of my favorite tracks</SectionLabel>
+          <MusicPlayer />
         </section>
       ) : null}
 
       {/* Projects */}
       <section id="products" className="scroll-mt-20 pt-10">
-        <SectionLabel>Projects</SectionLabel>
+        <SectionLabel>My favorite projects</SectionLabel>
         <div className="grid gap-4 md:grid-cols-2">
           {products.map((p) => (
             <ProductCard key={p.slug} product={p} />
