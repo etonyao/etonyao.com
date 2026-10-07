@@ -12,8 +12,8 @@ export interface Product {
   links: ProductLink[];
   image: string;
   imageAlt: string;
-  problem: string;
-  approach: string[];
+  /** Why I made it, in my own words. One string per paragraph. Hidden until filled in. */
+  why?: string[];
   features: string[];
 }
 
@@ -34,14 +34,6 @@ export const products: Product[] = [
     ],
     image: '/products/joystick/icon.png',
     imageAlt: 'Joystick app icon: a red joystick ball on a dark green stick',
-    problem:
-      'Gamers keep backlogs, half-finished playthroughs and opinions in their heads, in notes apps or scattered across storefronts. There is no simple, social place to log what you played and see what your friends think.',
-    approach: [
-      'Started from one question: what is the fastest way to log a game in under 30 seconds? That led to a search dropdown, a one-tap status and a rating, with everything else optional.',
-      'One shared backend, so the website and the iPhone app show the same feed, profiles and notifications.',
-      'Made sign-in forgiving: sign up with just a username, or add an email for password resets, or continue with Google or Apple.',
-      'Added the trust and safety basics early: report and block tools, in-app account deletion and privacy and terms pages.',
-    ],
     features: [
       'Log games with a status (playing, finished, dropped, want to play), a rating, minutes played, a review and a photo',
       'Game search powered by IGDB, with a dropdown of suggestions and custom games for anything not in the database',
@@ -66,13 +58,6 @@ export const products: Product[] = [
     ],
     image: '/documents/potion-problems.jpg',
     imageAlt: 'Potion Problems key art',
-    problem:
-      'A student-developed game had to find an audience from scratch with no budget, only student talent and the ability to coordinate many teams.',
-    approach: [
-      'Defined the positioning and key messaging so every asset told the same story.',
-      'Coordinated asset delivery across 8 cross-functional teams.',
-      'Produced and launched the official trailer on deadline for the Steam release.',
-    ],
     features: [
       'Official game trailer and launch campaign',
       'Steam store page messaging and positioning',

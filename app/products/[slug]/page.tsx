@@ -61,15 +61,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
       <Separator className="my-12" />
 
-      <div className="grid gap-10 md:grid-cols-2">
-        <section>
-          <h2 className="font-heading text-xl font-semibold tracking-tight">The problem</h2>
-          <p className="mt-3 text-muted-foreground">{product.problem}</p>
-          <h2 className="mt-8 font-heading text-xl font-semibold tracking-tight">My approach</h2>
-          <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 text-muted-foreground">
-            {product.approach.map((a) => <li key={a}>{a}</li>)}
-          </ul>
-        </section>
+      <div className={cn("grid gap-10", product.why ? "md:grid-cols-2" : "max-w-2xl")}>
+        {product.why ? (
+          <section>
+            <h2 className="font-heading text-xl font-semibold tracking-tight">Why I made it</h2>
+            <div className="mt-3 flex flex-col gap-3 text-muted-foreground">
+              {product.why.map((para) => <p key={para}>{para}</p>)}
+            </div>
+          </section>
+        ) : null}
         <section>
           <h2 className="font-heading text-xl font-semibold tracking-tight">What it does</h2>
           <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 text-muted-foreground">
